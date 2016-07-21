@@ -95,23 +95,23 @@ namespace AR_AreaZhuk.Insolation
             return false;
         }        
 
-        private bool CheckRule (string rule, int[] lightCurSide, int[] lightOtherSide, 
+        private bool CheckRule (InsRule rule, int[] lightCurSide, int[] lightOtherSide, 
             string[] insCurSide, string[] insOtherSide, int step)
         {
-            string[] masRule = rule.Split('=', '|');
+            var requires = rule.Requirements.ToList();
 
-            var intLightings = CheckLighting(masRule, lightCurSide, insCurSide, step);
-            intLightings += CheckLighting(masRule, lightOtherSide, insOtherSide, step);
+            // подходящие окна в квартиирах будут вычитаться из требований
+            CheckLighting(ref requires, lightCurSide, insCurSide, step);
+            CheckLighting(ref requires, lightOtherSide, insOtherSide, step);
 
-            int lightingRequirement = Convert.ToInt16(masRule[0]);
-            var res = intLightings >= lightingRequirement;
+            // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
+            var countBalance = requires.Sum(s => Math.Ceiling(s.CountLighting)); // Округление вниз - от окон внутри одного помещения
+            var res = countBalance <= 0;            
             return res;            
         }
 
-        private int CheckLighting (string[] masRule, int[] light, string [] ins, int step)
-        {
-            double countValidCell = 0;           
-            
+        private void CheckLighting (ref List<InsRequired> requires, int[] light, string [] ins, int step)
+        {            
             foreach (var item in light)
             {
                 double countLigth = 1;
@@ -125,21 +125,20 @@ namespace AR_AreaZhuk.Insolation
                 else
                 {
                     lightIndexInFlat = (-item) - 1;
-                    countLigth = 0.5; // Условие или (одно из окон в одном помещении)
+                    countLigth = 0.5; // несколько окон в одном помещении в квартире (считается только одно окно в одном помещении)
                 }
 
                 var insValue = ins[step + lightIndexInFlat];
 
                 if (!string.IsNullOrWhiteSpace(insValue))
                 {
-                    if (masRule[1].Equals(insValue, StringComparison.OrdinalIgnoreCase))
+                    var require = requires.Find(f => f.InsIndex.Equals(insValue, StringComparison.OrdinalIgnoreCase));
+                    if (requires != null)
                     {
-                        countValidCell += countLigth;
+                        require.CountLighting -= countLigth;
                     }
                 }
-            }
-            var res = Convert.ToInt32(countValidCell);
-            return res;
+            }            
         }                
     }
 }
