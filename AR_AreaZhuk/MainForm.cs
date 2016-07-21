@@ -19,7 +19,7 @@ using AR_Zhuk_DataModel;
 using System.Drawing.Imaging;
 using System.Net;
 using OfficeOpenXml;
-
+using AR_AreaZhuk.Insolation;
 
 namespace AR_AreaZhuk
 {
@@ -87,7 +87,7 @@ namespace AR_AreaZhuk
 
 
         public Section GetInsulationSections(List<SectionInformation> sections, bool isRightOrTopLLu, bool isVertical, int indexRowStart,
-            int indexColumnStart, Insolation insulation, bool isCorner, int numberSection, SpotInfo sp)
+            int indexColumnStart, InsolationSpot insulation, bool isCorner, int numberSection, SpotInfo sp)
         {
             // List<FlatInfo> listSections = new List<FlatInfo>();
             Section s = new Section();
@@ -1266,7 +1266,7 @@ indexColumnLLUBottom];
         // }
 
 
-        public void GetHousePercentage(ref HouseInfo houseInfo, SpotInfo sp1, Insolation insulation)
+        public void GetHousePercentage(ref HouseInfo houseInfo, SpotInfo sp1, InsolationSpot insulation)
         {
             sp1 = sp1.CopySpotInfo(spotInfo);
             for (int k = 0; k < houseInfo.Sections.Count; k++) //Квартиры
@@ -1487,7 +1487,6 @@ indexColumnLLUBottom];
       
             foreach (var insulation in insulations)
             {
-
                 List<HouseInfo> variantHouses = new List<HouseInfo>();
                 MainForm.isContinue = true;
                 List<HouseInfo> housesTemp = new List<HouseInfo>();
@@ -1689,13 +1688,15 @@ indexColumnLLUBottom];
                                     sections = sectionGood.Sections;
                                     if (sections.Count > 0)
                                     {
-                                        var listSections1 = insulation.GetInsulationSections(sections, isRightOrTopLLu, isVertical, indexRowStart,   ////////////////////////////////////////Инсоляция
-                                            indexColumnStart, insulation, isCorner, m + 1, spotInfo);
+                                        var listSections1 = insulation.GetInsulationSections(
+                                                sections, isRightOrTopLLu, isVertical, indexRowStart,   ////////////////////////////////////////Инсоляция
+                                                indexColumnStart, isCorner, m + 1, spotInfo);
                                         s1 = listSections1;
                                         if (!isCorner)
                                         {
-                                            var listSections2 = insulation.GetInsulationSections(sections, false, isVertical, indexRowStart,         ////////////////////////////////////////Инсоляция
-                                                indexColumnStart, insulation, isCorner, m + 1, spotInfo);
+                                            var listSections2 = insulation.GetInsulationSections(
+                                                    sections, false, isVertical, indexRowStart,         ////////////////////////////////////////Инсоляция
+                                                    indexColumnStart, isCorner, m + 1, spotInfo);
                                             foreach (var l in listSections2.Sections)
                                                 s1.Sections.Add(l);
 
@@ -1874,7 +1875,7 @@ indexColumnLLUBottom];
 
         }
 
-        private static void GetDBSections(int startIndex, Insolation insulation, FrameWork fw, List<Section> dbSections, int countFloors, bool isLeftCorner, bool isRightCorner)
+        private static void GetDBSections(int startIndex, InsolationSpot insulation, FrameWork fw, List<Section> dbSections, int countFloors, bool isLeftCorner, bool isRightCorner)
         {
             //for (int i = 7; i < 15; i++)
             //{

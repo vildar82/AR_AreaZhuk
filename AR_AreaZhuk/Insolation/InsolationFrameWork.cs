@@ -75,7 +75,6 @@ namespace AR_AreaZhuk
             var l = lightStr.Length;
             if (masStr.Length > 1)
             {
-
                 string[] ss = masStr[1].Split('*');
                 if (allRooms.IndexOf(room) - 1 < 0)
                     return null;

@@ -13,6 +13,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using OfficeOpenXml.Style;
 using AR_Zhuk_DataModel;
+using AR_AreaZhuk.Insolation;
 
 namespace AR_AreaZhuk
 {
@@ -100,17 +101,17 @@ namespace AR_AreaZhuk
             return index;
         }
 
-        public List<Insolation> GetInsulations(string path)
+        public List<InsolationSpot> GetInsulations(string path)
         {
-            List<Insolation> insulations = new List<Insolation>();
+            List<InsolationSpot> insulations = new List<InsolationSpot>();
             insulations.Add(GetInsulationSpot("P1|", path));
-            insulations.Add(GetInsulationSpot("P2|", path));
+            //insulations.Add(GetInsulationSpot("P2|", path));
             return insulations;
         }
 
-        private static Insolation GetInsulationSpot(string nameSpot, string path)
+        private static InsolationSpot GetInsulationSpot(string nameSpot, string path)
         {
-            Insolation insulation = new Insolation();
+            InsolationSpot insulation = new InsolationSpot();
             insulation.Name = nameSpot;
             insulation.Matrix = new string[100, 100];
             insulation.MaxLeftXY = new List<int>();
@@ -128,19 +129,21 @@ namespace AR_AreaZhuk
                 // string nameSpot = "P2|";
                 int minColumn = 5000;
                 int maxColumn = -5000;
+
+                var workSheet = xlPackage.Workbook.Worksheets[1];
+
                 for (int column = 1; column < 100; column++)
                 {
                     for (int row = 1; row < 100; row++)
                     {
-                        if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
-                            .Contains(nameSpot))
+                        var cellVal = Convert.ToString(workSheet.Cells[row, column].Value);
+                        if (cellVal.Contains(nameSpot))
                         {
                             if (minColumn > column - 1)
                                 minColumn = column - 1;
                             if (maxColumn < column - 1)
                                 maxColumn = column - 1;
-                            insulation.Matrix[column - 1, row - 1] =
-                                Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
+                            insulation.Matrix[column - 1, row - 1] = cellVal;
                         }
                         else insulation.Matrix[column - 1, row - 1] = string.Empty;
                     }
@@ -745,7 +748,7 @@ namespace AR_AreaZhuk
                 }
                 if (!isValid) continue;
                 sectionsBySyze.Add(fl);
-                if (sectionsBySyze.Count == 200)
+                if (sectionsBySyze.Count == 50)
                     break;
 
                 //}

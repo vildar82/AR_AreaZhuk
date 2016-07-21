@@ -82,9 +82,15 @@
     <Compile Include="FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Insolation\CellInsOrdinary.cs" />
+    <Compile Include="Insolation\IInsCheck.cs" />
+    <Compile Include="Insolation\InsCheckBase.cs" />
+    <Compile Include="Insolation\InsCheckCorner.cs" />
+    <Compile Include="Insolation\InsCheckFactory.cs" />
+    <Compile Include="Insolation\InsCheckOrdinary.cs" />
     <Compile Include="Insolation\InsolationFrameWork.cs" />
     <Compile Include="Model\HouseInfo.cs" />
-    <Compile Include="Insolation\Insolation.cs" />
+    <Compile Include="Insolation\InsolationSpot.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
