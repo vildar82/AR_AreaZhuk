@@ -569,7 +569,7 @@ namespace AR_AreaZhuk.Insolation
     }
 
     /// <summary>
-    /// Правила инсоляции для типа квартиры (1,2,3,4 комнатной)
+    /// Правила инсоляции для квартиры (общие правила по типам квартир - 1,2,3,4 комнатной)
     /// </summary>
     public class RoomInsulation
     {
@@ -610,6 +610,9 @@ namespace AR_AreaZhuk.Insolation
         }        
     }
 
+    /// <summary>
+    /// Инсоляционное правило для квартиры - состоит из одного или нескольких требований (перечисленных через + в выражении требования)
+    /// </summary>
     public class InsRule
     {
         /// <summary>
@@ -632,6 +635,9 @@ namespace AR_AreaZhuk.Insolation
         }       
     }
 
+    /// <summary>
+    /// Инсоляционное требование - один индекс и кол инсолируемых комнат(окон)
+    /// </summary>
     public class InsRequired
     {
         /// <summary>
@@ -660,7 +666,8 @@ namespace AR_AreaZhuk.Insolation
         {
             var resCountLighting = 1;
             insIndex = item;
-            var firstChar = item.First(); // первый символ это требуемое число инсолируемых окон для данного индекса инсоляции, или пусто если 1.
+            // первый символ это требуемое число инсолируемых окон для данного индекса инсоляции, или пусто если 1.
+            var firstChar = item.First(); 
             if (char.IsDigit(firstChar))
             {
                 resCountLighting = (int)char.GetNumericValue(firstChar);
