@@ -132,7 +132,7 @@ namespace AR_AreaZhuk.Insolation
                 {
                     foreach (var require in requires)
                     {
-                        if (require.CountLighting>0 && require.Passed(insIndex))
+                        if (require.CountLighting>0 && require.IsPassed(insIndex))
                         {
                             require.CountLighting -= countLigth;
                         }

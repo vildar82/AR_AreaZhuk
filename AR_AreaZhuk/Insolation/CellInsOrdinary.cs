@@ -59,20 +59,20 @@ namespace AR_AreaZhuk.Insolation
 
             for (int i = 0; i < countStep; i++)
             {
-                InsTop[i] = getInsIndex(insCheck.insSpot.Matrix[colTop, rowTop]);
-                InsBot[i] = getInsIndex(insCheck.insSpot.Matrix[colBot, rowBot]);
+                InsTop[i] = getInsIndex(colTop, rowTop);
+                InsBot[i] = getInsIndex(colBot, rowBot);
                 rowTop += stepRow;
                 rowBot += stepRow;
                 colTop += stepCol;
                 colBot += stepCol;
             }
-
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();
         }
 
-        private string getInsIndex (string cellValue)
+        private string getInsIndex (int row, int col)
         {
+            var cellValue = insCheck.insSpot.Matrix[col, row];
             string resInsIndex = string.Empty;
             var splitSpot = cellValue.Split('|');
             if(splitSpot.Length>1)
@@ -81,9 +81,13 @@ namespace AR_AreaZhuk.Insolation
                 // проверка допустимого индекса инсоляции
                 if (!RoomInsulation.AllowedIndexes.Contains(resInsIndex))
                 {
-                    throw new Exception($"Недопустимый индекс инсоляции в задании - {resInsIndex}.\n " +
+                    throw new Exception($"Недопустимый индекс инсоляции в задании - '{resInsIndex}', в ячейке [c{col},r{row}].\n " +
                          $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedIndexes)}");
                 }
+            }
+            else
+            {
+                throw new Exception($"Не задан индекс инсоляции в ячейке [c{col},r{row}].");
             }
             return resInsIndex;
         }

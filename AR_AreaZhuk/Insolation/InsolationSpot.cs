@@ -669,7 +669,12 @@ namespace AR_AreaZhuk.Insolation
             return resCountLighting;
         }
 
-        public bool Passed (string insIndexProject)
+        /// <summary>
+        /// Проверка - проходит расчетный индекс инсоляции
+        /// </summary>
+        /// <param name="insIndexProject">Расчетный индекс инсоляции (по Excel)</param>
+        /// <returns>Да, если расчетный индекс инсоляции выше или равен требуемому</returns>
+        public bool IsPassed (string insIndexProject)
         {
             // Если проектный индекс больше требуемого, то проходит            
             var res = insIndexProject.CompareTo(InsIndex) >= 0;
