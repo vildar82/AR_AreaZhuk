@@ -59,8 +59,8 @@ namespace AR_AreaZhuk.Insolation
 
             for (int i = 0; i < countStep; i++)
             {
-                InsTop[i] = getInsValue(insCheck.insSpot.Matrix[colTop, rowTop]);
-                InsBot[i] = getInsValue(insCheck.insSpot.Matrix[colBot, rowBot]);
+                InsTop[i] = getInsIndex(insCheck.insSpot.Matrix[colTop, rowTop]);
+                InsBot[i] = getInsIndex(insCheck.insSpot.Matrix[colBot, rowBot]);
                 rowTop += stepRow;
                 rowBot += stepRow;
                 colTop += stepCol;
@@ -71,10 +71,21 @@ namespace AR_AreaZhuk.Insolation
             InsBot = InsBot.Reverse().ToArray();
         }
 
-        private string getInsValue (string cellValue)
+        private string getInsIndex (string cellValue)
         {
-            var res = cellValue.Split('|');
-            return res[1];
+            string resInsIndex = string.Empty;
+            var splitSpot = cellValue.Split('|');
+            if(splitSpot.Length>1)
+            {
+                resInsIndex = splitSpot[1];
+                // проверка допустимого индекса инсоляции
+                if (!RoomInsulation.AllowedIndexes.Contains(resInsIndex))
+                {
+                    throw new Exception($"Недопустимый индекс инсоляции в задании - {resInsIndex}.\n " +
+                         $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedIndexes)}");
+                }
+            }
+            return resInsIndex;
         }
     }
 }

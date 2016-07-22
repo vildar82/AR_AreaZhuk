@@ -48,15 +48,16 @@ namespace AR_AreaZhuk.Insolation
             // Список выражений требований (должно удовлетворяться любое из них):
             // Синтаксис выражения одного требования:
             // [Кол.помещений][Индеск инсоляции]+[Кол.помещений][Индеск инсоляции]+...
-            // [Кол.помещений] - пусто или любое число. Длина - один символ. Если пусто, то это 1 помещение.
+            // [Кол.помещений] - кол инсолируемых комнат. Пусто или любое число. Длина - один символ. Если пусто, то это 1 помещение.
             // [Индеск инсоляции] - один символ A, B, C, D - латинская.
-            // + не обязательно. B+C - требуется 2 помещения с 1B и 1C инсоляцией.                        
+            // + не обязательно. Например: C+2B - требуется 3 помещения с 1C и 2B.     
+            // Учитывается порядок индексов A<B<C<D. Поэтому нужно писать только минимальное требования. Например, если требуется C, то писать требование D не обязательно.                   
             RoomInsulations = new List<RoomInsulation>()
             {
-                new RoomInsulation ("Однокомнатная или студия", 1, new List<string>() { "C", "D" }),
-                new RoomInsulation ("Двухкомнатная", 2, new List<string>() { "C", "D", "2B", "B+C" }),
-                new RoomInsulation ("Трехкомнатная", 3, new List<string>() { "C", "D", "2B" }),
-                new RoomInsulation ("Четырехкомнатная", 4, new List<string>() { "2C", "2D", "C+2B" })
+                new RoomInsulation ("Однокомнатная или студия", 1, new List<string>() { "C" }),
+                new RoomInsulation ("Двухкомнатная", 2, new List<string>() { "C", "2B" }),
+                new RoomInsulation ("Трехкомнатная", 3, new List<string>() { "C", "2B" }),
+                new RoomInsulation ("Четырехкомнатная", 4, new List<string>() { "2C", "C+2B" })
             };
         }
         /// <summary>
@@ -575,7 +576,7 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Допустимые индексы инсоляции
         /// </summary>
-        public static List<string> AllowedInsIndexes { get; } = new List<string> { "A", "B", "C", "D" };
+        public static List<string> AllowedIndexes { get; } = new List<string> { "A", "B", "C", "D" };
 
         /// <summary>
         /// Название типа квартиры
@@ -627,6 +628,7 @@ namespace AR_AreaZhuk.Insolation
                 var requireAdd = new InsRequired(item.Trim());
                 Requirements.Add(requireAdd);
             }
+            Requirements = Requirements.OrderByDescending(o => o.InsIndex).ToList();
         }       
     }
 
@@ -647,10 +649,10 @@ namespace AR_AreaZhuk.Insolation
             CountLighting = GetCountLighting(item, out insIndex);
             InsIndex = insIndex;    
             
-            if (!RoomInsulation.AllowedInsIndexes.Contains(InsIndex, StringComparer.OrdinalIgnoreCase))
+            if (!RoomInsulation.AllowedIndexes.Contains(InsIndex))
             {
                 throw new Exception($"Недопустимый индекс инсоляции в правилах - {InsIndex}.\n " + 
-                    $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedInsIndexes)}");
+                    $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedIndexes)}");
             }
         }
 
@@ -665,6 +667,13 @@ namespace AR_AreaZhuk.Insolation
                 insIndex = item.Substring(1);
             }
             return resCountLighting;
+        }
+
+        public bool Passed (string insIndexProject)
+        {
+            // Если проектный индекс больше требуемого, то проходит            
+            var res = insIndexProject.CompareTo(InsIndex) >= 0;
+            return res;
         }
     }
 }

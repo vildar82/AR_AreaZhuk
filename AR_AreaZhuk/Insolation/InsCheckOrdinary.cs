@@ -40,7 +40,7 @@ namespace AR_AreaZhuk.Insolation
 
             // Проверка инсоляции квартир сверху
             res = CheckFlats(topFlats, cellIns, isTop: true);
-            if (res)
+            if (res) // прошла инсоляция верхних квартир
             {
                 // Проверка инсоляции квартир снизу
                 res = CheckFlats(bottomFlats, cellIns, isTop: false);
@@ -74,9 +74,7 @@ namespace AR_AreaZhuk.Insolation
                 var lightCurSide = insFramework.GetLightingPosition(lightingCurSide, flat, sectionInfo.Flats);
                 var lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, sectionInfo.Flats);
 
-                //var rule = insSpot.FindRule(flat);
-
-                var rule = new RoomInsulation("Четырехкомнатная", 4, new List<string>() { "2=C", "2=D", "3=1C+2B" });
+                var rule = insSpot.FindRule(flat);                
 
                 if (rule != null)
                 {
@@ -113,9 +111,9 @@ namespace AR_AreaZhuk.Insolation
         private void CheckLighting (ref List<InsRequired> requires, int[] light, string [] ins, int step)
         {            
             foreach (var item in light)
-            {
-                double countLigth = 1;
+            {                
                 if (item.Equals(0)) break;
+                double countLigth = 1;
 
                 int lightIndexInFlat;
                 if (item > 0)
@@ -128,15 +126,17 @@ namespace AR_AreaZhuk.Insolation
                     countLigth = 0.5; // несколько окон в одном помещении в квартире (считается только одно окно в одном помещении)
                 }
 
-                var insValue = ins[step + lightIndexInFlat];
+                var insIndex = ins[step + lightIndexInFlat];
 
-                if (!string.IsNullOrWhiteSpace(insValue))
+                if (!string.IsNullOrWhiteSpace(insIndex))
                 {
-                    var require = requires.Find(f => f.InsIndex.Equals(insValue, StringComparison.OrdinalIgnoreCase));
-                    if (requires != null)
+                    foreach (var require in requires)
                     {
-                        require.CountLighting -= countLigth;
-                    }
+                        if (require.CountLighting>0 && require.Passed(insIndex))
+                        {
+                            require.CountLighting -= countLigth;
+                        }
+                    }                    
                 }
             }            
         }                
