@@ -9,9 +9,13 @@ namespace AR_AreaZhuk.Insolation
 {
     class InsCheckCorner : InsCheckBase
     {
+        CellInsCorner cellInsStandart;        
+
         public InsCheckCorner (InsolationSpot insSpot, Section section, bool isVertical, int indexRowStart, int indexColumnStart)
             : base(insSpot, section, isVertical, indexRowStart, indexColumnStart)
         {
+            cellInsStandart = new CellInsCorner(this);
+            cellInsStandart.DefineIns(); 
         }
 
         public override bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)

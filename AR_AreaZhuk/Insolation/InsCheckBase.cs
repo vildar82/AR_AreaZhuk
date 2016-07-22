@@ -9,7 +9,7 @@ namespace AR_AreaZhuk.Insolation
 {
     abstract class InsCheckBase : IInsCheck
     {
-        protected InsolationFrameWork insFramework = new InsolationFrameWork();
+        internal InsolationFrameWork insFramework = new InsolationFrameWork();
         internal readonly InsolationSpot insSpot;
         internal readonly Section section;
 
@@ -20,9 +20,6 @@ namespace AR_AreaZhuk.Insolation
 
         internal readonly int indexRowStart;
         internal readonly int indexColumnStart;       
-        
-        protected List<RoomInfo> topFlats;
-        protected List<RoomInfo> bottomFlats;      
 
         public InsCheckBase (InsolationSpot insSpot, Section section, bool isVertical, int indexRowStart, int indexColumnStart)
         {

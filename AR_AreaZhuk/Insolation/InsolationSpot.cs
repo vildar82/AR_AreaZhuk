@@ -659,8 +659,8 @@ namespace AR_AreaZhuk.Insolation
             
             if (!RoomInsulation.AllowedIndexes.Contains(InsIndex))
             {
-                throw new Exception($"Недопустимый индекс инсоляции в правилах - {InsIndex}.\n " + 
-                    $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedIndexes)}");
+                throw new Exception("Недопустимый индекс инсоляции в правилах - "+ InsIndex + ".\n " + 
+                    "Допустимые индексы инсоляции " + string.Join(", ", RoomInsulation.AllowedIndexes));
             }
         }
 

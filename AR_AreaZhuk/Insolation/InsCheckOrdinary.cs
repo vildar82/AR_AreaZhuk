@@ -19,9 +19,8 @@ namespace AR_AreaZhuk.Insolation
             // Данные по инсоляции секции в стандартном ее положении            
             cellInsStandart = new CellInsOrdinary(this);
             cellInsStandart.DefineIns();
-            cellInsInvert = new CellInsOrdinary(this);
-            cellInsInvert.InsTop = cellInsStandart.InsBot.Reverse().ToArray();
-            cellInsInvert.InsBot = cellInsStandart.InsTop.Reverse().ToArray();            
+
+            cellInsInvert = cellInsStandart.Invert();
         }
 
         public override bool CheckSection (FlatInfo sect,bool isRightOrTopLLu)
@@ -36,8 +35,8 @@ namespace AR_AreaZhuk.Insolation
                 return false;
             }
 
-            topFlats = insFramework.GetTopFlatsInSection(sect.Flats, true, false);
-            bottomFlats = insFramework.GetTopFlatsInSection(sect.Flats, false, false);
+            var topFlats = insFramework.GetTopFlatsInSection(sect.Flats, true, false);
+            var bottomFlats = insFramework.GetTopFlatsInSection(sect.Flats, false, false);
 
             CellInsOrdinary cellIns;
             if (isRightOrTopLLu)
@@ -54,10 +53,11 @@ namespace AR_AreaZhuk.Insolation
             if (res) // прошла инсоляция верхних квартир
             {
                 // Проверка инсоляции квартир снизу
-                // отступ шагов снизу от последней верхней квартиры
+                // отступ шагов снизу последней верхней квартиры сверху
                 var startStep = topFlats.Last().SelectedIndexBottom; 
                 res = CheckFlats(bottomFlats, cellIns, isTop: false, startStep: startStep);
-            }            
+            }           
+             
             return res;
         }
 
@@ -76,6 +76,7 @@ namespace AR_AreaZhuk.Insolation
             else
             {                
                 insCurSide = cellIns.InsBot;
+                // У нижних квартир не нужно проверять верх, т.к. верха у них быть не может
                 //insOtherSide = cellIns.InsTop.Reverse().ToArray();
             }
 
@@ -94,8 +95,13 @@ namespace AR_AreaZhuk.Insolation
                     lightingCurSide = flat.LightingNiz;
                     //lightingOtherSide = flat.LightingTop;                    
                 }
+
                 var lightCurSide = insFramework.GetLightingPosition(lightingCurSide, flat, sectionInfo.Flats);
-                var lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, sectionInfo.Flats);
+                int[] lightOtherSide = null;
+                if (lightingOtherSide != null)
+                {
+                    lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, sectionInfo.Flats);
+                }
 
                 var rule = insSpot.FindRule(flat);
 
@@ -110,7 +116,8 @@ namespace AR_AreaZhuk.Insolation
                     {
                         if (CheckRule(ruleName, lightCurSide, lightOtherSide, insCurSide, insOtherSide, step))
                         {
-                            // Правило удовлетворено
+                            // Правило удовлетворено, оставшиеся правила можно не проверять
+                            // Евартира проходит инсоляцию
                             flatPassed = true;
                             break;
                         }
@@ -161,7 +168,7 @@ namespace AR_AreaZhuk.Insolation
                 }
                 else
                 {
-                    // несколько окон в одном помещении в квартире (считается только одно окно в одном помещении)
+                    // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
                     lightIndexInFlat = (-item) - 1;
                     countLigth = 0.5; 
                 }

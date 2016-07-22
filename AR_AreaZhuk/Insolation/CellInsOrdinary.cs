@@ -6,90 +6,66 @@ using System.Threading.Tasks;
 
 namespace AR_AreaZhuk.Insolation
 {
-    class CellInsOrdinary
+    /// <summary>
+    /// Значение инсолиции ячеек в прямой секции (в стандартном положении - горизонтально, ЛЛУ сверху)
+    /// Сверху и Снизу
+    /// Сбоку???
+    /// </summary>
+    class CellInsOrdinary : CellInsBase
     {
-        private const int WithSectionModules = 4;
-        private InsCheckOrdinary insCheck;
+        public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
+        {                       
+        }
 
-        public string[] InsTop { get; set; }
-        public string[] InsBot { get; set; }
-
-        public CellInsOrdinary (InsCheckOrdinary insCheck)
+        public CellInsOrdinary Invert()
         {
-            this.insCheck = insCheck;            
+            var invert = new CellInsOrdinary((InsCheckOrdinary)insCheck);
+            invert.InsTop = InsBot.Reverse().ToArray();
+            invert.InsBot = InsTop.Reverse().ToArray();
+            return invert;
         }
 
         public void DefineIns ()
-        {
-            int countStep = insCheck.section.CountStep;            
-            bool isVertic = insCheck.isVertical;
-
-            InsTop = new string[countStep];
-            InsBot = new string[countStep];
-
-            int indexWithSection = WithSectionModules - 1;
-
-            int rowTop;
-            int rowBot;
-            int colTop;
-            int colBot;
-            int stepRow;
-            int stepCol;
+        {            
+            int indexWithSection = CountStepWithSection - 1;
+            
+            Cell cellTop = new Cell();            
+            Cell cellBot = new Cell();
+            Cell offset = new Cell();            
 
             if (!isVertic)
             {
                 // Для горизонтальной секции, ЛЛУ сверху                    
-                rowTop = insCheck.indexRowStart;
-                rowBot = rowTop + indexWithSection;
-                stepCol = -1;
-                colTop = insCheck.indexColumnStart-1;
-                colBot = colTop;
-                stepRow = 0;
+                cellTop.Row = insCheck.indexRowStart;
+                cellTop.Col = insCheck.indexColumnStart - 1;
+
+                cellBot.Row = cellTop.Row + indexWithSection;                                               
+                cellBot.Col = cellTop.Col;
+
+                offset.Col = -1;
             }
             else
             {
-                // Для вертикальной секции, ЛЛУ справа                    
-                colTop = insCheck.indexColumnStart+ indexWithSection;
-                colBot = colTop - indexWithSection;
-                rowTop = insCheck.indexRowStart-1;
-                stepRow = -1;
-                rowBot = rowTop;
-                stepCol = 0;
+                // Для вертикальной секции, ЛЛУ справа       
+                cellTop.Col = insCheck.indexColumnStart + indexWithSection;
+                cellTop.Row = insCheck.indexRowStart - 1;
+
+                cellBot.Col = cellTop.Col - indexWithSection;                
+                cellBot.Row = cellTop.Row;
+
+                offset.Row = -1;                
             }            
 
             for (int i = 0; i < countStep; i++)
             {
-                InsTop[i] = getInsIndex(colTop, rowTop);
-                InsBot[i] = getInsIndex(colBot, rowBot);
-                rowTop += stepRow;
-                rowBot += stepRow;
-                colTop += stepCol;
-                colBot += stepCol;
+                InsTop[i] = GetInsIndex(cellTop);
+                InsBot[i] = GetInsIndex(cellBot);
+
+                cellTop.Offset(offset);
+                cellBot.Offset(offset);                
             }
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();
-        }
-
-        private string getInsIndex (int row, int col)
-        {
-            var cellValue = insCheck.insSpot.Matrix[row, col];
-            string resInsIndex = string.Empty;
-            var splitSpot = cellValue.Split('|');
-            if(splitSpot.Length>1)
-            {
-                resInsIndex = splitSpot[1];
-                // проверка допустимого индекса инсоляции
-                if (!RoomInsulation.AllowedIndexes.Contains(resInsIndex))
-                {
-                    throw new Exception($"Недопустимый индекс инсоляции в задании - '{resInsIndex}', в ячейке [c{col},r{row}].\n " +
-                         $"Допустимые индексы инсоляции {string.Join(", ", RoomInsulation.AllowedIndexes)}");
-                }
-            }
-            else
-            {
-                throw new Exception($"Не задан индекс инсоляции в ячейке [c{col},r{row}].");
-            }
-            return resInsIndex;
-        }
+        }        
     }
 }

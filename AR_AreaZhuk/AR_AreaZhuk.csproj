@@ -82,6 +82,9 @@
     <Compile Include="FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Insolation\Cell.cs" />
+    <Compile Include="Insolation\CellInsBase.cs" />
+    <Compile Include="Insolation\CellInsCorner.cs" />
     <Compile Include="Insolation\CellInsOrdinary.cs" />
     <Compile Include="Insolation\IInsCheck.cs" />
     <Compile Include="Insolation\InsCheckBase.cs" />
