@@ -13,7 +13,7 @@ namespace AR_AreaZhuk.Insolation
         internal readonly InsolationSpot insSpot;
         internal readonly Section section;
 
-        internal SectionInformation sectionInfo;
+        internal FlatInfo sectionInfo;
         internal bool isRightOrTopLLu;
 
         internal readonly bool isVertical;
@@ -33,12 +33,10 @@ namespace AR_AreaZhuk.Insolation
             this.indexColumnStart = indexColumnStart;
         }
 
-        public virtual bool CheckSection (SectionInformation sect, bool isRightOrTopLLu)
+        public virtual bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)
         {
             this.isRightOrTopLLu = isRightOrTopLLu;
-            sectionInfo = sect;
-            topFlats = insFramework.GetTopFlatsInSection(sect.Flats, true, false);
-            bottomFlats = insFramework.GetTopFlatsInSection(sect.Flats, false, false);
+            sectionInfo = sect;            
             return true;
         }
     }

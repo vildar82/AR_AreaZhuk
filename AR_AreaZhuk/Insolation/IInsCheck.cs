@@ -9,6 +9,6 @@ namespace AR_AreaZhuk.Insolation
 {
     interface IInsCheck
     {        
-        bool CheckSection (SectionInformation sect, bool isRightOrTopLLu);
+        bool CheckSection (FlatInfo sect, bool isRightOrTopLLu);
     }
 }

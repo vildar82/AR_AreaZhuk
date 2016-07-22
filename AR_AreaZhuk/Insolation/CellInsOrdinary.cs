@@ -39,10 +39,10 @@ namespace AR_AreaZhuk.Insolation
             if (!isVertic)
             {
                 // Для горизонтальной секции, ЛЛУ сверху                    
-                rowTop = insCheck.indexRowStart-1;
+                rowTop = insCheck.indexRowStart;
                 rowBot = rowTop + indexWithSection;
                 stepCol = -1;
-                colTop = insCheck.indexColumnStart;
+                colTop = insCheck.indexColumnStart-1;
                 colBot = colTop;
                 stepRow = 0;
             }
@@ -72,7 +72,7 @@ namespace AR_AreaZhuk.Insolation
 
         private string getInsIndex (int row, int col)
         {
-            var cellValue = insCheck.insSpot.Matrix[col, row];
+            var cellValue = insCheck.insSpot.Matrix[row, col];
             string resInsIndex = string.Empty;
             var splitSpot = cellValue.Split('|');
             if(splitSpot.Length>1)

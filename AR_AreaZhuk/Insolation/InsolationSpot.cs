@@ -64,11 +64,11 @@ namespace AR_AreaZhuk.Insolation
         /// Проверка инсоляции секции (всех вариантов секции)
         /// 
         /// </summary>        
-        public Section GetInsulationSections (List<SectionInformation> sections, bool isRightOrTopLLu, bool isVertical,
+        public Section GetInsulationSections (List<FlatInfo> sections, bool isRightOrTopLLu, bool isVertical,
             int indexRowStart, int indexColumnStart, bool isCorner, int numberSection, SpotInfo sp)
         {
             Section s = new Section();
-            s.Sections = new List<SectionInformation>();
+            s.Sections = new List<FlatInfo>();
             s.IsCorner = isCorner;
             s.IsVertical = isVertical;
             s.NumberInSpot = numberSection;
@@ -83,7 +83,7 @@ namespace AR_AreaZhuk.Insolation
             {
                 if (sect.Flats.Count == 0)
                     continue;
-                SectionInformation flats = new SectionInformation();
+                FlatInfo flats = new FlatInfo();
                 flats.IdSection = sect.IdSection;
                 flats.IsInvert = !isRightOrTopLLu;
                 flats.SpotOwner = Name;
@@ -111,11 +111,11 @@ namespace AR_AreaZhuk.Insolation
         ///// Проверка инсоляции секции (всех вариантов секции)
         ///// 
         ///// </summary>        
-        //public Section GetInsulationSections (List<SectionInformation> sections, bool isRightOrTopLLu, bool isVertical,
+        //public Section GetInsulationSections (List<FlatInfo> sections, bool isRightOrTopLLu, bool isVertical,
         //    int indexRowStart, int indexColumnStart, bool isCorner, int numberSection, SpotInfo sp)
         //{
         //    Section s = new Section();
-        //    s.Sections = new List<SectionInformation>();
+        //    s.Sections = new List<FlatInfo>();
         //    s.IsCorner = isCorner;
         //    s.IsVertical = isVertical;
         //    s.NumberInSpot = numberSection;
@@ -130,7 +130,7 @@ namespace AR_AreaZhuk.Insolation
         //    {
         //        if (sect.Flats.Count == 0)
         //            continue;
-        //        SectionInformation flats = new SectionInformation();
+        //        FlatInfo flats = new FlatInfo();
         //        flats.IdSection = sect.IdSection;
         //        flats.IsInvert = !isRightOrTopLLu;
         //        flats.SpotOwner = Name;
@@ -638,7 +638,7 @@ namespace AR_AreaZhuk.Insolation
     /// <summary>
     /// Инсоляционное требование - один индекс и кол инсолируемых комнат(окон)
     /// </summary>
-    public class InsRequired
+    public struct InsRequired
     {
         /// <summary>
         /// Требуемое кол инсолиуемых окон
@@ -647,11 +647,13 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Требуемый индекс инсоляции (A, B, C, D)
         /// </summary>
-        public string InsIndex { get; private set; }        
+        public string InsIndex { get; private set; }    
 
         public InsRequired (string item)
         {            
             string insIndex;
+            CountLighting = 0;
+            InsIndex = string.Empty;
             CountLighting = GetCountLighting(item, out insIndex);
             InsIndex = insIndex;    
             

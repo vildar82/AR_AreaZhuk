@@ -86,12 +86,12 @@ namespace AR_AreaZhuk
 
 
 
-//        public Section GetInsulationSections(List<SectionInformation> sections, bool isRightOrTopLLu, bool isVertical, int indexRowStart,
+//        public Section GetInsulationSections(List<FlatInfo> sections, bool isRightOrTopLLu, bool isVertical, int indexRowStart,
 //            int indexColumnStart, InsolationSpot insulation, bool isCorner, int numberSection, SpotInfo sp)
 //        {
 //            // List<FlatInfo> listSections = new List<FlatInfo>();
 //            Section s = new Section();
-//            s.Sections = new List<SectionInformation>();
+//            s.Sections = new List<FlatInfo>();
 //            s.IsCorner = isCorner;
 //            s.IsVertical = isVertical;
 //            s.NumberInSpot = numberSection;
@@ -120,7 +120,7 @@ namespace AR_AreaZhuk
 //                //s.IsCorner = isCorner;
 //                //s.IsVertical = isVertical;
 //                // s.Sections = new List<FlatInfo>();
-//                SectionInformation flats = new SectionInformation();
+//                FlatInfo flats = new FlatInfo();
 //                flats.IdSection = sect.IdSection;
 //                flats.IsInvert = !isRightOrTopLLu;
 //                flats.SpotOwner = insulation.Name;
@@ -1271,7 +1271,7 @@ namespace AR_AreaZhuk
             sp1 = sp1.CopySpotInfo(spotInfo);
             for (int k = 0; k < houseInfo.Sections.Count; k++) //Квартиры
             {
-                SectionInformation section = houseInfo.Sections[k];
+                FlatInfo section = houseInfo.Sections[k];
                 double areaSection = 0;
                 for (int l = 0; l < section.Flats.Count; l++) //Квартиры
                 {
@@ -1479,7 +1479,7 @@ namespace AR_AreaZhuk
             List<List<HouseInfo>> totalObject = new List<List<HouseInfo>>();
             List<List<HouseInfo>> houses = new List<List<HouseInfo>>();
             List<HouseInfo> listSections = new List<HouseInfo>();
-            List<List<SectionInformation>> sectionsInHouse = new List<List<SectionInformation>>();
+            List<List<FlatInfo>> sectionsInHouse = new List<List<FlatInfo>>();
             bool isContinue1 = true;
             bool isContinue2 = true;
             int[] masSizes = new int[] { 28, 32, 36, 40, 44, 48, 52, 56 };
@@ -1512,7 +1512,7 @@ namespace AR_AreaZhuk
                         if (countModulesTotal == 0)
                         {
                             HouseInfo variantHouse = new HouseInfo();
-                            variantHouse.Sections = new List<SectionInformation>();
+                            variantHouse.Sections = new List<FlatInfo>();
                             bool isValid = true;
                             for (int j = 0; j < listSections.Count; j++)
                             {
@@ -1655,7 +1655,7 @@ namespace AR_AreaZhuk
 
                                     isCorner = sectionGood.IsLeftBottomCorner | sectionGood.IsRightBottomCorner;
                                     HouseInfo s = new HouseInfo();
-                                    s.Sections = new List<SectionInformation>();
+                                    s.Sections = new List<FlatInfo>();
                                     if (countEnter == 2)
                                         isVertical = false;
                                     Section s1 = new Section();
@@ -1684,7 +1684,7 @@ namespace AR_AreaZhuk
                                             }
                                         }
                                     }
-                                    List<SectionInformation> sections = new List<SectionInformation>();
+                                    List<FlatInfo> sections = new List<FlatInfo>();
                                     sections = sectionGood.Sections;
                                     if (sections.Count > 0)
                                     {
@@ -1692,15 +1692,15 @@ namespace AR_AreaZhuk
                                                 sections, isRightOrTopLLu, isVertical, indexRowStart,   ////////////////////////////////////////Инсоляция
                                                 indexColumnStart, isCorner, m + 1, spotInfo);
                                         s1 = listSections1;
-                                        if (!isCorner)
-                                        {
-                                            var listSections2 = insulation.GetInsulationSections(
-                                                    sections, false, isVertical, indexRowStart,         ////////////////////////////////////////Инсоляция
-                                                    indexColumnStart, isCorner, m + 1, spotInfo);
-                                            foreach (var l in listSections2.Sections)
-                                                s1.Sections.Add(l);
+                                        //if (!isCorner)
+                                        //{
+                                        //    var listSections2 = insulation.GetInsulationSections(
+                                        //            sections, false, isVertical, indexRowStart,         ////////////////////////////////////////Инсоляция
+                                        //            indexColumnStart, isCorner, m + 1, spotInfo);
+                                        //    foreach (var l in listSections2.Sections)
+                                        //        s1.Sections.Add(l);
 
-                                        }
+                                        //}
                                     }
 
                                     countEnter++;
@@ -1772,10 +1772,10 @@ namespace AR_AreaZhuk
                                     //if (sectionInfos.Count > 4 & counterr == 2)
                                     //    break;
                                     HouseInfo hi = new HouseInfo();
-                                    hi.Sections = new List<SectionInformation>();
+                                    hi.Sections = new List<FlatInfo>();
                                     try
                                     {
-                                        List<SectionInformation> secs = new List<SectionInformation>();
+                                        List<FlatInfo> secs = new List<FlatInfo>();
                                         int[] ids = new int[i + 1];
                                         for (int j = 0; j <= i; j++)
                                         {
@@ -1847,7 +1847,7 @@ namespace AR_AreaZhuk
 
             //for (int i = 0; i < totalObject[0].Count; i++)
             //{
-            //    List<SectionInformation> sections = new List<SectionInformation>();
+            //    List<FlatInfo> sections = new List<FlatInfo>();
             //    foreach (var sec1 in totalObject[0][i].SectionsBySize)
             //    {
 
@@ -1880,7 +1880,7 @@ namespace AR_AreaZhuk
             //for (int i = 7; i < 15; i++)
             //{
             Section sec = new Section();
-            sec.Sections = new List<SectionInformation>();
+            sec.Sections = new List<FlatInfo>();
             sec.Floors = countFloors;
             sec.CountModules = startIndex * 4;
             sec.IsLeftBottomCorner = isLeftCorner;

@@ -13,5 +13,19 @@ namespace AR_AreaZhuk.Insolation
             : base(insSpot, section, isVertical, indexRowStart, indexColumnStart)
         {
         }
+
+        public override bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)
+        {
+            bool resCheck = false;
+            base.CheckSection(sect, isRightOrTopLLu);
+
+            // Определить это правая или левая угловая секция            
+            bool isRight = true;
+            //topFlats = insFramework.GetTopFlatsInSection(sect.Flats, true, isRight);
+            //bottomFlats = insFramework.GetTopFlatsInSection(sect.Flats, false, isRight);
+            resCheck = true;
+
+            return resCheck;
+        }
     }
 }

@@ -308,7 +308,7 @@ namespace AR_AreaZhuk
         }
 
 
-        public List<SectionInformation> GenerateSections(List<RoomInfo> roomInfo, int countModulesInSection,
+        public List<FlatInfo> GenerateSections(List<RoomInfo> roomInfo, int countModulesInSection,
           bool isCornerLeftNiz, bool isCornerRightNiz, int countFloors)
         {
             // FrameWork fw = new FrameWork();
@@ -323,7 +323,7 @@ namespace AR_AreaZhuk
             int iteration = 0;
             Random random = new Random();
             // bool isContinue = true;
-            List<SectionInformation> listSections = new List<SectionInformation>();
+            List<FlatInfo> listSections = new List<FlatInfo>();
             int indexSummNiz = 0;
             int indexSummTop = 0;
             double summ = 0;
@@ -675,10 +675,10 @@ namespace AR_AreaZhuk
         //   return rrrrr;
         //}
 
-        public List<SectionInformation> GetAllSectionsFromDB(int countModulesInSection,
+        public List<FlatInfo> GetAllSectionsFromDB (int countModulesInSection,
             bool isCornerLeftNiz, bool isCornerRightNiz, int countFloors)
         {
-            List<SectionInformation> sectionsBySyze = new List<SectionInformation>();
+            List<FlatInfo> sectionsBySyze = new List<FlatInfo>();
             FrameWork fw = new FrameWork();
             List<HouseInfo> sectionsInfo = new List<HouseInfo>();
             string countFl = "10-18";
@@ -697,72 +697,96 @@ namespace AR_AreaZhuk
                 levels = "Угловая право";
             var sections = sects.GetSectionByID(countFl, levels, countModulesInSection / 4);
             var flats = flatsIsSection.GetFlatsInTypeSection(countModulesInSection / 4, countFl, levels);
-            foreach (var s in sections)
+            int counter = 0;
+            int lastIdSection = 0;
+            FlatInfo fl = new FlatInfo();
+            for (int i = 0; i < flats.Count; i++)
             {
-                SectionInformation fl = new SectionInformation();
-                fl.IdSection = s.ID_Section;
-                fl.Floors = countFloors;
-                fl.CountStep = countModulesInSection / 4;
-                fl.Flats = new List<RoomInfo>();
-                fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
+                var f = flats[i];
+                if (f.ID_Section != lastIdSection)
+                {
+                    if (counter != 0)
+                        sectionsBySyze.Add(fl);
+                    fl = new FlatInfo();
+                    fl.IdSection = f.ID_Section;
+                    fl.Floors = countFloors;
+                    fl.CountStep = countModulesInSection / 4;
+                    fl.Flats = new List<RoomInfo>();
+                    fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
+                    lastIdSection = f.ID_Section;
+                }
+                var fflat = new RoomInfo(f.ShortType, f.SubZone, f.TypeFlat, f.AreaLive.ToString(),
+                       f.AreaTotalStandart.ToString(),
+                       f.AreaTotalStrong.ToString(), f.CountModules.ToString(), "",
+                       "", f.LinkageBefore, f.LinkageAfter, "", "", "", f.Levels, "", "", f.LightBottom, f.LightTop,
+                       "");
+                fflat.SelectedIndexTop = f.SelectedIndexTop;
+                fflat.SelectedIndexBottom = f.SelectedIndexBottom;
+                fl.Flats.Add(fflat);
+                //if (counter == 0 | lastIdSection != f.ID_Section)
+                //{
+                //    fl.IdSection = f.ID_Section;
+                //    fl.Floors = countFloors;
+                //    fl.CountStep = countModulesInSection / 4;
+                //    fl.Flats = new List<RoomInfo>();
+                //    fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
+                //}
 
-                List<RoomInfo> secs = new List<RoomInfo>();
+                // List<RoomInfo> secs = new List<RoomInfo>();
                 //try
                 //{
-                var flatsInSection = flats.Where(x => x.ID_Section.Equals(s.ID_Section)).ToList();
-                bool isValid = true;
-                bool is2KL2 = false;
-                foreach (var f in flatsInSection.OrderBy(x => x.ID_FlatInSection))
-                {
-                    //if (f.ShortType.Equals("2NM2"))
-                    //{
-                    //    isValid = false;
-                    //    break;
-                    //}
-                    //else if (f.ShortType.Equals("2KL2"))
-                    //{
-                    //    if (levels.Equals("Рядовая"))
-
-                    //    {
-                    //        isValid = false;
-                    //        break;
-                    //    }
-                    //    if (!is2KL2)
-                    //    {
-                    //        is2KL2 = true;
-                    //    }
-                    //    else
-                    //    {
-                    //        isValid = false;
-                    //        break;
-                    //    }
-                    //}
-                    var fflat = new RoomInfo(f.ShortType, f.SubZone, f.TypeFlat, f.AreaLive.ToString(),
-                        f.AreaTotalStandart.ToString(),
-                        f.AreaTotalStrong.ToString(), f.CountModules.ToString(), "",
-                        "", f.LinkageBefore, f.LinkageAfter, "", "", "", f.Levels, "", "", f.LightBottom, f.LightTop,
-                        "");
-                    fflat.SelectedIndexTop = f.SelectedIndexTop;
-                    fflat.SelectedIndexBottom = f.SelectedIndexBottom;
-                    fl.Flats.Add(fflat);
-                }
-                if (!isValid) continue;
-                sectionsBySyze.Add(fl);
-                if (sectionsBySyze.Count == 50)
-                    break;
-
-                //}
-                //catch
+                // var flatsInSection = flats.Where(x => x.ID_Section.Equals(s.ID_Section)).OrderBy(x => x.ID_FlatInSection).ToList();
+                //bool isValid = true;
+                //bool is2KL2 = false;
+                //foreach (var f in flatsInSection)
                 //{
-                //}
 
+
+                //}
+                //if (!isValid) continue;
+
+                counter++;
+                if (counter < 1000) continue;
+                break;
             }
+            //foreach (var s in sections)
+            //{
+            //    FlatInfo fl = new FlatInfo();
+            //    fl.IdSection = s.ID_Section;
+            //    fl.Floors = countFloors;
+            //    fl.CountStep = countModulesInSection / 4;
+            //    fl.Flats = new List<RoomInfo>();
+            //    fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
+
+            //    List<RoomInfo> secs = new List<RoomInfo>();
+            //    //try
+            //    //{
+            //    var flatsInSection = flats.Where(x => x.ID_Section.Equals(s.ID_Section)).OrderBy(x => x.ID_FlatInSection).ToList();
+            //    //bool isValid = true;
+            //    //bool is2KL2 = false;
+            //    foreach (var f in flatsInSection)
+            //    {
+
+            //        var fflat = new RoomInfo(f.ShortType, f.SubZone, f.TypeFlat, f.AreaLive.ToString(),
+            //            f.AreaTotalStandart.ToString(),
+            //            f.AreaTotalStrong.ToString(), f.CountModules.ToString(), "",
+            //            "", f.LinkageBefore, f.LinkageAfter, "", "", "", f.Levels, "", "", f.LightBottom, f.LightTop,
+            //            "");
+            //        fflat.SelectedIndexTop = f.SelectedIndexTop;
+            //        fflat.SelectedIndexBottom = f.SelectedIndexBottom;
+            //        fl.Flats.Add(fflat);
+            //    }
+            //    //if (!isValid) continue;
+            //    sectionsBySyze.Add(fl);
+            //    counter++;
+            //if (counter < 3000) continue;
+            //break;
+            //}
             return sectionsBySyze;
         }
 
 
-
-        private void AddToListSections(List<SectionInformation> listSections, List<RoomInfo> listRooms1, List<RoomInfo> allRooms, bool isLeftCorner, int countFloors)
+        private void AddToListSections(List<FlatInfo> listSections, List<RoomInfo> listRooms1, List<RoomInfo> allRooms, bool isLeftCorner, int countFloors)
         {
             bool isExist = false;
             foreach (var section in listSections)
@@ -784,7 +808,7 @@ namespace AR_AreaZhuk
                         int a = 0;
                         int b = a+1;
                     }
-                    SectionInformation fi = new SectionInformation();
+                    FlatInfo fi = new FlatInfo();
                     fi.Flats = listRooms1;
                     //if (fi.Flats[1].ShortType == "1KS1" && fi.Flats[2].ShortType == "2KL3" && fi.Flats[fi.Flats.Count-2].ShortType == "2KL3")
                     //{
@@ -1201,7 +1225,7 @@ namespace AR_AreaZhuk
         }
 
 
-        private bool IsValidSmoke(List<RoomInfo> listRooms1, List<RoomInfo> allRooms, bool isCorner, int countFloors, List<SectionInformation> allsections)
+        private bool IsValidSmoke(List<RoomInfo> listRooms1, List<RoomInfo> allRooms, bool isCorner, int countFloors, List<FlatInfo> allsections)
         {
 
             if (listRooms1.Count > 7)

@@ -4,28 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
-namespace AR_AreaZhuk
+namespace AR_AreaZhuk.Insolation
 {
     class InsolationFrameWork
     {
-        public List<RoomInfo> GetTopFlatsInSection(List<RoomInfo> section, bool isTop, bool isRight)
+        public List<RoomInfo> GetTopFlatsInSection(List<RoomInfo> sectionFlats, bool isTop, bool isRight)
         {
             List<RoomInfo> topFlats = new List<RoomInfo>();
             if (isTop)
             {
                 if (!isRight)
                 {
-                    for (int i = section.Count - 3; i < section.Count; i++)
+                    for (int i = sectionFlats.Count - 3; i < sectionFlats.Count; i++)
                     {
-                        if (section[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
 
                     for (int i = 0; i < 4; i++)
                     {
-                        if (section[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
 
                 }
@@ -33,14 +34,14 @@ namespace AR_AreaZhuk
                 {
                     for (int i = 3; i >= 0; i--)
                     {
-                        if (section[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
 
-                    for (int i = section.Count - 1; i > section.Count - 4; i--)
+                    for (int i = sectionFlats.Count - 1; i > sectionFlats.Count - 4; i--)
                     {
-                        if (section[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
                 }
             }
@@ -48,23 +49,24 @@ namespace AR_AreaZhuk
             {
                 if (!isRight)
                 {
-                    for (int i = 0; i < section.Count; i++)
+                    for (int i = 0; i < sectionFlats.Count; i++)
                     {
-                        if (section[i].SelectedIndexTop != 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop != 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
                 }
                 else
                 {
 
 
-                    for (int i = section.Count - 1; i >= 0; i--)
+                    for (int i = sectionFlats.Count - 1; i >= 0; i--)
                     {
-                        if (section[i].SelectedIndexTop != 0) continue;
-                        topFlats.Add(section[i]);
+                        if (sectionFlats[i].SelectedIndexTop != 0) continue;
+                        topFlats.Add(sectionFlats[i]);
                     }
                 }
             }
+            Debug.Assert(topFlats.Count<= sectionFlats.Count, "GetTopFlatsInSection - Определено больше квартир сверху, чем всего квартир в секции.");
             return topFlats;
         }
 
