@@ -62,7 +62,7 @@ namespace AR_AreaZhuk.Insolation
             int indexStep = 0;
 
             // Инсоляция верхних квартир (справа-налево), до 1 углового шага (сверху)
-            var topFlats = insCheck.insFramework.GetTopFlatsInSection(insCheck.sectionInfo.Flats, true, false);            
+            var topFlats = insCheck.insFramework.GetTopFlatsInSection(insCheck.checkSection.Flats, true, false);            
             foreach (var topFlat in topFlats)
             {
                 if (topFlat.SubZone == "0")

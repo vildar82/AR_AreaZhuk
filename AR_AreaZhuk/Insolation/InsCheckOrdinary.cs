@@ -96,11 +96,11 @@ namespace AR_AreaZhuk.Insolation
                     //lightingOtherSide = flat.LightingTop;                    
                 }
 
-                var lightCurSide = insFramework.GetLightingPosition(lightingCurSide, flat, sectionInfo.Flats);
+                var lightCurSide = insFramework.GetLightingPosition(lightingCurSide, flat, checkSection.Flats);
                 int[] lightOtherSide = null;
                 if (lightingOtherSide != null)
                 {
-                    lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, sectionInfo.Flats);
+                    lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, checkSection.Flats);
                 }
 
                 var rule = insSpot.FindRule(flat);
@@ -157,7 +157,7 @@ namespace AR_AreaZhuk.Insolation
             if (light == null || ins == null) return;
 
             foreach (var item in light)
-            {                
+            {
                 if (item.Equals(0)) break;
                 double countLigth = 1;
 
@@ -170,10 +170,15 @@ namespace AR_AreaZhuk.Insolation
                 {
                     // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
                     lightIndexInFlat = (-item) - 1;
-                    countLigth = 0.5; 
+                    countLigth = 0.5;
                 }
 
-                var insIndexProject = ins[step + lightIndexInFlat];
+                var indexStepLight = step + lightIndexInFlat;
+                if (indexStepLight>= ins.Length)
+                {
+                    // квартира с окном выходящим на торец секции
+                }
+                var insIndexProject = ins[indexStepLight];
 
                 if (!string.IsNullOrWhiteSpace(insIndexProject))
                 {
@@ -185,7 +190,7 @@ namespace AR_AreaZhuk.Insolation
                             require.CountLighting -= countLigth;
                             requires[i] = require;
                         }
-                    }                           
+                    }
                 }
             }            
         }                

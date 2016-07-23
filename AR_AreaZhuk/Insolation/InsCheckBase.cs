@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace AR_AreaZhuk.Insolation
         internal readonly InsolationSpot insSpot;
         internal readonly Section section;
 
-        internal FlatInfo sectionInfo;
+        internal FlatInfo checkSection;
         internal bool isRightOrTopLLu;
 
         internal readonly bool isVertical;
@@ -30,10 +31,12 @@ namespace AR_AreaZhuk.Insolation
             this.indexColumnStart = indexColumnStart;
         }
 
-        public virtual bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)
+        public virtual bool CheckSection (FlatInfo checkSect, bool isRightOrTopLLu)
         {
+            Debug.Assert(checkSect.Flats.Any(f=>f.ShortType == "2KL2"));
+
             this.isRightOrTopLLu = isRightOrTopLLu;
-            sectionInfo = sect;            
+            checkSection = checkSect;            
             return true;
         }
     }

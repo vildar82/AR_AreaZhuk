@@ -8,11 +8,20 @@ namespace AR_AreaZhuk.Insolation
 {
     /// <summary>
     /// Значение инсолиции ячеек в прямой секции (в стандартном положении - горизонтально, ЛЛУ сверху)
-    /// Сверху и Снизу
-    /// Сбоку???
+    /// Сверху - справа-налево
+    /// Снизу - слева-направо
+    /// Сбоку - 2 слева, 2 справа (сверху и снизу по ячейке)
     /// </summary>
     class CellInsOrdinary : CellInsBase
     {
+        /// <summary>
+        /// Инсоляция с торца секции - 2 ячейки справа и слеева
+        /// </summary>
+        public string InsSideTopLeft { get; private set; }
+        public string InsSideBotLeft { get; private set; }
+        public string InsSideTopRight { get; private set; }
+        public string InsSideBotRight { get; private set; }
+
         public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
         {                       
         }
@@ -43,6 +52,16 @@ namespace AR_AreaZhuk.Insolation
                 cellBot.Col = cellTop.Col;
 
                 offset.Col = -1;
+
+                // Торцевая инсоляция
+                var cel = new Cell(cellTop.Row+1, cellTop.Col);
+                InsSideTopRight = GetInsIndex(cel, isRequired:false);
+                cel.Row--;
+                InsSideBotRight = GetInsIndex(cel, isRequired: false);
+                cel.Col -= countStep;
+                InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+                cel.Row++;
+                InsSideTopLeft = GetInsIndex(cel, isRequired: false);
             }
             else
             {
@@ -53,7 +72,17 @@ namespace AR_AreaZhuk.Insolation
                 cellBot.Col = cellTop.Col - indexWithSection;                
                 cellBot.Row = cellTop.Row;
 
-                offset.Row = -1;                
+                offset.Row = -1;
+
+                // Торцевая инсоляция
+                var cel = new Cell(cellTop.Row, cellTop.Col-1);
+                InsSideTopRight = GetInsIndex(cel, isRequired: false);
+                cel.Col--;
+                InsSideBotRight = GetInsIndex(cel, isRequired: false);
+                cel.Row += countStep;
+                InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+                cel.Col++;
+                InsSideTopLeft = GetInsIndex(cel, isRequired: false);
             }            
 
             for (int i = 0; i < countStep; i++)

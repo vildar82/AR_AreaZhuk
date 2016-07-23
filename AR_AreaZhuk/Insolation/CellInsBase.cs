@@ -35,11 +35,11 @@ namespace AR_AreaZhuk.Insolation
 
         /// <summary>
         /// Получение индекса из матрицы инсоляции
-        /// </summary>
-        /// <param name="row">Индекс строки (от 0)</param>
-        /// <param name="col">Индекс столбца (от 0)</param>
+        /// </summary>        
+        /// <param name="cell">Ячейка в матрице инсоляции</param>
+        /// <param name="isRequired">Должна быть задана инсоляция в этой ячеке. Точно определять торцы я пока не умею, но надо</param>
         /// <returns>Индекс инсоляции - A,B,C,D</returns>
-        protected string GetInsIndex (Cell cell)
+        protected string GetInsIndex (Cell cell, bool isRequired = true)
         {
             var cellValue = insCheck.insSpot.Matrix[cell.Col, cell.Row];
             string resInsIndex = string.Empty;
@@ -48,14 +48,14 @@ namespace AR_AreaZhuk.Insolation
             {
                 resInsIndex = splitSpot[1];
                 // проверка допустимого индекса инсоляции
-                if (!RoomInsulation.AllowedIndexes.Contains(resInsIndex))
+                if (!RoomInsulation.AllowedIndexes.Contains(resInsIndex) && isRequired)
                 {
                     throw new Exception("Недопустимый индекс инсоляции в задании - '" + resInsIndex + "', " +
                         "в ячейке [c" + cell.Col + ",r" + cell.Row + "].\n " +
                         "Допустимые индексы инсоляции " + string.Join(", ", RoomInsulation.AllowedIndexes));
                 }
             }
-            else
+            else if (isRequired)
             {
                 throw new Exception("Не задан индекс инсоляции в ячейке [c"+ cell.Col + ",r"+ cell.Row + "].");
             }
