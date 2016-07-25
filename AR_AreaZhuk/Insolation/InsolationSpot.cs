@@ -87,6 +87,9 @@ namespace AR_AreaZhuk.Insolation
             s.CountModules = sections[0].CountStep * 4;
             s.Floors = sections[0].Floors;
 
+            // Определение стартовой точки секции в матрице инсоляции
+            Cell cellStart = DefineStartCell();
+
             IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s, isCorner, isVertical, 
                 indexRowStart, indexColumnStart, sections, sp);
 
@@ -116,6 +119,15 @@ namespace AR_AreaZhuk.Insolation
                 continue;
             }
             return s;
+        }
+
+        /// <summary>
+        /// Определение стартовой точки секции в матрице инсоляции
+        /// верхняя правая точка. (в стандартном положении секции - горизонтально, ЛЛУ сверху)
+        /// </summary>        
+        private Cell DefineStartCell ()
+        {
+            
         }
 
         ///// <summary>

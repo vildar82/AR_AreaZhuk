@@ -10,7 +10,7 @@ namespace AR_AreaZhuk.Insolation
     class InsCheckCorner : InsCheckBase
     {
         CellInsCorner cellIns;
-        int indexSide =0;      
+        int indexBot =0;      
 
         public InsCheckCorner (InsolationSpot insSpot, Section section, bool isVertical,
             int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp)
@@ -25,11 +25,11 @@ namespace AR_AreaZhuk.Insolation
             bool res = false;
             if (isTop)
             {
-                 res = CheckTopFlats();
+                 res = CheckSideFlats(cellIns.InsTop);
             }
             else
             {
-                res = CheckBotFlats();
+                res = CheckSideFlats(cellIns.InsBot);
             }
             return res;
         }        
@@ -37,7 +37,7 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Проверка инсоляции верхних квартир
         /// </summary>
-        private bool CheckTopFlats ()
+        private bool CheckSideFlats (string[] ins)
         {
             int step = 0;            
             for (int i = 0; i < curSideFlats.Count; i++)
@@ -53,7 +53,8 @@ namespace AR_AreaZhuk.Insolation
                     continue;
                 }
 
-                var flatLightIndexTop = insSpot.insFramework.GetLightingPosition(flat.LightingTop, flat, checkSection.Flats);
+                string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;
+                var lightingFlatIndexes = insSpot.insFramework.GetLightingPosition(lightingFlat, flat, checkSection.Flats);
 
                 var ruleInsFlat = insSpot.FindRule(flat);
                 if (ruleInsFlat == null)
@@ -67,12 +68,13 @@ namespace AR_AreaZhuk.Insolation
                     // подходящие окна в квартиирах будут вычитаться из требований
                     var requires = rule.Requirements.ToList();
 
-                    CheckLighting(ref requires, flatLightIndexTop, cellIns.InsTop, step);
+                    CheckLighting(ref requires, lightingFlatIndexes, ins, step);
                     // Для первой квартиры проверить низ
-                    if (curFlatIndex==0)
+                    if  (isTop && curFlatIndex==0)
                     {
                         var flatLightIndexBot = insSpot.insFramework.GetLightingPosition(flat.LightingNiz, flat, checkSection.Flats);
-                        CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot.Reverse().ToArray(), step);
+                        CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
+                        indexBot = flat.SelectedIndexBottom;
                     }
 
                     // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
@@ -86,14 +88,10 @@ namespace AR_AreaZhuk.Insolation
                     // квартира не прошла инсоляцию - вся секция не проходит
                     return false;
                 }
+                step += isTop ? flat.SelectedIndexTop : flat.SelectedIndexBottom;
             }
             return true;
-        }
-
-        private bool CheckBotFlats ()
-        {
-            throw new NotImplementedException();
-        }
+        }               
 
         private void CheckLighting (ref List<InsRequired> requires, int[] light, string[] ins, int step)
         {

@@ -9,18 +9,10 @@ namespace AR_AreaZhuk.Insolation
     /// <summary>
     /// Значения инсоляции угловой секции
     /// InsTop - от левого угла секции до шага над ЛЛУ, шаги ЛЛУ пропускаются
+    /// InsBot - включает боковые ячейки не попадающие в шаги секции
     /// </summary>
     class CellInsCorner : CellInsBase
-    {
-        /// <summary>
-        /// Длина загиба короткого конца угловой секции - в шагах (модулях)
-        /// </summary>
-        const int CountStepShortEnd = 1;
-
-        /// <summary>
-        /// Индексы инсоляции сбоку в углу - начиная с первого шага
-        /// </summary>
-        public string[] InsCornerSide { get; set; }
+    {           
         /// <summary>
         /// Инсоляция с торца - верхняя ячейка
         /// Вдруг угловая сеция будет последней (или первой)
@@ -47,7 +39,7 @@ namespace AR_AreaZhuk.Insolation
             var isRightNiz = insCheck.insSpot.IsRightNizSection;
             var isRightTop = insCheck.insSpot.IsRightTopSection;
 
-            InsCornerSide = new string[CountStepWithSection + CountStepShortEnd - 1];
+            InsBot = new string[countStep+3];                                         
 
             if (isLeftNiz)
             {
@@ -100,14 +92,17 @@ namespace AR_AreaZhuk.Insolation
             // Инсоляция боковой угловой части, сверху-вниз, начиная с 1 шага
             indexStep = 0;
             cell.Col += (CountStepWithSection - 1) * directionHor;
-            for (int i = 0; i < InsCornerSide.Length; i++)
-            {
-                InsCornerSide[i] = GetInsIndex(cell);
+            
+            for (int i = 0; i < 4; i++) // 4 - кол боковых ячеек (начиная с 1 шага)
+            {                
+                InsBot[i] = GetInsIndex(cell);
                 cell.Row -= directionVertic;
             }
+            int indexBot = 4;
+            cell.Row -= directionVertic;
 
-            // Нижняя инсоляция - слева-направо, до начальной ячейки            
-            for (int i = 0; i < countStep; i++)
+            // Нижняя инсоляция - до начальной ячейки            
+            for (int i = indexBot; i < countStep+indexBot; i++)
             {
                 InsBot[i] = GetInsIndex(cell);
                 cell.Col -= directionHor;
