@@ -82,7 +82,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>        
         /// <param name="cellFirstSection">Угол первой секции - левый верхний для вертикальной или левый нижний для горизонтальной</param>
         public Section GetInsulationSections (List<FlatInfo> sections, bool isVertical,
-            bool isCorner, int numberSection, SpotInfo spotInfo, int[] indexSelectedSize, Cell cellFirstSection)
+            bool isCorner, int numberSection, SpotInfo spotInfo, Cell cellFirstSection)
         {
             Section s = new Section();
             s.Sections = new List<FlatInfo>();
@@ -98,7 +98,7 @@ namespace AR_AreaZhuk.Insolation
             // Начальная точка первой секции   
             if (s.NumberInSpot == 1)
             {
-                startCellHelper = new StartCellHelper(this, s, spotInfo, indexSelectedSize, cellFirstSection);                
+                startCellHelper = new StartCellHelper(this, s, spotInfo, cellFirstSection);                
             }
             else
             {

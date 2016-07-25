@@ -1688,9 +1688,10 @@ namespace AR_AreaZhuk
                                     sections = sectionGood.Sections;
                                     if (sections.Count > 0)
                                     {
+                                        // дефолтная стартовая ячейка первой секции в доме
                                         var cellFirstSection = new Cell(indexRowStart, indexColumnStart);
                                         var listSections1 = insulation.GetInsulationSections(sections, 
-                                            isVertical, isCorner, m + 1, spotInfo, indexSelectedSize, cellFirstSection);
+                                                    isVertical, isCorner, m + 1, spotInfo, cellFirstSection);
                                         s1 = listSections1;
                                         //if (!isCorner)
                                         //{
