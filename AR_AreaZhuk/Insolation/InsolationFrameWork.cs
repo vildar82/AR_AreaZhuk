@@ -57,8 +57,6 @@ namespace AR_AreaZhuk.Insolation
                 }
                 else
                 {
-
-
                     for (int i = sectionFlats.Count - 1; i >= 0; i--)
                     {
                         if (sectionFlats[i].SelectedIndexTop != 0) continue;

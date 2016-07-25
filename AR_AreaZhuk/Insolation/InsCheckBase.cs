@@ -10,9 +10,10 @@ namespace AR_AreaZhuk.Insolation
 {
     abstract class InsCheckBase : IInsCheck
     {
-        internal InsolationFrameWork insFramework = new InsolationFrameWork();
         internal readonly InsolationSpot insSpot;
         internal readonly Section section;
+        internal List<FlatInfo> sections;
+        internal SpotInfo sp;
 
         internal FlatInfo checkSection;
         internal bool isRightOrTopLLu;
@@ -20,24 +21,61 @@ namespace AR_AreaZhuk.Insolation
         internal readonly bool isVertical;
 
         internal readonly int indexRowStart;
-        internal readonly int indexColumnStart;       
+        internal readonly int indexColumnStart;
 
-        public InsCheckBase (InsolationSpot insSpot, Section section, bool isVertical, int indexRowStart, int indexColumnStart)
+        protected List<RoomInfo> topFlats;
+        protected List<RoomInfo> bottomFlats;
+
+        // Текущие проверяемые значения
+        protected RoomInfo flat;        
+        protected bool isTop;
+        protected bool isCurSide;
+        protected int curFlatIndex;
+        protected List<RoomInfo> curSideFlats;
+        protected bool specialFail; // Спец. условия не прохождения инсоляции - например торцевая квартира в средней секции
+
+        protected abstract bool CheckFlats ();
+
+        public InsCheckBase (InsolationSpot insSpot, Section section, bool isVertical,
+            int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp)
         {
             this.section = section;
+            this.sections = sections;
+            this.sp = sp;
             this.insSpot = insSpot;
             this.isVertical = isVertical;
             this.indexRowStart = indexRowStart;
             this.indexColumnStart = indexColumnStart;
         }
 
-        public virtual bool CheckSection (FlatInfo checkSect, bool isRightOrTopLLu)
+        public bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)
         {
-            Debug.Assert(checkSect.Flats.Any(f=>f.ShortType == "2KL2"));
-
+            bool res = false;
             this.isRightOrTopLLu = isRightOrTopLLu;
-            checkSection = checkSect;            
-            return true;
+            checkSection = sect;
+
+            // !!!??? Может быть мало квартир в секции?            
+            if (sect.Flats.Count <= 3)
+            {
+                Debug.Assert(false, "Меньше 3 квартир в секции.");
+                return false;
+            }
+
+            var topFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop: true, isRight: false);
+            var bottomFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop:false, isRight:false);
+
+            // Проверка инсоляции квартир сверху
+            isTop = true;
+            curSideFlats = topFlats;
+            res = CheckFlats();
+            if (res) // прошла инсоляция верхних квартир
+            {
+                // Проверка инсоляции квартир снизу                
+                isTop = false;
+                curSideFlats = bottomFlats;
+                res = CheckFlats();
+            }
+            return res;
         }
     }
 }

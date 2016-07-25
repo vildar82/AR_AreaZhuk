@@ -24,6 +24,8 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         public string[] InsBot { get; set; }
 
+        public abstract void DefineIns ();
+
         public CellInsBase (InsCheckBase insCheck)
         {
             this.insCheck = insCheck;
@@ -60,6 +62,16 @@ namespace AR_AreaZhuk.Insolation
                 throw new Exception("Не задан индекс инсоляции в ячейке [c"+ cell.Col + ",r"+ cell.Row + "].");
             }
             return resInsIndex;
+        }
+
+        /// <summary>
+        /// Проверка - это концевая секция (1 или последняя)
+        /// </summary>        
+        protected bool isEndSection ()
+        {
+            var res = insCheck.section.NumberInSpot == 1 ||
+                insCheck.section.NumberInSpot == insCheck.sp.TotalSections;
+            return res;
         }
     }
 }

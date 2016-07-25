@@ -17,10 +17,10 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Инсоляция с торца секции - 2 ячейки справа и слеева
         /// </summary>
-        public string InsSideTopLeft { get; private set; }
-        public string InsSideBotLeft { get; private set; }
-        public string InsSideTopRight { get; private set; }
-        public string InsSideBotRight { get; private set; }
+        public string InsSideTopLeft { get; private set; } = "";
+        public string InsSideBotLeft { get; private set; } = "";
+        public string InsSideTopRight { get; private set; } = "";
+        public string InsSideBotRight { get; private set; } = "";
 
         public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
         {                       
@@ -31,10 +31,16 @@ namespace AR_AreaZhuk.Insolation
             var invert = new CellInsOrdinary((InsCheckOrdinary)insCheck);
             invert.InsTop = InsBot.Reverse().ToArray();
             invert.InsBot = InsTop.Reverse().ToArray();
+
+            invert.InsSideBotLeft = InsSideTopRight;
+            invert.InsSideBotRight = InsSideTopLeft;
+            invert.InsSideTopLeft = InsSideBotRight;
+            invert.InsSideTopRight = InsSideBotLeft;
+
             return invert;
         }
 
-        public void DefineIns ()
+        public override void DefineIns ()
         {            
             int indexWithSection = CountStepWithSection - 1;
             
@@ -48,20 +54,23 @@ namespace AR_AreaZhuk.Insolation
                 cellTop.Row = insCheck.indexRowStart;
                 cellTop.Col = insCheck.indexColumnStart - 1;
 
-                cellBot.Row = cellTop.Row + indexWithSection;                                               
+                cellBot.Row = cellTop.Row + indexWithSection;
                 cellBot.Col = cellTop.Col;
 
                 offset.Col = -1;
 
                 // Торцевая инсоляция
-                var cel = new Cell(cellTop.Row+1, cellTop.Col);
-                InsSideTopRight = GetInsIndex(cel, isRequired:false);
-                cel.Row--;
-                InsSideBotRight = GetInsIndex(cel, isRequired: false);
-                cel.Col -= countStep;
-                InsSideBotLeft = GetInsIndex(cel, isRequired: false);
-                cel.Row++;
-                InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                if (isEndSection())
+                {
+                    var cel = new Cell(cellTop.Row + 1, cellTop.Col);
+                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
+                    cel.Row++;
+                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
+                    cel.Col -= countStep - 1;
+                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+                    cel.Row--;
+                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                }
             }
             else
             {
@@ -75,14 +84,17 @@ namespace AR_AreaZhuk.Insolation
                 offset.Row = -1;
 
                 // Торцевая инсоляция
-                var cel = new Cell(cellTop.Row, cellTop.Col-1);
-                InsSideTopRight = GetInsIndex(cel, isRequired: false);
-                cel.Col--;
-                InsSideBotRight = GetInsIndex(cel, isRequired: false);
-                cel.Row += countStep;
-                InsSideBotLeft = GetInsIndex(cel, isRequired: false);
-                cel.Col++;
-                InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                if (isEndSection())
+                {
+                    var cel = new Cell(cellTop.Row, cellTop.Col - 1);
+                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
+                    cel.Col--;
+                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
+                    cel.Row -= countStep - 1;
+                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+                    cel.Col++;
+                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                }
             }            
 
             for (int i = 0; i < countStep; i++)
@@ -95,6 +107,8 @@ namespace AR_AreaZhuk.Insolation
             }
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();
-        }        
+        }
+
+        
     }
 }

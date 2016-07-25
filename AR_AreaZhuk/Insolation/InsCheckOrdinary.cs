@@ -9,112 +9,112 @@ using AR_Zhuk_DataModel;
 namespace AR_AreaZhuk.Insolation
 {
     class InsCheckOrdinary : InsCheckBase
-    {        
+    {
         CellInsOrdinary cellInsStandart;
         CellInsOrdinary cellInsInvert;
+        CellInsOrdinary cellInsCur;
 
-        public InsCheckOrdinary (InsolationSpot insSpot,Section section, bool isVertical, int indexRowStart, int indexColumnStart) 
-            : base(insSpot, section, isVertical, indexRowStart, indexColumnStart)
+        protected int[] flatLightIndexCurSide;
+        protected int[] flatLightIndexOtherSide;
+        protected string[] insCurSide;
+        protected string[] insOtherSide;
+
+        public InsCheckOrdinary (InsolationSpot insSpot,Section section, bool isVertical,
+            int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp) 
+            : base(insSpot, section, isVertical, indexRowStart, indexColumnStart, sections, sp)
         {            
             // Данные по инсоляции секции в стандартном ее положении            
             cellInsStandart = new CellInsOrdinary(this);
             cellInsStandart.DefineIns();
-
-            cellInsInvert = cellInsStandart.Invert();
+            cellInsInvert = cellInsStandart.Invert();            
         }
 
-        public override bool CheckSection (FlatInfo sect,bool isRightOrTopLLu)
+        protected override bool CheckFlats ()
         {
-            bool res = false;     
-            base.CheckSection(sect, isRightOrTopLLu);
-
-            // !!!??? Может быть мало квартир в секции?            
-            if (sect.Flats.Count <= 3)
-            {
-                Debug.Assert(false, "Меньше 3 квартир в секции.");
-                return false;
-            }
-
-            var topFlats = insFramework.GetTopFlatsInSection(sect.Flats, true, false);
-            var bottomFlats = insFramework.GetTopFlatsInSection(sect.Flats, false, false);
-
-            CellInsOrdinary cellIns;
+            bool res = false;
             if (isRightOrTopLLu)
             {
-                cellIns = cellInsStandart;
+                cellInsCur = cellInsStandart;
             }
             else
             {
-                cellIns = cellInsInvert;
+                cellInsCur = cellInsInvert;
             }
 
-            // Проверка инсоляции квартир сверху
-            res = CheckFlats(topFlats, cellIns, isTop: true);
-            if (res) // прошла инсоляция верхних квартир
+            if (isTop)
             {
-                // Проверка инсоляции квартир снизу
-                // отступ шагов снизу последней верхней квартиры сверху
-                var startStep = topFlats.Last().SelectedIndexBottom; 
-                res = CheckFlats(bottomFlats, cellIns, isTop: false, startStep: startStep);
-            }           
-             
+                res = CheckCellIns();
+            }
+            else
+            {
+                var startStep = topFlats.Last().SelectedIndexBottom;                
+                res = CheckCellIns(startStep);
+            }
             return res;
         }
 
-        private bool CheckFlats (List<RoomInfo> flatsSide, CellInsOrdinary cellIns,  bool isTop, int startStep = 0)
+        private bool CheckCellIns (int startStep = 0)
         {            
-            int step = startStep;
+            int step = startStep;            
 
-            string[] insCurSide = null;
-            string[] insOtherSide = null;
+            insCurSide = null;
+            insOtherSide = null;
 
             if (isTop)
             {                
-                insCurSide = cellIns.InsTop;
-                insOtherSide = cellIns.InsBot.Reverse().ToArray(); 
+                insCurSide = cellInsCur.InsTop;
+                insOtherSide = cellInsCur.InsBot.Reverse().ToArray(); 
             }
             else
             {                
-                insCurSide = cellIns.InsBot;
-                // У нижних квартир не нужно проверять верх, т.к. верха у них быть не может
-                //insOtherSide = cellIns.InsTop.Reverse().ToArray();
+                insCurSide = cellInsCur.InsBot;
+                // У нижних квартир не нужно проверять верх, т.к. верха у них быть не может                
             }
 
-            foreach (var flat in flatsSide)
-            {
+            for (int i = 0; i < curSideFlats.Count; i++)            
+            {                
+                flat = curSideFlats[i];
+                curFlatIndex = i;
+                specialFail = false;
                 bool flatPassed = false;
                 string lightingCurSide = null;
-                string lightingOtherSide = null;                
-                if (isTop)
-                {
-                    lightingCurSide = flat.LightingTop;
-                    lightingOtherSide = flat.LightingNiz;                    
-                }
-                else
-                {
-                    lightingCurSide = flat.LightingNiz;
-                    //lightingOtherSide = flat.LightingTop;                    
-                }
+                string lightingOtherSide = null;
 
-                var lightCurSide = insFramework.GetLightingPosition(lightingCurSide, flat, checkSection.Flats);
-                int[] lightOtherSide = null;
-                if (lightingOtherSide != null)
-                {
-                    lightOtherSide = insFramework.GetLightingPosition(lightingOtherSide, flat, checkSection.Flats);
-                }
-
-                var rule = insSpot.FindRule(flat);
-
-                if (rule == null)
+                if (flat.SubZone == "0")
                 {
                     // без правил инсоляции может быть ЛЛУ
                     flatPassed = true;
                 }
                 else
                 {
-                    foreach (var ruleName in rule.Rules)
+                    if (isTop)
                     {
-                        if (CheckRule(ruleName, lightCurSide, lightOtherSide, insCurSide, insOtherSide, step))
+                        lightingCurSide = flat.LightingTop;
+                        lightingOtherSide = flat.LightingNiz;
+                    }
+                    else
+                    {
+                        lightingCurSide = flat.LightingNiz;
+                    }
+
+                    flatLightIndexCurSide = insSpot.insFramework.GetLightingPosition(lightingCurSide, flat, checkSection.Flats);
+                    flatLightIndexOtherSide = null;
+                    // Для крайних верхних квартир нужно проверить низ
+                    if (lightingOtherSide != null && curFlatIndex ==0 || curFlatIndex == curSideFlats.Count-1)
+                    {
+                        flatLightIndexOtherSide = insSpot.insFramework.GetLightingPosition(lightingOtherSide, flat, checkSection.Flats);
+                    }
+
+                    var ruleInsFlat = insSpot.FindRule(flat);
+                    if (ruleInsFlat == null)
+                    {
+                        // Атас, квартира не ЛЛУ, но без правил инсоляции
+                        throw new Exception("Не определено правило инсоляции для квартиры - " + flat.Type);
+                    }
+
+                    foreach (var rule in ruleInsFlat.Rules)
+                    {
+                        if (CheckRule(rule, step))
                         {
                             // Правило удовлетворено, оставшиеся правила можно не проверять
                             // Евартира проходит инсоляцию
@@ -124,7 +124,7 @@ namespace AR_AreaZhuk.Insolation
                     }
                 }
 
-                if (!flatPassed)
+                if (!flatPassed || specialFail)
                 {
                     // квартира не прошла инсоляцию - вся секция не проходит
                     return false;
@@ -136,14 +136,17 @@ namespace AR_AreaZhuk.Insolation
             return true;
         }        
 
-        private bool CheckRule (InsRule rule, int[] lightCurSide, int[] lightOtherSide, 
-            string[] insCurSide, string[] insOtherSide, int step)
+        private bool CheckRule (InsRule rule, int step)
         {
-            var requires = rule.Requirements.ToList();
-
             // подходящие окна в квартиирах будут вычитаться из требований
-            CheckLighting(ref requires, lightCurSide, insCurSide, step);
-            CheckLighting(ref requires, lightOtherSide, insOtherSide, step);
+            var requires = rule.Requirements.ToList();            
+
+            // Проверка окон с этой строны
+            isCurSide = true;
+            CheckLighting(ref requires, flatLightIndexCurSide, insCurSide, step);
+            // Проверка окон с другой стороны
+            isCurSide = false;
+            CheckLighting(ref requires, flatLightIndexOtherSide, insOtherSide, step);
 
             // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
             // Округление вниз - от окон внутри одного помещения
@@ -171,14 +174,14 @@ namespace AR_AreaZhuk.Insolation
                     // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
                     lightIndexInFlat = (-item) - 1;
                     countLigth = 0.5;
-                }
+                }                
 
-                var indexStepLight = step + lightIndexInFlat;
-                if (indexStepLight>= ins.Length)
-                {
-                    // квартира с окном выходящим на торец секции
-                }
-                var insIndexProject = ins[indexStepLight];
+                // проверка квартиры с окном выходящим на торец секции   
+                string insIndexProject;
+                if (!CheckSideFlat(step, lightIndexInFlat, ins, out insIndexProject))
+                {                    
+                    return;
+                }                
 
                 if (!string.IsNullOrWhiteSpace(insIndexProject))
                 {
@@ -193,6 +196,106 @@ namespace AR_AreaZhuk.Insolation
                     }
                 }
             }            
-        }                
+        }
+
+        /// <summary>
+        /// Проверка боковой квартиры - у которой окна выходят на торец секции
+        /// Т.е. такая квартира может быть только в торцевой секции
+        /// Если такая квартира в средней секции, то такая секция не пропускается
+        /// </summary>
+        /// <returns>false если квартира не пропущена</returns>
+        private bool CheckSideFlat (int step, int flatLightIndex, string[] ins, out string insIndexProject)
+        {
+            bool res = false;
+            insIndexProject = null;
+
+            var sideFlat = insSpot.SideFlats.Find(f => f.Name == flat.Type);
+
+            // Это боковая квартира с окном на торце секции
+            // и текущий индекс освещенности равен торцевому индексу в этой квартире - то проверяем боковую инсоляцию
+            if (sideFlat != null &&
+                sideFlat.IndexLightSide == flatLightIndex + 1)
+            {
+                if (isTop)
+                {
+                    // Верх (на стороне ЛЛУ)
+                    // если это первая квартира сверху - то торец справа                    
+                    if (curFlatIndex == 0)
+                    {
+                        // Торец справа
+                        if (isCurSide)
+                        {
+                            // Сверху
+                            insIndexProject = cellInsCur.InsSideTopRight;
+                        }
+                        else
+                        {
+                            // Снизу
+                            insIndexProject = cellInsCur.InsSideBotRight;
+                        }
+                    }
+                    else if (curFlatIndex == curSideFlats.Count-1)
+                    {
+                        // Торец слева
+                        if (isCurSide)
+                        {
+                            // Сверху
+                            insIndexProject = cellInsCur.InsSideTopLeft;
+                        }
+                        else
+                        {
+                            // Снизу
+                            insIndexProject = cellInsCur.InsSideBotLeft;
+                        }
+                    }                    
+                }
+                else
+                {
+                    // Нижняя сторона от ЛЛУ
+                    // если это первая квартира снизу - то торец справа
+                    if (curFlatIndex == 0)
+                    {
+                        // Торец справа
+                        if (isCurSide)
+                        {
+                            // Снизу
+                            insIndexProject = cellInsCur.InsSideBotRight;
+                        }
+                        else
+                        {
+                            // Сверху
+                            insIndexProject = cellInsCur.InsSideTopRight;
+                        }
+                    }
+                    else if (curFlatIndex == curSideFlats.Count - 1)
+                    {
+                        // Торец слева
+                        if (isCurSide)
+                        {
+                            // Снизу
+                            insIndexProject = cellInsCur.InsSideBotLeft;
+                        }
+                        else
+                        {
+                            // Сверху
+                            insIndexProject = cellInsCur.InsSideTopLeft;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(insIndexProject))
+                {
+                    specialFail = true;
+                }
+            }
+            else
+            {
+                // определение инсоляции по текущему шагу в секции и индексу окна в квартире
+                var indexStepLight = step + flatLightIndex;
+                insIndexProject = ins[indexStepLight];
+                res = true;
+            }
+            return res;
+        }
     }
 }

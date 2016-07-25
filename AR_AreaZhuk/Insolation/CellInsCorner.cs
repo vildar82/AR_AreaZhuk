@@ -8,6 +8,7 @@ namespace AR_AreaZhuk.Insolation
 {
     /// <summary>
     /// Значения инсоляции угловой секции
+    /// InsTop - от левого угла секции до шага над ЛЛУ, шаги ЛЛУ пропускаются
     /// </summary>
     class CellInsCorner : CellInsBase
     {
@@ -19,7 +20,13 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Индексы инсоляции сбоку в углу - начиная с первого шага
         /// </summary>
-        public string[] InsSide { get; set; }     
+        public string[] InsCornerSide { get; set; }
+        /// <summary>
+        /// Инсоляция с торца - верхняя ячейка
+        /// Вдруг угловая сеция будет последней (или первой)
+        /// </summary>
+        public string InsSideTop { get; private set; } = "";
+        public string InsSideBot { get; private set; } = "";
 
         /// <summary>
         /// Начальная точка - в стандартном положении (левый нижний) - верхний правый угол
@@ -33,19 +40,19 @@ namespace AR_AreaZhuk.Insolation
         {            
         }
 
-        public void DefineIns()
+        public override void DefineIns()
         {            
             var isLeftNiz = insCheck.insSpot.IsLeftNizSection;
             var isLeftTop = insCheck.insSpot.IsLeftTopSection;
             var isRightNiz = insCheck.insSpot.IsRightNizSection;
             var isRightTop = insCheck.insSpot.IsRightTopSection;
 
-            InsSide = new string[CountStepWithSection + CountStepShortEnd - 1];
+            InsCornerSide = new string[CountStepWithSection + CountStepShortEnd - 1];
 
             if (isLeftNiz)
             {
                 startRow = insCheck.indexRowStart;
-                startCol = insCheck.indexColumnStart;
+                startCol = insCheck.indexColumnStart-1;
                 directionVertic = -1;
                 directionHor = -1;                
             }
@@ -54,15 +61,24 @@ namespace AR_AreaZhuk.Insolation
         }        
 
         /// <summary>
-        /// Определение инсоляции для левой нижней угловой секции
+        /// Определение инсоляции угловой горизонтально расположенной в Excel секции
         /// </summary>
         private void define ()
         {
             Cell cell = new Cell(startRow, startCol);                     
             int indexStep = 0;
 
+            // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
+            if (isEndSection())
+            {
+                var cellSide = new Cell(cell.Row + 1, cell.Col);
+                InsSideTop = GetInsIndex(cellSide, isRequired: false);
+                cellSide.Row++;
+                InsSideBot = GetInsIndex(cellSide, isRequired: false);
+            }
+
             // Инсоляция верхних квартир (справа-налево), до 1 углового шага (сверху)
-            var topFlats = insCheck.insFramework.GetTopFlatsInSection(insCheck.checkSection.Flats, true, false);            
+            var topFlats = insCheck.insSpot.insFramework.GetTopFlatsInSection(insCheck.sections.First().Flats, true, false);            
             foreach (var topFlat in topFlats)
             {
                 if (topFlat.SubZone == "0")
@@ -70,30 +86,32 @@ namespace AR_AreaZhuk.Insolation
                     // ячейка над ллу           
                     cell.Col += directionHor*2;             
                     cell.Row += directionVertic;
-                    InsTop[++indexStep] = GetInsIndex(cell);
+                    InsTop[indexStep] = GetInsIndex(cell);
                     break;
-                }             
-                InsTop[indexStep] = GetInsIndex(cell);
-                cell.Col += directionHor;
-                indexStep++;
+                }
+                for (int i = 0; i < topFlat.SelectedIndexTop; i++)
+                {
+                    InsTop[indexStep] = GetInsIndex(cell);
+                    cell.Col += directionHor;
+                    indexStep++;
+                }                
             }
 
             // Инсоляция боковой угловой части, сверху-вниз, начиная с 1 шага
             indexStep = 0;
             cell.Col += (CountStepWithSection - 1) * directionHor;
-            for (int i = 0; i < InsSide.Length; i++)
+            for (int i = 0; i < InsCornerSide.Length; i++)
             {
-                InsSide[i] = GetInsIndex(cell);
+                InsCornerSide[i] = GetInsIndex(cell);
                 cell.Row -= directionVertic;
             }
 
-            // Нижняя инсоляция - слева-направо, до начальной ячейки
-            indexStep = 0;
-            do
+            // Нижняя инсоляция - слева-направо, до начальной ячейки            
+            for (int i = 0; i < countStep; i++)
             {
-                InsBot[indexStep] = GetInsIndex(cell);
-                cell.Row -= directionHor;
-            } while (startRow>cell.Row);            
+                InsBot[i] = GetInsIndex(cell);
+                cell.Col -= directionHor;
+            }
         }
     }
 }

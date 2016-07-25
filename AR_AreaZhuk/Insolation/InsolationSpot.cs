@@ -14,7 +14,7 @@ namespace AR_AreaZhuk.Insolation
     /// </summary>
     public class InsolationSpot
     {
-        InsolationFrameWork insFramework = new InsolationFrameWork();
+        internal InsolationFrameWork insFramework = new InsolationFrameWork();
         public string Name { get; set; }
         /// <summary>
         /// Угловая. Правый угол. Низ.
@@ -42,6 +42,10 @@ namespace AR_AreaZhuk.Insolation
         public List<int> MaxRightXY { get; set; }
         public string[,] Matrix { get; set; }
         public List<RoomInsulation> RoomInsulations { get; private set; }
+        /// <summary>
+        /// Боковые квартиры у которых окна выходят на тоец секции
+        /// </summary>
+        public List<SideFlat> SideFlats { get; private set; }
 
         public InsolationSpot ()
         {
@@ -51,13 +55,19 @@ namespace AR_AreaZhuk.Insolation
             // [Кол.помещений] - кол инсолируемых комнат. Пусто или любое число. Длина - один символ. Если пусто, то это 1 помещение.
             // [Индеск инсоляции] - один символ A, B, C, D - латинская.
             // + не обязательно. Например: C+2B - требуется 3 помещения с 1C и 2B.     
-            // Учитывается порядок индексов A<B<C<D. Поэтому нужно писать только минимальное требования. Например, если требуется C, то писать требование D не обязательно.                   
+            // Учитывается порядок индексов A<B<C<D. Поэтому писать только минимальное требования. Например, если требуется C, то писать требование D не обязательно.                   
             RoomInsulations = new List<RoomInsulation>()
             {
                 new RoomInsulation ("Однокомнатная или студия", 1, new List<string>() { "C" }),
                 new RoomInsulation ("Двухкомнатная", 2, new List<string>() { "C", "2B" }),
                 new RoomInsulation ("Трехкомнатная", 3, new List<string>() { "C", "2B" }),
                 new RoomInsulation ("Четырехкомнатная", 4, new List<string>() { "2C", "C+2B" })
+            };
+
+            SideFlats = new List<SideFlat>() 
+            {
+                new SideFlat("PIK1_2KL2_A0", 4),
+                new SideFlat("PIK1_2KL2_Z0", 1)
             };
         }
         /// <summary>
@@ -77,7 +87,8 @@ namespace AR_AreaZhuk.Insolation
             s.CountModules = sections[0].CountStep * 4;
             s.Floors = sections[0].Floors;
 
-            IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s, isCorner, isVertical, indexRowStart, indexColumnStart);
+            IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s, isCorner, isVertical, 
+                indexRowStart, indexColumnStart, sections, sp);
 
             foreach (var sect in sections)
             {
