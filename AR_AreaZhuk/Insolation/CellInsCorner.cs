@@ -42,9 +42,7 @@ namespace AR_AreaZhuk.Insolation
             InsBot = new string[countStep+3];                                         
 
             if (isLeftNiz)
-            {
-                startRow = insCheck.indexRowStart;
-                startCol = insCheck.indexColumnStart-1;
+            {                
                 directionVertic = -1;
                 directionHor = -1;                
             }
@@ -57,7 +55,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         private void define ()
         {
-            Cell cell = new Cell(startRow, startCol);                     
+            Cell cell = new Cell(insCheck.cellStart.Row, insCheck.cellStart.Col);
             int indexStep = 0;
 
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
@@ -91,7 +89,7 @@ namespace AR_AreaZhuk.Insolation
 
             // Инсоляция боковой угловой части, сверху-вниз, начиная с 1 шага
             indexStep = 0;
-            cell.Col += (CountStepWithSection - 1) * directionHor;
+            cell.Col += (InsolationSpot.CountStepWithSection - 1) * directionHor;
             
             for (int i = 0; i < 4; i++) // 4 - кол боковых ячеек (начиная с 1 шага)
             {                

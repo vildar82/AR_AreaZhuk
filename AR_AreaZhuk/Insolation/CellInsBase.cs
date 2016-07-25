@@ -8,10 +8,7 @@ namespace AR_AreaZhuk.Insolation
 {
     abstract class CellInsBase
     {
-        /// <summary>
-        /// Ширина секции - в шагах (модулях)
-        /// </summary>
-        protected const int CountStepWithSection = 4;
+        
         protected InsCheckBase insCheck;
         protected int countStep;
         protected bool isVertic;

@@ -13,8 +13,8 @@ namespace AR_AreaZhuk.Insolation
         int indexBot =0;      
 
         public InsCheckCorner (InsolationSpot insSpot, Section section, bool isVertical,
-            int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp)
-            : base(insSpot, section, isVertical, indexRowStart, indexColumnStart, sections, sp)
+            Cell cellStart, List<FlatInfo> sections, SpotInfo sp)
+            : base(insSpot, section, isVertical, cellStart, sections, sp)
         {
             cellIns = new CellInsCorner(this);
             cellIns.DefineIns(); 

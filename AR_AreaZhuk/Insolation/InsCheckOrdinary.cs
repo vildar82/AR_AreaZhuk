@@ -20,8 +20,8 @@ namespace AR_AreaZhuk.Insolation
         protected string[] insOtherSide;
 
         public InsCheckOrdinary (InsolationSpot insSpot,Section section, bool isVertical,
-            int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp) 
-            : base(insSpot, section, isVertical, indexRowStart, indexColumnStart, sections, sp)
+            Cell cellStart, List<FlatInfo> sections, SpotInfo sp) 
+            : base(insSpot, section, isVertical, cellStart, sections, sp)
         {            
             // Данные по инсоляции секции в стандартном ее положении            
             cellInsStandart = new CellInsOrdinary(this);

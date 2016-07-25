@@ -1688,9 +1688,9 @@ namespace AR_AreaZhuk
                                     sections = sectionGood.Sections;
                                     if (sections.Count > 0)
                                     {
-                                        var listSections1 = insulation.GetInsulationSections(
-                                                sections, isRightOrTopLLu, isVertical, indexRowStart,   ////////////////////////////////////////Инсоляция
-                                                indexColumnStart, isCorner, m + 1, spotInfo);
+                                        var cellFirstSection = new Cell(indexRowStart, indexColumnStart);
+                                        var listSections1 = insulation.GetInsulationSections(sections, 
+                                            isVertical, isCorner, m + 1, spotInfo, indexSelectedSize, cellFirstSection);
                                         s1 = listSections1;
                                         //if (!isCorner)
                                         //{

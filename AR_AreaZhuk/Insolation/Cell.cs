@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AR_AreaZhuk.Insolation
 {
-    struct Cell
+    public struct Cell
     {
         public int Row { get; set; }
         public int Col { get; set; }

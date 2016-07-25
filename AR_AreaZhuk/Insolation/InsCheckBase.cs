@@ -20,8 +20,7 @@ namespace AR_AreaZhuk.Insolation
 
         internal readonly bool isVertical;
 
-        internal readonly int indexRowStart;
-        internal readonly int indexColumnStart;
+        internal readonly Cell cellStart;        
 
         protected List<RoomInfo> topFlats;
         protected List<RoomInfo> bottomFlats;
@@ -37,15 +36,14 @@ namespace AR_AreaZhuk.Insolation
         protected abstract bool CheckFlats ();
 
         public InsCheckBase (InsolationSpot insSpot, Section section, bool isVertical,
-            int indexRowStart, int indexColumnStart, List<FlatInfo> sections, SpotInfo sp)
+            Cell cellStart, List<FlatInfo> sections, SpotInfo sp)
         {
             this.section = section;
             this.sections = sections;
             this.sp = sp;
             this.insSpot = insSpot;
             this.isVertical = isVertical;
-            this.indexRowStart = indexRowStart;
-            this.indexColumnStart = indexColumnStart;
+            this.cellStart = cellStart;            
         }
 
         public bool CheckSection (FlatInfo sect, bool isRightOrTopLLu)
