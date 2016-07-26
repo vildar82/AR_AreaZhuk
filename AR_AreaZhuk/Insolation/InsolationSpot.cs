@@ -100,7 +100,8 @@ namespace AR_AreaZhuk.Insolation
 
             foreach (var sect in sections)
             {
-                if (sect.Flats.Count < 4)
+                // Пропуск секций с малым количеством квартир (меньше 5 (вместе с ЛЛУ))
+                if (sect.Flats.Count < 5)
                     continue;
 
                 // Для тестирования - добавление не прошедших инсоляцию секций
