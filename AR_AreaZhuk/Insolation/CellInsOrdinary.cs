@@ -55,7 +55,7 @@ namespace AR_AreaZhuk.Insolation
                 offset.Row = -1;
 
                 // Торцевая инсоляция
-                if (isEndSection())
+                if (insCheck.IsEndSection())
                 {
                     var cel = new Cell(cellTop.Row, cellTop.Col - 1);
                     InsSideTopRight = GetInsIndex(cel, isRequired: false);
@@ -74,7 +74,7 @@ namespace AR_AreaZhuk.Insolation
                 offset.Col = -1;
 
                 // Торцевая инсоляция
-                if (isEndSection())
+                if (insCheck.IsEndSection())
                 {
                     var cel = new Cell(cellTop.Row + 1, cellTop.Col);
                     InsSideTopRight = GetInsIndex(cel, isRequired: false);

@@ -61,14 +61,6 @@ namespace AR_AreaZhuk.Insolation
             return resInsIndex;
         }
 
-        /// <summary>
-        /// Проверка - это концевая секция (1 или последняя)
-        /// </summary>        
-        protected bool isEndSection ()
-        {
-            var res = insCheck.section.NumberInSpot == 1 ||
-                insCheck.section.NumberInSpot == insCheck.sp.TotalSections;
-            return res;
-        }
+        
     }
 }

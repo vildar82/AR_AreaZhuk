@@ -76,7 +76,7 @@ namespace AR_AreaZhuk.Insolation
             int indexStep = 0;
 
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
-            if (isEndSection())
+            if (insCheck.IsEndSection())
             {
                 var cellSide = cell;
                 cellSide.Offset(directionOrthoFromLLU);

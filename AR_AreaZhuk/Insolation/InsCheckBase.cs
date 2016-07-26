@@ -75,5 +75,15 @@ namespace AR_AreaZhuk.Insolation
             }
             return res;
         }
+
+        /// <summary>
+        /// Проверка - это концевая секция (1 или последняя)
+        /// </summary>        
+        public bool IsEndSection ()
+        {
+            var res = section.NumberInSpot == 1 ||
+                section.NumberInSpot == sp.TotalSections;
+            return res;
+        }
     }
 }

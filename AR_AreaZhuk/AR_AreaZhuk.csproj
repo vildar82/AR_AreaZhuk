@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AR_AreaZhuk</RootNamespace>
     <AssemblyName>AR_AreaZhuk</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyVersion>1.0.202.3084</AssemblyVersion>
     <TargetFrameworkProfile />
@@ -26,7 +26,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -92,6 +92,7 @@
     <Compile Include="Insolation\InsCheckFactory.cs" />
     <Compile Include="Insolation\InsCheckOrdinary.cs" />
     <Compile Include="Insolation\InsolationFrameWork.cs" />
+    <Compile Include="Insolation\LightingStringParser.cs" />
     <Compile Include="Insolation\SideFlat.cs" />
     <Compile Include="Insolation\StartCellHelper.cs" />
     <Compile Include="Model\HouseInfo.cs" />

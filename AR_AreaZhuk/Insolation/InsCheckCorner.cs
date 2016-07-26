@@ -57,7 +57,8 @@ namespace AR_AreaZhuk.Insolation
                 }
 
                 string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;
-                var lightingFlatIndexes = insSpot.insFramework.GetLightingPosition(lightingFlat, flat, checkSection.Flats);
+                List<int> sideLighting;
+                var lightingFlatIndexes = LightingStringParser.GetLightings(lightingFlat, out sideLighting);
 
                 var ruleInsFlat = insSpot.FindRule(flat);
                 if (ruleInsFlat == null)
@@ -75,7 +76,7 @@ namespace AR_AreaZhuk.Insolation
                     // Для первой квартиры проверить низ
                     if  (isTop && curFlatIndex==0)
                     {
-                        var flatLightIndexBot = insSpot.insFramework.GetLightingPosition(flat.LightingNiz, flat, checkSection.Flats);
+                        var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
                         CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
                         indexBot = flat.SelectedIndexBottom;
                     }
@@ -96,7 +97,7 @@ namespace AR_AreaZhuk.Insolation
             return true;
         }               
 
-        private void CheckLighting (ref List<InsRequired> requires, int[] light, string[] ins, int step)
+        private void CheckLighting (ref List<InsRequired> requires, List<int> light, string[] ins, int step)
         {
             if (light == null || ins == null) return;
 
