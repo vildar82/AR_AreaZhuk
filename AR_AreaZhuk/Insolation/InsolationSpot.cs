@@ -49,10 +49,6 @@ namespace AR_AreaZhuk.Insolation
         public List<int> MaxRightXY { get; set; }
         public string[,] Matrix { get; set; }
         public List<RoomInsulation> RoomInsulations { get; private set; }
-        /// <summary>
-        /// Боковые квартиры у которых окна выходят на тоец секции
-        /// </summary>
-        public List<SideFlat> SideFlats { get; private set; }
 
         public InsolationSpot ()
         {
@@ -69,13 +65,7 @@ namespace AR_AreaZhuk.Insolation
                 new RoomInsulation ("Двухкомнатная", 2, new List<string>() { "C", "2B" }),
                 new RoomInsulation ("Трехкомнатная", 3, new List<string>() { "C", "2B" }),
                 new RoomInsulation ("Четырехкомнатная", 4, new List<string>() { "2C", "C+2B" })
-            };
-
-            SideFlats = new List<SideFlat>() 
-            {
-                new SideFlat("PIK1_2KL2_A0", 4),
-                new SideFlat("PIK1_2KL2_Z0", 1)
-            };
+            };            
         }
         /// <summary>
         /// Проверка инсоляции секции (всех вариантов секции) 
@@ -110,7 +100,7 @@ namespace AR_AreaZhuk.Insolation
 
             foreach (var sect in sections)
             {
-                if (sect.Flats.Count == 0)
+                if (sect.Flats.Count < 4)
                     continue;                
 
                 if (insCheck.CheckSection(sect, isRightOrTopLLu: true))

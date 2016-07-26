@@ -23,6 +23,8 @@ namespace AR_AreaZhuk.Insolation
         List<int> flatLightIndexSideOtherSide;
         string[] insCurSide;
         string[] insOtherSide;
+        bool isFirstFlatInSide;
+        bool isLastFlatInSide;
 
         public InsCheckOrdinary (InsolationSpot insSpot,Section section,
             StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp) 
@@ -84,8 +86,8 @@ namespace AR_AreaZhuk.Insolation
                 bool flatPassed = false;
                 string lightingCurSide = null;
                 string lightingOtherSide = null;
-                bool isFirstFlatInSide = IsFirstFlatInSide();
-                bool isLastFlatInSide = IsLastFlatInSide();
+                isFirstFlatInSide = IsFirstFlatInSide();
+                isLastFlatInSide = IsLastFlatInSide();
 
                 if (flat.SubZone == "0")
                 {
@@ -104,12 +106,22 @@ namespace AR_AreaZhuk.Insolation
                         lightingCurSide = flat.LightingNiz;
                     }
 
+                    // Временно - подмена индекса освещенностим для боковых квартир!!!???
+                    var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
+                    if (sideFlat != null)
+                    {
+                        lightingCurSide = sideFlat.LightingStringWithB;
+                    }
+
                     flatLightIndexCurSide = LightingStringParser.GetLightings(lightingCurSide, out flatLightIndexSideCurSide);
                     flatLightIndexOtherSide = null;
-                    // Для крайних верхних квартир нужно проверить низ
-                    if (lightingOtherSide != null && isFirstFlatInSide || isLastFlatInSide)
+                    // Для верхних крайних верхних квартир нужно проверить низ
+                    if (isTop)
                     {
-                        flatLightIndexOtherSide = LightingStringParser.GetLightings(lightingOtherSide, out flatLightIndexSideOtherSide);
+                        if (lightingOtherSide != null && (isFirstFlatInSide || isLastFlatInSide))
+                        {
+                            flatLightIndexOtherSide = LightingStringParser.GetLightings(lightingOtherSide, out flatLightIndexSideOtherSide);
+                        }
                     }
 
                     var ruleInsFlat = insSpot.FindRule(flat);
@@ -146,170 +158,95 @@ namespace AR_AreaZhuk.Insolation
         private bool CheckRule (InsRule rule, int step)
         {
             // подходящие окна в квартиирах будут вычитаться из требований
-            var requires = rule.Requirements.ToList();            
-
-            // 
+            var requires = rule.Requirements.ToList();                       
 
             // Проверка окон с этой строны
             isCurSide = true;
-            CheckLighting(ref requires, flatLightIndexCurSide, insCurSide, step);
+            CheckLighting(ref requires, flatLightIndexCurSide, insCurSide, step);           
+
             // Проверка окон с другой стороны
             isCurSide = false;
             CheckLighting(ref requires, flatLightIndexOtherSide, insOtherSide, step);
+
+            // проверка боковин            
+            CheckLightingSide(ref requires);
 
             // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
             // Округление вниз - от окон внутри одного помещения
             var countBalance = requires.Sum(s => Math.Ceiling(s.CountLighting)); 
             var res = countBalance <= 0;            
             return res;            
-        }
+        }        
 
-        private void CheckLighting (ref List<InsRequired> requires, List<int> light, string [] ins, int step)
-        {
-            if (light == null || ins == null) return;
-
-            foreach (var item in light)
-            {
-                if (item.Equals(0)) break;
-                double countLigth = 1;
-
-                int lightIndexInFlat;
-                if (item > 0)
-                {
-                    lightIndexInFlat = item - 1;
-                }
-                else
-                {
-                    // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
-                    lightIndexInFlat = -item - 1;
-                    countLigth = 0.5;
-                }
-                
-                string insIndexProject = ins[step + lightIndexInFlat];
-
-                if (!string.IsNullOrWhiteSpace(insIndexProject))
-                {
-                    for (int i = 0; i < requires.Count; i++)
-                    {
-                        var require = requires[i];
-                        if (require.CountLighting > 0 && require.IsPassed(insIndexProject))
-                        {
-                            require.CountLighting -= countLigth;
-                            requires[i] = require;
-                        }
-                    }
-                }
-            }            
-        }
+        
 
         /// <summary>
-        /// Проверка боковой квартиры - у которой окна выходят на торец секции
-        /// Т.е. такая квартира может быть только в торцевой секции
-        /// Если такая квартира в средней секции, то такая секция не пропускается
-        /// </summary>
-        /// <returns>false если квартира не пропущена</returns>
-        private bool CheckSideFlat (int step, int flatLightIndex, string[] ins, out string insIndexProject)
+        /// Проверка инсоляции боковин
+        /// </summary>        
+        private void CheckLightingSide (ref List<InsRequired> requires)
         {
-            bool res = false;
-            insIndexProject = null;
-
-            var sideFlat = insSpot.SideFlats.Find(f => f.Name == flat.Type);
-
-            // Это боковая квартира с окном на торце секции
-            // и текущий индекс освещенности равен торцевому индексу в этой квартире - то проверяем боковую инсоляцию
-            if (sideFlat != null &&
-                sideFlat.IndexLightSide == flatLightIndex + 1)
+            // Если это не крайняя квартира на стороне, то точно боковой инсоляции нет.
+            // И если не задана боковая инсоляция для квартиры
+            // И если не задана боковая инсоляция в пятне инсоляции
+            bool isSideFlat = isFirstFlatInSide || isLastFlatInSide;
+            bool flatHasSide = flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;            
+            if (!isSideFlat || !flatHasSide || !cellInsCur.HasSideIns || requires.Sum(r=>r.CountLighting)<=0)
             {
-                if (isTop)
-                {
-                    // Верх (на стороне ЛЛУ)
-                    // если это первая квартира сверху - то торец справа                    
-                    if (curFlatIndex == 0)
-                    {
-                        // Торец справа
-                        if (isCurSide)
-                        {
-                            // Сверху
-                            insIndexProject = cellInsCur.InsSideTopRight;
-                        }
-                        else
-                        {
-                            // Снизу
-                            insIndexProject = cellInsCur.InsSideBotRight;
-                        }
-                    }
-                    else if (curFlatIndex == curSideFlats.Count-1)
-                    {
-                        // Торец слева
-                        if (isCurSide)
-                        {
-                            // Сверху
-                            insIndexProject = cellInsCur.InsSideTopLeft;
-                        }
-                        else
-                        {
-                            // Снизу
-                            insIndexProject = cellInsCur.InsSideBotLeft;
-                        }
-                    }                    
-                }
-                else
-                {
-                    // Нижняя сторона от ЛЛУ
-                    // если это первая квартира снизу - то торец справа
-                    if (curFlatIndex == 0)
-                    {
-                        // Торец справа
-                        if (isCurSide)
-                        {
-                            // Снизу
-                            insIndexProject = cellInsCur.InsSideBotRight;
-                        }
-                        else
-                        {
-                            // Сверху
-                            insIndexProject = cellInsCur.InsSideTopRight;
-                        }
-                    }
-                    else if (curFlatIndex == curSideFlats.Count - 1)
-                    {
-                        // Торец слева
-                        if (isCurSide)
-                        {
-                            // Снизу
-                            insIndexProject = cellInsCur.InsSideBotLeft;
-                        }
-                        else
-                        {
-                            // Сверху
-                            insIndexProject = cellInsCur.InsSideTopLeft;
-                        }
-                    }
-                }
+                return;
+            }
 
-                if (string.IsNullOrEmpty(insIndexProject))
+            if(isTop)
+            {
+                // Правая сторона
+                if (isFirstFlatInSide)
                 {
-                    specialFail = true;
-                }
+                    // Верхняя правая боковая ячейка  (InsSideTopRight)
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopRight) && flatLightIndexSideCurSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopRight);
+                    }
+                    // Нижняя правая боковая ячейка (InsSideBotRight)
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotRight) && flatLightIndexOtherSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexOtherSide[0], cellInsStandart.InsSideBotRight);
+                    }
+                }           
+                // Левая сторона     
+                else if (isLastFlatInSide)
+                {
+                    // Верхняя левая боковая ячейка 
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopLeft) && flatLightIndexSideCurSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopLeft);
+                    }
+                    // Нижняя левая боковая ячейка 
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotLeft) && flatLightIndexOtherSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexOtherSide[0], cellInsStandart.InsSideBotLeft);
+                    }
+                }                
             }
             else
             {
-                // определение инсоляции по текущему шагу в секции и индексу окна в квартире
-                var indexStepLight = step + flatLightIndex;
-                insIndexProject = ins[indexStepLight];
-                res = true;
+                if (isFirstFlatInSide)
+                {
+                    // Левая нижняя ячейка боковой инсоляции                    
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotRight) && flatLightIndexSideCurSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideBotRight);
+                    }
+                }                
+                else if (isLastFlatInSide)
+                {
+                    // Верхняя левая боковая ячейка 
+                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopLeft) && flatLightIndexSideCurSide.Count == 1)
+                    {
+                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopLeft);
+                    }
+                }
             }
-            return res;
         }
 
-        private bool IsFirstFlatInSide ()
-        {
-            return curFlatIndex == 0;
-        }
-
-        private bool IsLastFlatInSide ()
-        {
-            return curFlatIndex == curSideFlats.Count - 1;
-        }
+        
     }
 }

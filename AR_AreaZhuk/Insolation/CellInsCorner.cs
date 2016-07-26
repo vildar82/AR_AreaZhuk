@@ -117,14 +117,12 @@ namespace AR_AreaZhuk.Insolation
             for (int i = 0; i < 4; i++) // 4 - кол боковых ячеек (начиная с 1 шага)
             {                
                 InsBot[i] = GetInsIndex(cell);
-                cell.OffsetNegative(directionOrthoFromLLU);
+                cell.Offset(directionOrthoFromLLU);
             }
-            int indexBot = 4;
-
-            cell.OffsetNegative(directionOrthoFromLLU);
+            int indexBot = 4;            
 
             // Нижняя инсоляция - до начальной ячейки            
-            for (int i = indexBot; i < countStep+indexBot; i++)
+            for (int i = indexBot; i < countStep+indexBot-1; i++)
             {
                 InsBot[i] = GetInsIndex(cell);
                 cell.OffsetNegative(directionGeneralToLLU);

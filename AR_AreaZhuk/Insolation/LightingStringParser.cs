@@ -9,9 +9,14 @@ namespace AR_AreaZhuk.Insolation
     public static class LightingStringParser
     {
         public static List<int> GetLightings (string lightingString, out List<int> sideLightings)
-        {            
+        {   
             List<int> lightings = new List<int>();
             sideLightings = new List<int>();
+
+            if (string.IsNullOrEmpty(lightingString))
+            {
+                return null;
+            }
 
             bool isRange = false;
             bool isLeaf = false; // окно в большой комнате с несколькими окнами

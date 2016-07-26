@@ -21,6 +21,7 @@ namespace AR_AreaZhuk.Insolation
         public string InsSideBotLeft { get; private set; } = "";
         public string InsSideTopRight { get; private set; } = "";
         public string InsSideBotRight { get; private set; } = "";
+        public bool HasSideIns { get; private set; }
 
         public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
         {                       
@@ -85,7 +86,10 @@ namespace AR_AreaZhuk.Insolation
                     cel.Row--;
                     InsSideTopLeft = GetInsIndex(cel, isRequired: false);
                 }                
-            }            
+            }
+
+            // Задана ли боковая инсоляция
+            HasSideIns = !string.IsNullOrEmpty(InsSideTopRight + InsSideBotRight + InsSideBotLeft + InsSideTopLeft);
 
             for (int i = 0; i < countStep; i++)
             {

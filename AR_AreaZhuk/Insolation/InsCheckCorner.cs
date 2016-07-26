@@ -28,21 +28,23 @@ namespace AR_AreaZhuk.Insolation
             bool res = false;
             if (isTop)
             {
-                 res = CheckSideFlats(cellIns.InsTop);
+                curSideFlats = topFlats;
+                res = CheckSideFlats(cellIns.InsTop);
             }
             else
             {
+                curSideFlats = bottomFlats;
                 res = CheckSideFlats(cellIns.InsBot);
             }
             return res;
-        }        
+        }
 
         /// <summary>
         /// Проверка инсоляции верхних квартир
         /// </summary>
         private bool CheckSideFlats (string[] ins)
         {
-            int step = 0;            
+            int step = isTop ? 0 : indexBot;
             for (int i = 0; i < curSideFlats.Count; i++)
             {
                 flat = curSideFlats[i];
@@ -57,7 +59,16 @@ namespace AR_AreaZhuk.Insolation
                 }
 
                 string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;
-                List<int> sideLighting;
+
+                // Временно - подмена индекса освещенностим для боковых квартир!!!???
+                var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
+                if (sideFlat != null)
+                {
+                    // Если угловая секция крайняя, то нужно проверять инсоляция с торца ???!!!
+                    // Если боковая первая сверху или последняя снизу, то нужно проверить инсоляцию сбоку
+                }
+
+                List<int> sideLighting; 
                 var lightingFlatIndexes = LightingStringParser.GetLightings(lightingFlat, out sideLighting);
 
                 var ruleInsFlat = insSpot.FindRule(flat);
@@ -73,18 +84,33 @@ namespace AR_AreaZhuk.Insolation
                     var requires = rule.Requirements.ToList();
 
                     CheckLighting(ref requires, lightingFlatIndexes, ins, step);
-                    // Для первой квартиры проверить низ
-                    if  (isTop && curFlatIndex==0)
+
+                    // Для верхних квартир проверить низ
+                    if (isTop)
                     {
-                        var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
-                        CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
-                        indexBot = flat.SelectedIndexBottom;
+                        if (IsFirstFlatInSide())
+                        {
+                            // проверка низа для первой верхней квартиры
+                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
+                            CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot.Reverse().ToArray(), 0);
+                        }
+                        // Для последней - проверка низа
+                        else if (IsLastFlatInSide())
+                        {
+                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
+                            CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
+                            // начальный отступ шагов для проверки нижних квартир
+                            indexBot = flat.SelectedIndexBottom;
+                        }
                     }
 
                     // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
                     // Округление вниз - от окон внутри одного помещения
-                    var countBalance = requires.Sum(s => Math.Ceiling(s.CountLighting));
-                    flatPassed = countBalance <= 0;
+                    flatPassed = RequirementsIsEmpty(requires);                    
+                    if (flatPassed)
+                    {
+                        break;
+                    }
                 }
 
                 if (!flatPassed || specialFail)
@@ -95,52 +121,47 @@ namespace AR_AreaZhuk.Insolation
                 step += isTop ? flat.SelectedIndexTop : flat.SelectedIndexBottom;
             }
             return true;
-        }               
+        }        
 
-        private void CheckLighting (ref List<InsRequired> requires, List<int> light, string[] ins, int step)
-        {
-            if (light == null || ins == null) return;
+        //private void CheckLighting (ref List<InsRequired> requires, List<int> light, string[] ins, int step)
+        //{
+        //    if (light == null || ins == null || RequirementsIsEmpty(requires)) return;
 
-            foreach (var item in light)
-            {
-                if (item.Equals(0)) break;
-                double countLigth = 1;
+        //    foreach (var item in light)
+        //    {
+        //        if (item.Equals(0)) break;
+        //        double countLigth = 1;
 
-                int lightIndexInFlat;
-                if (item > 0)
-                {
-                    lightIndexInFlat = item - 1;
-                }
-                else
-                {
-                    // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
-                    lightIndexInFlat = (-item) - 1;
-                    countLigth = 0.5;
-                }
+        //        int lightIndexInFlat;
+        //        if (item > 0)
+        //        {
+        //            lightIndexInFlat = item - 1;
+        //        }
+        //        else
+        //        {
+        //            // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
+        //            lightIndexInFlat = (-item) - 1;
+        //            countLigth = 0.5;
+        //        }
                 
-                // Нужно проверить торец секции
-                // При условии, что угловая секция может быть последней!!!???
-                int indexStepLight = step + lightIndexInFlat;
-                string insIndexProject = ins[indexStepLight];
+        //        // Нужно проверить торец секции
+        //        // При условии, что угловая секция может быть последней!!!???
+        //        int indexStepLight = step + lightIndexInFlat;
+        //        string insIndexProject = ins[indexStepLight];
 
-                if (!string.IsNullOrWhiteSpace(insIndexProject))
-                {
-                    for (int i = 0; i < requires.Count; i++)
-                    {
-                        var require = requires[i];
-                        if (require.CountLighting > 0 && require.IsPassed(insIndexProject))
-                        {
-                            require.CountLighting -= countLigth;
-                            requires[i] = require;
-                        }
-                    }
-                }
-            }
-        }
-
-        private bool CheckSideFlat (int step, int lightIndexInFlat, string[] ins, out string insIndexProject)
-        {
-            throw new NotImplementedException();
-        }
+        //        if (!string.IsNullOrWhiteSpace(insIndexProject))
+        //        {
+        //            for (int i = 0; i < requires.Count; i++)
+        //            {
+        //                var require = requires[i];
+        //                if (require.CountLighting > 0 && require.IsPassed(insIndexProject))
+        //                {
+        //                    require.CountLighting -= countLigth;
+        //                    requires[i] = require;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}           
     }
 }

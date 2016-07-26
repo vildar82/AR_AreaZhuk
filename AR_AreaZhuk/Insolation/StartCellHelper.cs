@@ -162,8 +162,8 @@ namespace AR_AreaZhuk.Insolation
         {
             var startCell = defaultCellSection;
             // длина хвоста угловой секции
-            int tailLenght = GetTailLength(s.CountStep);
-            IsDirectionDown = isDirectionFirstSectionDown();
+            int tailLenght = GetTailLength(s.CountStep);            
+            IsDirectionDown = isDirectionDown();
             // Направление
             if (s.IsVertical)
             {

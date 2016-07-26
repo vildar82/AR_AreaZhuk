@@ -93,7 +93,7 @@
     <Compile Include="Insolation\InsCheckOrdinary.cs" />
     <Compile Include="Insolation\InsolationFrameWork.cs" />
     <Compile Include="Insolation\LightingStringParser.cs" />
-    <Compile Include="Insolation\SideFlat.cs" />
+    <Compile Include="Insolation\SideFlatFake.cs" />
     <Compile Include="Insolation\StartCellHelper.cs" />
     <Compile Include="Model\HouseInfo.cs" />
     <Compile Include="Insolation\InsolationSpot.cs" />
