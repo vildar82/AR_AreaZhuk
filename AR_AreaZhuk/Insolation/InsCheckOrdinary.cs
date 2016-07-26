@@ -173,9 +173,8 @@ namespace AR_AreaZhuk.Insolation
 
             // Если все требуемые окно были вычтены, то сумма остатка будет <= 0
             // Округление вниз - от окон внутри одного помещения
-            var countBalance = requires.Sum(s => Math.Ceiling(s.CountLighting)); 
-            var res = countBalance <= 0;            
-            return res;            
+            var isPassed = RequirementsIsEmpty(requires);                    
+            return isPassed;            
         }        
 
         
@@ -190,7 +189,7 @@ namespace AR_AreaZhuk.Insolation
             // И если не задана боковая инсоляция в пятне инсоляции
             bool isSideFlat = isFirstFlatInSide || isLastFlatInSide;
             bool flatHasSide = flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;            
-            if (!isSideFlat || !flatHasSide || !cellInsCur.HasSideIns || requires.Sum(r=>r.CountLighting)<=0)
+            if (!isSideFlat || !flatHasSide || !cellInsCur.HasSideIns || RequirementsIsEmpty(requires))
             {
                 return;
             }

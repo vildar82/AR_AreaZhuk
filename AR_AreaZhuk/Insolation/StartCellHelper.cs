@@ -235,11 +235,11 @@ namespace AR_AreaZhuk.Insolation
             }
             else
             {
-                // Горизонтальная
+                // Горизонтальная                                
                 defaultCellSection.Col += s.CountStep;
-                startCell = defaultCellSection;
-                startCell.Col--;
+                startCell.Col = defaultCellSection.Col - 1;
                 startCell.Row -= InsolationSpot.CountStepWithSection - 1;
+                
             }
             return startCell;
         }

@@ -52,8 +52,8 @@ namespace AR_AreaZhuk.Insolation
             this.isRightOrTopLLu = isRightOrTopLLu;
             checkSection = sect;
 
-            topFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop: true, isRight: false);
-            bottomFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop:false, isRight:false);
+            topFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats);
+            bottomFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats);
 
             // Проверка инсоляции квартир сверху
             isTop = true;
@@ -73,9 +73,12 @@ namespace AR_AreaZhuk.Insolation
         /// Проверка - это концевая секция (1 или последняя)
         /// </summary>        
         public bool IsEndSection ()
-        {
-            var res = section.NumberInSpot == 1 ||
-                section.NumberInSpot == sp.TotalSections;
+        {            
+            var res = section.NumberInSpot == 1;
+            if (res) return res;
+            // Последняя секция в доме
+            //res = section.NumberInSpot == sp.TotalSections; // Как определить последнюю секция в доме ?????
+            res = true;
             return res;
         }
 
@@ -85,7 +88,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         /// <param name="requires">требования инсоляции</param>        
         protected bool RequirementsIsEmpty (List<InsRequired> requires)
-        {
+        {   
             var balance = requires.Sum(s => Math.Floor(s.CountLighting));
             var res = balance <= 0;
             return res;

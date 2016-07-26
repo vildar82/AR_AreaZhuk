@@ -10,61 +10,23 @@ namespace AR_AreaZhuk.Insolation
 {
     class InsolationFrameWork
     {
-        public List<RoomInfo> GetTopFlatsInSection(List<RoomInfo> sectionFlats, bool isTop, bool isRight)
+        public List<RoomInfo> GetTopFlatsInSection (List<RoomInfo> sectionFlats)
         {
             List<RoomInfo> topFlats = new List<RoomInfo>();
-            if (isTop)
+
+            for (int i = 4; i < sectionFlats.Count; i++)
             {
-                if (!isRight)
-                {
-                    for (int i = sectionFlats.Count - 3; i < sectionFlats.Count; i++)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-
-                }
-                else
-                {
-                    for (int i = 3; i >= 0; i--)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-
-                    for (int i = sectionFlats.Count - 1; i > sectionFlats.Count - 4; i--)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-                }
+                if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                topFlats.Add(sectionFlats[i]);
             }
-            else
+
+            for (int i = 0; i < 4; i++)
             {
-                if (!isRight)
-                {
-                    for (int i = 0; i < sectionFlats.Count; i++)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop != 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-                }
-                else
-                {
-                    for (int i = sectionFlats.Count - 1; i >= 0; i--)
-                    {
-                        if (sectionFlats[i].SelectedIndexTop != 0) continue;
-                        topFlats.Add(sectionFlats[i]);
-                    }
-                }
+                if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                topFlats.Add(sectionFlats[i]);
             }
-            Debug.Assert(topFlats.Count<= sectionFlats.Count, "GetTopFlatsInSection - Определено больше квартир сверху, чем всего квартир в секции.");
+
+            Debug.Assert(topFlats.Count != 1, "GetTopFlatsInSection - Одна квартира на стороне!!!");
             return topFlats;
         }
 

@@ -101,18 +101,30 @@ namespace AR_AreaZhuk.Insolation
             foreach (var sect in sections)
             {
                 if (sect.Flats.Count < 4)
-                    continue;                
+                    continue;
 
-                if (insCheck.CheckSection(sect, isRightOrTopLLu: true))
+                // Для тестирования - добавление не прошедших инсоляцию секций
+                if (!insCheck.CheckSection(sect, isRightOrTopLLu: true))
                 {
                     FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, false);
                     s.Sections.Add(flats);
                 }
-                if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
+                if (!insCheck.CheckSection(sect, isRightOrTopLLu: false))
                 {
-                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, true);                    
+                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, true);
                     s.Sections.Add(flats);
                 }
+
+                //if (insCheck.CheckSection(sect, isRightOrTopLLu: true))
+                //{
+                //    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, false);
+                //    s.Sections.Add(flats);
+                //}
+                //if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
+                //{
+                //    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, true);                    
+                //    s.Sections.Add(flats);
+                //}
                 
                 continue;
             }
