@@ -22,5 +22,11 @@ namespace AR_AreaZhuk.Insolation
             Row += offset.Row;
             Col += offset.Col;
         }
+
+        public void OffsetNegative(Cell offset)
+        {
+            Row -= offset.Row;
+            Col -= offset.Col;
+        }
     }
 }

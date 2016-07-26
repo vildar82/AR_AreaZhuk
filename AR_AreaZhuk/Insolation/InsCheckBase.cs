@@ -35,14 +35,14 @@ namespace AR_AreaZhuk.Insolation
 
         protected abstract bool CheckFlats ();
 
-        public InsCheckBase (InsolationSpot insSpot, Section section, bool isVertical,
+        public InsCheckBase (InsolationSpot insSpot, Section section, 
             StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp)
         {
             this.section = section;
             this.sections = sections;
             this.sp = sp;
             this.insSpot = insSpot;
-            this.isVertical = isVertical;
+            this.isVertical = section.IsVertical;
             this.startCellHelper = startCellHelper;            
         }
 

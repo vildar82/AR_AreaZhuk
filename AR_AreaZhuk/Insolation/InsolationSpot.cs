@@ -105,7 +105,7 @@ namespace AR_AreaZhuk.Insolation
                 startCellHelper.Define(s);
             }            
 
-            IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s, isCorner, isVertical,
+            IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s,
                 startCellHelper, sections, spotInfo);
 
             foreach (var sect in sections)

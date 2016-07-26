@@ -20,26 +20,48 @@ namespace AR_AreaZhuk.Insolation
         public string InsSideTop { get; private set; } = "";
         public string InsSideBot { get; private set; } = "";
         
-        int directionVertic; // направление по вертикали (стандартное - вверх: row -1)
-        int directionHor; // смещение по главному направлению, от стартовой точки в сторону ллу (стандартное - в лево: col -1)
+        Cell directionGeneralToLLU; // смещение по главному направлению, от стартовой точки в сторону ллу (стандартное - в лево: col -1)        
+        Cell directionOrthoFromLLU;  // направление по вертикали от ЛЛУ вниз (стандартное - вверх: row -1)        
 
         public CellInsCorner (InsCheckCorner insCheck) : base(insCheck)
         {            
         }
 
         public override void DefineIns()
-        {            
-            var isLeftNiz = insCheck.insSpot.IsLeftNizSection;
-            var isLeftTop = insCheck.insSpot.IsLeftTopSection;
-            var isRightNiz = insCheck.insSpot.IsRightNizSection;
-            var isRightTop = insCheck.insSpot.IsRightTopSection;
-
+        {   
             InsBot = new string[countStep+3];                                         
 
-            if (isLeftNiz)
+            if (isVertic)
             {                
-                directionVertic = -1;
-                directionHor = -1;                
+                // Вертикальная
+                if (insCheck.startCellHelper.IsDirectionDown)
+                {
+                    // вниз
+                    directionGeneralToLLU.Row = 1;                    
+                    directionOrthoFromLLU.Col = -1;
+                }
+                else
+                {
+                    // Вверх
+                    directionGeneralToLLU.Row = -1;
+                    directionOrthoFromLLU.Col = -1;
+                }
+            }
+            else
+            {
+                // Горизонтальная
+                if (insCheck.startCellHelper.IsDirectionDown)
+                {
+                    // загиб сверху-вбок
+                    directionGeneralToLLU.Col = -1;
+                    directionOrthoFromLLU.Row = 1;
+                }
+                else
+                {
+                    // загиб снизу-вбок
+                    directionGeneralToLLU.Col = -1;
+                    directionOrthoFromLLU.Row = -1;
+                }
             }
 
             define();
@@ -56,9 +78,10 @@ namespace AR_AreaZhuk.Insolation
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
             if (isEndSection())
             {
-                var cellSide = new Cell(cell.Row + 1, cell.Col);
+                var cellSide = cell;
+                cellSide.Offset(directionOrthoFromLLU);
                 InsSideTop = GetInsIndex(cellSide, isRequired: false);
-                cellSide.Row++;
+                cellSide.Offset(directionOrthoFromLLU);
                 InsSideBot = GetInsIndex(cellSide, isRequired: false);
             }
 
@@ -69,36 +92,42 @@ namespace AR_AreaZhuk.Insolation
                 if (topFlat.SubZone == "0")
                 {
                     // ячейка над ллу           
-                    cell.Col += directionHor*2;             
-                    cell.Row += directionVertic;
+                    // скачек на две ячейки по основному направлению и на 1 в негативном орто направлении
+                    cell.Offset(directionGeneralToLLU);
+                    cell.Offset(directionGeneralToLLU);
+                    cell.OffsetNegative(directionOrthoFromLLU);
                     InsTop[indexStep] = GetInsIndex(cell);
                     break;
                 }
                 for (int i = 0; i < topFlat.SelectedIndexTop; i++)
                 {
                     InsTop[indexStep] = GetInsIndex(cell);
-                    cell.Col += directionHor;
+                    cell.Offset(directionGeneralToLLU);
                     indexStep++;
                 }                
             }
 
             // Инсоляция боковой угловой части, сверху-вниз, начиная с 1 шага
             indexStep = 0;
-            cell.Col += (InsolationSpot.CountStepWithSection - 1) * directionHor;
+            // Скачек на ширину секции
+            int width = InsolationSpot.CountStepWithSection - 1;
+            cell.Row += width * directionGeneralToLLU.Row;
+            cell.Col += width * directionGeneralToLLU.Col;            
             
             for (int i = 0; i < 4; i++) // 4 - кол боковых ячеек (начиная с 1 шага)
             {                
                 InsBot[i] = GetInsIndex(cell);
-                cell.Row -= directionVertic;
+                cell.OffsetNegative(directionOrthoFromLLU);
             }
             int indexBot = 4;
-            cell.Row -= directionVertic;
+
+            cell.OffsetNegative(directionOrthoFromLLU);
 
             // Нижняя инсоляция - до начальной ячейки            
             for (int i = indexBot; i < countStep+indexBot; i++)
             {
                 InsBot[i] = GetInsIndex(cell);
-                cell.Col -= directionHor;
+                cell.OffsetNegative(directionGeneralToLLU);
             }
         }
     }

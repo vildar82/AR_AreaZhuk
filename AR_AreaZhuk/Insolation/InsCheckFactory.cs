@@ -9,18 +9,18 @@ namespace AR_AreaZhuk.Insolation
 {
     static class InsCheckFactory
     {
-        public static IInsCheck CreateInsCheck (InsolationSpot insSpot, Section section, bool isCorner,
-            bool isVertical, StartCellHelper startCellHelper,  List<FlatInfo> sections, SpotInfo sp)
+        public static IInsCheck CreateInsCheck (InsolationSpot insSpot, Section section, 
+            StartCellHelper startCellHelper,  List<FlatInfo> sections, SpotInfo sp)
         {
             IInsCheck insCheck = null;
 
-            if(isCorner)
+            if(section.IsCorner)
             {
-                insCheck = new InsCheckCorner(insSpot, section, isVertical, startCellHelper, sections, sp);
+                insCheck = new InsCheckCorner(insSpot, section, startCellHelper, sections, sp);
             }
             else
             {
-                insCheck = new InsCheckOrdinary(insSpot, section, isVertical, startCellHelper, sections, sp);
+                insCheck = new InsCheckOrdinary(insSpot, section, startCellHelper, sections, sp);
             }
 
             return insCheck;

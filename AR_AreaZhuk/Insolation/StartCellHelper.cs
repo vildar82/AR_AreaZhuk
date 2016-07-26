@@ -25,7 +25,7 @@ namespace AR_AreaZhuk.Insolation
         /// Определенная стартовая точка для текущей секции
         /// </summary>
         public Cell StartCell { get; private set; }
-        public bool IsDirectionDown { get; private set; }
+        public bool IsDirectionDown { get; private set; }       
 
         public StartCellHelper (InsolationSpot insSpot, Section s, SpotInfo spotInfo,Cell cellFirstSection)
         {
