@@ -7,14 +7,17 @@ using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.Insolation
 {
+    /// <summary>
+    /// Проверка инсоляции угловой секции
+    /// </summary>
     class InsCheckCorner : InsCheckBase
     {
         CellInsCorner cellIns;
         int indexBot =0;      
 
         public InsCheckCorner (InsolationSpot insSpot, Section section, bool isVertical,
-            Cell cellStart, List<FlatInfo> sections, SpotInfo sp)
-            : base(insSpot, section, isVertical, cellStart, sections, sp)
+            StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp)
+            : base(insSpot, section, isVertical, startCellHelper, sections, sp)
         {
             cellIns = new CellInsCorner(this);
             cellIns.DefineIns(); 

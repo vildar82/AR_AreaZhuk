@@ -8,6 +8,9 @@ using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.Insolation
 {
+    /// <summary>
+    /// Проверка инсоляции рядовой секции
+    /// </summary>
     class InsCheckOrdinary : InsCheckBase
     {
         CellInsOrdinary cellInsStandart;
@@ -20,8 +23,8 @@ namespace AR_AreaZhuk.Insolation
         protected string[] insOtherSide;
 
         public InsCheckOrdinary (InsolationSpot insSpot,Section section, bool isVertical,
-            Cell cellStart, List<FlatInfo> sections, SpotInfo sp) 
-            : base(insSpot, section, isVertical, cellStart, sections, sp)
+            StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp) 
+            : base(insSpot, section, isVertical, startCellHelper, sections, sp)
         {            
             // Данные по инсоляции секции в стандартном ее положении            
             cellInsStandart = new CellInsOrdinary(this);

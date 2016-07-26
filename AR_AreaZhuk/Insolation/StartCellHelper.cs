@@ -10,6 +10,8 @@ namespace AR_AreaZhuk.Insolation
     /// <summary>
     /// Помощник определения стартовой ячейки переданной секции
     /// Стартовая ячейка - левый верхний угол секции в стандарртном положении (рядовой и угловой)
+    /// Для рядовой - это правый верхний угол от ллу.
+    /// Для угловой - это правый верхни  угол от ллу.
     /// </summary>
     class StartCellHelper
     {   
@@ -22,7 +24,8 @@ namespace AR_AreaZhuk.Insolation
         /// <summary>
         /// Определенная стартовая точка для текущей секции
         /// </summary>
-        public Cell StartCell { get; internal set; }
+        public Cell StartCell { get; private set; }
+        public bool IsDirectionDown { get; private set; }
 
         public StartCellHelper (InsolationSpot insSpot, Section s, SpotInfo spotInfo,Cell cellFirstSection)
         {
@@ -73,12 +76,12 @@ namespace AR_AreaZhuk.Insolation
 
             // длина хвоста
             int tailLength = GetTailLength(s.CountStep);
-
+            IsDirectionDown = isDirectionFirstSectionDown();
             if (s.IsVertical)
             {
                 // Вертикальная
-                // Направление
-                if (isDirectionFirstSectionDown())
+                // Направление                
+                if (IsDirectionDown)
                 {
                     // Вниз                    
                     startCell.Col += InsolationSpot.CountStepWithSection - 1;
@@ -94,10 +97,10 @@ namespace AR_AreaZhuk.Insolation
                 }
             }
             else
-            {
+            {                
                 // Горизонтальная
-                // Направление
-                if (isDirectionFirstSectionDown())
+                // Направление загиба - вверх или вниз               
+                if (IsDirectionDown)
                 {
                     // Вниз
                     // стартовая точка совпадаетс дефолтной
@@ -127,7 +130,8 @@ namespace AR_AreaZhuk.Insolation
             {
                 // Вертикальная
                 // Определение направления первой секции - вниз или вверх
-                if (isDirectionFirstSectionDown())
+                IsDirectionDown = isDirectionFirstSectionDown();
+                if (IsDirectionDown)
                 {
                     // Вниз
                     startCell.Col += InsolationSpot.CountStepWithSection - 1;
@@ -158,14 +162,14 @@ namespace AR_AreaZhuk.Insolation
         {
             var startCell = defaultCellSection;
             // длина хвоста угловой секции
-            int tailLenght = GetTailLength(s.CountStep);  
-
+            int tailLenght = GetTailLength(s.CountStep);
+            IsDirectionDown = isDirectionFirstSectionDown();
             // Направление
             if (s.IsVertical)
             {
                 // Вертикальная
                 // Направление
-                if (isDirectionDown())
+                if (IsDirectionDown)
                 {
                     // Вниз
                     startCell.Col += InsolationSpot.CountStepWithSection - 1;
@@ -183,7 +187,7 @@ namespace AR_AreaZhuk.Insolation
             else
             {
                 // Горизонтальная
-                if (isDirectionDown())
+                if (IsDirectionDown)
                 {
                     // поворот сверху - вправо    
                     startCell.Col += s.CountStep - 2;
@@ -214,7 +218,8 @@ namespace AR_AreaZhuk.Insolation
             {
                 // Вертикальная
                 // определение направления
-                if (isDirectionDown())
+                IsDirectionDown = isDirectionFirstSectionDown();
+                if (IsDirectionDown)
                 {
                     // Направление Вниз                    
                     defaultCellSection.Row += s.CountStep;
@@ -245,7 +250,7 @@ namespace AR_AreaZhuk.Insolation
         /// <returns>True - вниз, false - вверх</returns>
         private bool isDirectionFirstSectionDown ()
         {
-            var res = defaultCellSection.Row == insSpot.MaxLeftXY[1];
+            var res = defaultCellSection.Row == insSpot.MinLeftXY[1];
             return res;
         }
 

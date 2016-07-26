@@ -10,17 +10,17 @@ namespace AR_AreaZhuk.Insolation
     static class InsCheckFactory
     {
         public static IInsCheck CreateInsCheck (InsolationSpot insSpot, Section section, bool isCorner,
-            bool isVertical, Cell cellStart,  List<FlatInfo> sections, SpotInfo sp)
+            bool isVertical, StartCellHelper startCellHelper,  List<FlatInfo> sections, SpotInfo sp)
         {
             IInsCheck insCheck = null;
 
             if(isCorner)
             {
-                insCheck = new InsCheckCorner(insSpot, section, isVertical, cellStart, sections, sp);
+                insCheck = new InsCheckCorner(insSpot, section, isVertical, startCellHelper, sections, sp);
             }
             else
             {
-                insCheck = new InsCheckOrdinary(insSpot, section, isVertical, cellStart, sections, sp);
+                insCheck = new InsCheckOrdinary(insSpot, section, isVertical, startCellHelper, sections, sp);
             }
 
             return insCheck;

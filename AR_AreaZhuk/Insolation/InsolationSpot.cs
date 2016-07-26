@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace AR_AreaZhuk.Insolation
 {
     /// <summary>
-    /// Инсоляция одного пятна
+    /// Инсоляция одного пятна (дома)
     /// </summary>
     public class InsolationSpot
     {
@@ -106,7 +106,7 @@ namespace AR_AreaZhuk.Insolation
             }            
 
             IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s, isCorner, isVertical,
-                startCellHelper.StartCell, sections, spotInfo);
+                startCellHelper, sections, spotInfo);
 
             foreach (var sect in sections)
             {

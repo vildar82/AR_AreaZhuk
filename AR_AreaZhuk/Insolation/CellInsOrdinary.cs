@@ -44,37 +44,14 @@ namespace AR_AreaZhuk.Insolation
         {            
             int indexWithSection = InsolationSpot.CountStepWithSection - 1;
             
-            Cell cellTop = new Cell(insCheck.cellStart.Row, insCheck.cellStart.Col);            
-            Cell cellBot = new Cell();
+            Cell cellTop = insCheck.startCellHelper.StartCell;            
+            Cell cellBot = cellTop;
             Cell offset = new Cell();            
 
-            if (!isVertic)
-            {
-                // Для горизонтальной секции, ЛЛУ сверху                    
-                cellBot.Row = cellTop.Row + indexWithSection;
-                cellBot.Col = cellTop.Col;
-
-                offset.Col = -1;
-
-                // Торцевая инсоляция
-                if (isEndSection())
-                {
-                    var cel = new Cell(cellTop.Row + 1, cellTop.Col);
-                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
-                    cel.Row++;
-                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
-                    cel.Col -= countStep - 1;
-                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
-                    cel.Row--;
-                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
-                }
-            }
-            else
+            if (isVertic)
             {
                 // Для вертикальной секции, ЛЛУ справа       
-                cellBot.Col = cellTop.Col - indexWithSection;                
-                cellBot.Row = cellTop.Row;
-
+                cellBot.Col -= indexWithSection;
                 offset.Row = -1;
 
                 // Торцевая инсоляция
@@ -89,6 +66,25 @@ namespace AR_AreaZhuk.Insolation
                     cel.Col++;
                     InsSideTopLeft = GetInsIndex(cel, isRequired: false);
                 }
+            }
+            else
+            {
+                // Для горизонтальной секции, ЛЛУ сверху                    
+                cellBot.Row += indexWithSection;
+                offset.Col = -1;
+
+                // Торцевая инсоляция
+                if (isEndSection())
+                {
+                    var cel = new Cell(cellTop.Row + 1, cellTop.Col);
+                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
+                    cel.Row++;
+                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
+                    cel.Col -= countStep - 1;
+                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+                    cel.Row--;
+                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                }                
             }            
 
             for (int i = 0; i < countStep; i++)
@@ -101,8 +97,6 @@ namespace AR_AreaZhuk.Insolation
             }
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();
-        }
-
-        
+        }        
     }
 }

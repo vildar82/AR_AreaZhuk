@@ -19,12 +19,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         public string InsSideTop { get; private set; } = "";
         public string InsSideBot { get; private set; } = "";
-
-        /// <summary>
-        /// Начальная точка - в стандартном положении (левый нижний) - верхний правый угол
-        /// </summary>
-        int startRow;
-        int startCol;
+        
         int directionVertic; // направление по вертикали (стандартное - вверх: row -1)
         int directionHor; // смещение по главному направлению, от стартовой точки в сторону ллу (стандартное - в лево: col -1)
 
@@ -55,7 +50,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         private void define ()
         {
-            Cell cell = new Cell(insCheck.cellStart.Row, insCheck.cellStart.Col);
+            Cell cell = insCheck.startCellHelper.StartCell;
             int indexStep = 0;
 
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
