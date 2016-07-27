@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 namespace AR_AreaZhuk.Insolation
 {
     /// <summary>
+    /// Временно - для подмены индексов освещенности боковых квартир
     /// Квартира с боковым окном - выходящим на торец секции
     /// </summary>
     public class SideFlatFake
     {
         static List<SideFlatFake> SideFlats = new List<SideFlatFake>()
-            {
-                new SideFlatFake ("PIK1_2KL2_A0", "2|3,B"),
-                new SideFlatFake ("PIK1_2KL2_Z0", "1|2,B")
-            };
+        {
+            new SideFlatFake ("PIK1_2KL2_A0", "2|3,B"),
+            new SideFlatFake ("PIK1_2KL2_Z0", "1|2,B")
+        };
 
         /// <summary>
         /// Имя квартиры - полное

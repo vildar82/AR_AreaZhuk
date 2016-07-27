@@ -63,8 +63,7 @@ namespace AR_AreaZhuk.Insolation
                 var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
                 if (sideFlat != null)
                 {
-                    // Если угловая секция крайняя, то нужно проверять инсоляция с торца ???!!!
-                    // Если боковая первая сверху или последняя снизу, то нужно проверить инсоляцию сбоку
+                    // Если угловая секция крайняя, то нужно проверять инсоляция с торца ???!!!                    
                 }
 
                 List<int> sideLighting; 

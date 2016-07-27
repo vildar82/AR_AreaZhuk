@@ -17,9 +17,7 @@ namespace AR_AreaZhuk.Insolation
 
         internal FlatInfo checkSection;
         internal bool isRightOrTopLLu;
-
         internal readonly bool isVertical;
-
         internal readonly StartCellHelper startCellHelper;        
 
         protected List<RoomInfo> topFlats;
@@ -59,9 +57,7 @@ namespace AR_AreaZhuk.Insolation
             isTop = true;
             curSideFlats = topFlats;
             res = CheckFlats();
-
 #if TEST
-
             // Проверка инсоляции квартир снизу                
             isTop = false;
             curSideFlats = bottomFlats;
