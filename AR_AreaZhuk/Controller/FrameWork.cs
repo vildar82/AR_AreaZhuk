@@ -771,7 +771,7 @@ namespace AR_AreaZhuk
                 //if (!isValid) continue;
 
                 counter++;
-                if (sectionsBySyze.Count < 1000) continue;
+                if (sectionsBySyze.Count < 50) continue;
                 break;
             }
             //foreach (var s in sections)

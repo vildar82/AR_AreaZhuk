@@ -67,8 +67,15 @@ namespace AR_AreaZhuk.Insolation
             insCurSide = null;
             insOtherSide = null;
 
-            insCurSide = cellInsCur.InsTop;
-            insOtherSide = isTop? cellInsCur.InsBot.Reverse().ToArray(): null; // У нижних квартир не нужно проверять другую сторону                       
+            if (isTop)
+            {
+                insCurSide = cellInsCur.InsTop;
+                insOtherSide = cellInsCur.InsBot.Reverse().ToArray(); // У нижних квартир не нужно проверять другую сторону                       
+            }
+            else
+            {
+                insCurSide = cellInsCur.InsBot;                
+            }            
 
             for (int i = 0; i < curSideFlats.Count; i++)
             {
@@ -291,16 +298,7 @@ namespace AR_AreaZhuk.Insolation
                 {
                     res = EnumEndSide.Right;
                 }
-            }
-
-            if (!isRightOrTopLLu)
-            {
-                if (res == EnumEndSide.Right)
-                    res = EnumEndSide.Left;
-                else if (res == EnumEndSide.Left)
-                    res = EnumEndSide.Right;
-            }
-
+            }            
             return res;
         }
     }

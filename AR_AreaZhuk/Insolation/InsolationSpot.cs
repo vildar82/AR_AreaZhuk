@@ -148,7 +148,11 @@ namespace AR_AreaZhuk.Insolation
             flats.IdSection = sect.IdSection;
             flats.SpotOwner = Name;
             flats.NumberInSpot = numberSection;
+#if TEST
+            flats.Flats = sect.Flats.Select(f => (RoomInfo)f.Clone()).ToList();
+#else
             flats.Flats = sect.Flats;
+#endif
             flats.IsCorner = isCorner;
             flats.IsVertical = isVertical;
             flats.CountStep = sect.CountStep;
