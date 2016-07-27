@@ -19,6 +19,7 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>
         public const int CountStepWithSection = 4;
 
+        internal int curNumbersSectionsInSpot;
         private static StartCellHelper startCellHelper;
         internal InsolationFrameWork insFramework = new InsolationFrameWork();
 
@@ -72,28 +73,21 @@ namespace AR_AreaZhuk.Insolation
         /// </summary>        
         /// <param name="cellFirstSection">Угол первой секции - левый верхний для вертикальной или левый нижний для горизонтальной</param>
         public Section GetInsulationSections (List<FlatInfo> sections, bool isVertical,
-            bool isCorner, int numberSection, SpotInfo spotInfo, Cell cellFirstSection)
+            bool isCorner, int numberSection, int numbersSectionsInSpot, SpotInfo spotInfo, Cell cellFirstSection)
         {
-            Section s = new Section();
-            s.Sections = new List<FlatInfo>();
-            s.IsCorner = isCorner;
-            s.IsVertical = isVertical;
-            s.NumberInSpot = numberSection;
-            s.SpotOwner = Name;
-            s.CountStep = sections[0].CountStep;
-            s.CountModules = sections[0].CountStep * 4;
-            s.Floors = sections[0].Floors;
+            curNumbersSectionsInSpot = numbersSectionsInSpot;
+            Section s = CreateSection(sections, isVertical, isCorner, numberSection, isInvert:false);            
 
             // Определение стартовой точки секции в матрице инсоляции     
             // Начальная точка первой секции   
-            if (s.NumberInSpot == 1)
+            if (numberSection == 1)
             {
-                startCellHelper = new StartCellHelper(this, s, spotInfo, cellFirstSection);                
+                startCellHelper = new StartCellHelper(this, s, spotInfo, cellFirstSection);
             }
             else
             {
                 startCellHelper.Define(s);
-            }            
+            }
 
             IInsCheck insCheck = InsCheckFactory.CreateInsCheck(this, s,
                 startCellHelper, sections, spotInfo);
@@ -104,31 +98,46 @@ namespace AR_AreaZhuk.Insolation
                 if (sect.Flats.Count < 5)
                     continue;
 
-                // Для тестирования - добавление не прошедших инсоляцию секций
-                if (!insCheck.CheckSection(sect, isRightOrTopLLu: true))
-                {
-                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, false);
-                    s.Sections.Add(flats);
-                }
-                if (!insCheck.CheckSection(sect, isRightOrTopLLu: false))
-                {
-                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, true);
-                    s.Sections.Add(flats);
-                }
+#if TEST
+                //// !!!! Только для тестирования!!!! - добавление всех секций с пометками квартир прошедших/непрошедших инсоляцию
+                insCheck.CheckSection(sect, isRightOrTopLLu: true);
+                FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: false);
+                s.Sections.Add(flats);
 
-                //if (insCheck.CheckSection(sect, isRightOrTopLLu: true))
-                //{
-                //    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, false);
-                //    s.Sections.Add(flats);
-                //}
-                //if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
-                //{
-                //    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, true);                    
-                //    s.Sections.Add(flats);
-                //}
-                
-                continue;
+                insCheck.CheckSection(sect, isRightOrTopLLu: false);
+                flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: true);
+                s.Sections.Add(flats);
+
+#else
+
+                // Добавление прошедших инсоляцию секций
+                if (insCheck.CheckSection(sect, isRightOrTopLLu: true))
+                {
+                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert:false);
+                    s.Sections.Add(flats);
+                }
+                if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
+                {
+                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert:true);
+                    s.Sections.Add(flats);
+                }                
+#endif
             }
+            return s;
+        }
+
+        private Section CreateSection (List<FlatInfo> sections, bool isVertical, bool isCorner, int numberSection, bool isInvert)
+        {
+            Section s = new Section();
+            s.Sections = new List<FlatInfo>();
+            s.IsCorner = isCorner;
+            s.IsVertical = isVertical;
+            s.NumberInSpot = numberSection;
+            s.SpotOwner = Name;
+            s.CountStep = sections[0].CountStep;
+            s.CountModules = sections[0].CountStep * 4;
+            s.Floors = sections[0].Floors;
+            s.IsInvert = isInvert;
             return s;
         }
 

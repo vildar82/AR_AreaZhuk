@@ -28,5 +28,11 @@ namespace AR_AreaZhuk.Insolation
             Row -= offset.Row;
             Col -= offset.Col;
         }
+
+        public static Cell operator * (Cell cell, int factor)
+        {
+            Cell res = new Cell(cell.Row * factor, cell.Col * factor);            
+            return res;
+        }
     }
 }

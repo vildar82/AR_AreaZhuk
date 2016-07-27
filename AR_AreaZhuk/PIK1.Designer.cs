@@ -767,6 +767,8 @@ namespace AR_AreaZhuk {
             
             private global::System.Data.DataColumn columnSubZone;
             
+            private global::System.Data.DataColumn columnLinkageOr;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public C_Flats_PIK1DataTable() {
@@ -938,6 +940,14 @@ namespace AR_AreaZhuk {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn LinkageOrColumn {
+                get {
+                    return this.columnLinkageOr;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -989,7 +999,8 @@ namespace AR_AreaZhuk {
                         string LightTop, 
                         string IndexTop, 
                         string IndexBottom, 
-                        string SubZone) {
+                        string SubZone, 
+                        string LinkageOr) {
                 C_Flats_PIK1Row rowC_Flats_PIK1Row = ((C_Flats_PIK1Row)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1008,7 +1019,8 @@ namespace AR_AreaZhuk {
                         LightTop,
                         IndexTop,
                         IndexBottom,
-                        SubZone};
+                        SubZone,
+                        LinkageOr};
                 rowC_Flats_PIK1Row.ItemArray = columnValuesArray;
                 this.Rows.Add(rowC_Flats_PIK1Row);
                 return rowC_Flats_PIK1Row;
@@ -1055,6 +1067,7 @@ namespace AR_AreaZhuk {
                 this.columnIndexTop = base.Columns["IndexTop"];
                 this.columnIndexBottom = base.Columns["IndexBottom"];
                 this.columnSubZone = base.Columns["SubZone"];
+                this.columnLinkageOr = base.Columns["LinkageOr"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1094,6 +1107,8 @@ namespace AR_AreaZhuk {
                 base.Columns.Add(this.columnIndexBottom);
                 this.columnSubZone = new global::System.Data.DataColumn("SubZone", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSubZone);
+                this.columnLinkageOr = new global::System.Data.DataColumn("LinkageOr", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLinkageOr);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID_Flat}, true));
                 this.columnID_Flat.AutoIncrement = true;
@@ -1126,7 +1141,10 @@ namespace AR_AreaZhuk {
                 this.columnIndexTop.MaxLength = 50;
                 this.columnIndexBottom.AllowDBNull = false;
                 this.columnIndexBottom.MaxLength = 50;
+                this.columnSubZone.AllowDBNull = false;
                 this.columnSubZone.MaxLength = 50;
+                this.columnLinkageOr.AllowDBNull = false;
+                this.columnLinkageOr.MaxLength = 50;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2507,12 +2525,7 @@ namespace AR_AreaZhuk {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string SubZone {
                 get {
-                    try {
-                        return ((string)(this[this.tableC_Flats_PIK1.SubZoneColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("Значение для столбца \'SubZone\' в таблице \'C_Flats_PIK1\' равно DBNull.", e);
-                    }
+                    return ((string)(this[this.tableC_Flats_PIK1.SubZoneColumn]));
                 }
                 set {
                     this[this.tableC_Flats_PIK1.SubZoneColumn] = value;
@@ -2521,14 +2534,13 @@ namespace AR_AreaZhuk {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsSubZoneNull() {
-                return this.IsNull(this.tableC_Flats_PIK1.SubZoneColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetSubZoneNull() {
-                this[this.tableC_Flats_PIK1.SubZoneColumn] = global::System.Convert.DBNull;
+            public string LinkageOr {
+                get {
+                    return ((string)(this[this.tableC_Flats_PIK1.LinkageOrColumn]));
+                }
+                set {
+                    this[this.tableC_Flats_PIK1.LinkageOrColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3638,10 +3650,11 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
             tableMapping.ColumnMappings.Add("IndexTop", "IndexTop");
             tableMapping.ColumnMappings.Add("IndexBottom", "IndexBottom");
             tableMapping.ColumnMappings.Add("SubZone", "SubZone");
+            tableMapping.ColumnMappings.Add("LinkageOr", "LinkageOr");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [C_Flats_PIK1] WHERE (([ID_Flat] = @Original_ID_Flat) AND ([Type] = @Original_Type) AND ([ShortType] = @Original_ShortType) AND ([AreaLive] = @Original_AreaLive) AND ([AreaTotalStandart] = @Original_AreaTotalStandart) AND ([AreaTotalStrong] = @Original_AreaTotalStrong) AND ([AreaInModule] = @Original_AreaInModule) AND ([SelectedIndexBottom] = @Original_SelectedIndexBottom) AND ([SelectedIndexTop] = @Original_SelectedIndexTop) AND ([LinkageBefore] = @Original_LinkageBefore) AND ([LinkageAfter] = @Original_LinkageAfter) AND ([FactorSmoke] = @Original_FactorSmoke) AND ([LightBottom] = @Original_LightBottom) AND ([LightTop] = @Original_LightTop) AND ([IndexTop] = @Original_IndexTop) AND ([IndexBottom] = @Original_IndexBottom) AND ((@IsNull_SubZone = 1 AND [SubZone] IS NULL) OR ([SubZone] = @Original_SubZone)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [C_Flats_PIK1] WHERE (([ID_Flat] = @Original_ID_Flat) AND ([Type] = @Original_Type) AND ([ShortType] = @Original_ShortType) AND ([AreaLive] = @Original_AreaLive) AND ([AreaTotalStandart] = @Original_AreaTotalStandart) AND ([AreaTotalStrong] = @Original_AreaTotalStrong) AND ([AreaInModule] = @Original_AreaInModule) AND ([SelectedIndexBottom] = @Original_SelectedIndexBottom) AND ([SelectedIndexTop] = @Original_SelectedIndexTop) AND ([LinkageBefore] = @Original_LinkageBefore) AND ([LinkageAfter] = @Original_LinkageAfter) AND ([FactorSmoke] = @Original_FactorSmoke) AND ([LightBottom] = @Original_LightBottom) AND ([LightTop] = @Original_LightTop) AND ([IndexTop] = @Original_IndexTop) AND ([IndexBottom] = @Original_IndexBottom) AND ([SubZone] = @Original_SubZone) AND ([LinkageOr] = @Original_LinkageOr))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID_Flat", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID_Flat", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Type", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Type", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3659,12 +3672,12 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_LightTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LightTop", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_IndexTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexTop", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_IndexBottom", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexBottom", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
-            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_SubZone", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_SubZone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_LinkageOr", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageOr", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [C_Flats_PIK1] ([Type], [ShortType], [AreaLive], [AreaTotalStandart], [AreaTotalStrong], [AreaInModule], [SelectedIndexBottom], [SelectedIndexTop], [LinkageBefore], [LinkageAfter], [FactorSmoke], [LightBottom], [LightTop], [IndexTop], [IndexBottom], [SubZone]) VALUES (@Type, @ShortType, @AreaLive, @AreaTotalStandart, @AreaTotalStrong, @AreaInModule, @SelectedIndexBottom, @SelectedIndexTop, @LinkageBefore, @LinkageAfter, @FactorSmoke, @LightBottom, @LightTop, @IndexTop, @IndexBottom, @SubZone);
-SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone FROM C_Flats_PIK1 WHERE (ID_Flat = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [C_Flats_PIK1] ([Type], [ShortType], [AreaLive], [AreaTotalStandart], [AreaTotalStrong], [AreaInModule], [SelectedIndexBottom], [SelectedIndexTop], [LinkageBefore], [LinkageAfter], [FactorSmoke], [LightBottom], [LightTop], [IndexTop], [IndexBottom], [SubZone], [LinkageOr]) VALUES (@Type, @ShortType, @AreaLive, @AreaTotalStandart, @AreaTotalStrong, @AreaInModule, @SelectedIndexBottom, @SelectedIndexTop, @LinkageBefore, @LinkageAfter, @FactorSmoke, @LightBottom, @LightTop, @IndexTop, @IndexBottom, @SubZone, @LinkageOr);
+SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone, LinkageOr FROM C_Flats_PIK1 WHERE (ID_Flat = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Type", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ShortType", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ShortType", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3682,6 +3695,7 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexTop", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexBottom", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexBottom", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SubZone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LinkageOr", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageOr", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [C_Flats_PIK1] SET [Type] = @Type, [ShortType] = @ShortType, [AreaLive] = " +
@@ -3690,20 +3704,21 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
                 "xBottom, [SelectedIndexTop] = @SelectedIndexTop, [LinkageBefore] = @LinkageBefor" +
                 "e, [LinkageAfter] = @LinkageAfter, [FactorSmoke] = @FactorSmoke, [LightBottom] =" +
                 " @LightBottom, [LightTop] = @LightTop, [IndexTop] = @IndexTop, [IndexBottom] = @" +
-                "IndexBottom, [SubZone] = @SubZone WHERE (([ID_Flat] = @Original_ID_Flat) AND ([T" +
-                "ype] = @Original_Type) AND ([ShortType] = @Original_ShortType) AND ([AreaLive] =" +
-                " @Original_AreaLive) AND ([AreaTotalStandart] = @Original_AreaTotalStandart) AND" +
-                " ([AreaTotalStrong] = @Original_AreaTotalStrong) AND ([AreaInModule] = @Original" +
-                "_AreaInModule) AND ([SelectedIndexBottom] = @Original_SelectedIndexBottom) AND (" +
-                "[SelectedIndexTop] = @Original_SelectedIndexTop) AND ([LinkageBefore] = @Origina" +
-                "l_LinkageBefore) AND ([LinkageAfter] = @Original_LinkageAfter) AND ([FactorSmoke" +
-                "] = @Original_FactorSmoke) AND ([LightBottom] = @Original_LightBottom) AND ([Lig" +
-                "htTop] = @Original_LightTop) AND ([IndexTop] = @Original_IndexTop) AND ([IndexBo" +
-                "ttom] = @Original_IndexBottom) AND ((@IsNull_SubZone = 1 AND [SubZone] IS NULL) " +
-                "OR ([SubZone] = @Original_SubZone)));\r\nSELECT ID_Flat, Type, ShortType, AreaLive" +
-                ", AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, Selecte" +
-                "dIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBottom, LightTop, Inde" +
-                "xTop, IndexBottom, SubZone FROM C_Flats_PIK1 WHERE (ID_Flat = @ID_Flat)";
+                "IndexBottom, [SubZone] = @SubZone, [LinkageOr] = @LinkageOr WHERE (([ID_Flat] = " +
+                "@Original_ID_Flat) AND ([Type] = @Original_Type) AND ([ShortType] = @Original_Sh" +
+                "ortType) AND ([AreaLive] = @Original_AreaLive) AND ([AreaTotalStandart] = @Origi" +
+                "nal_AreaTotalStandart) AND ([AreaTotalStrong] = @Original_AreaTotalStrong) AND (" +
+                "[AreaInModule] = @Original_AreaInModule) AND ([SelectedIndexBottom] = @Original_" +
+                "SelectedIndexBottom) AND ([SelectedIndexTop] = @Original_SelectedIndexTop) AND (" +
+                "[LinkageBefore] = @Original_LinkageBefore) AND ([LinkageAfter] = @Original_Linka" +
+                "geAfter) AND ([FactorSmoke] = @Original_FactorSmoke) AND ([LightBottom] = @Origi" +
+                "nal_LightBottom) AND ([LightTop] = @Original_LightTop) AND ([IndexTop] = @Origin" +
+                "al_IndexTop) AND ([IndexBottom] = @Original_IndexBottom) AND ([SubZone] = @Origi" +
+                "nal_SubZone) AND ([LinkageOr] = @Original_LinkageOr));\r\nSELECT ID_Flat, Type, Sh" +
+                "ortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedInd" +
+                "exBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBotto" +
+                "m, LightTop, IndexTop, IndexBottom, SubZone, LinkageOr FROM C_Flats_PIK1 WHERE (" +
+                "ID_Flat = @ID_Flat)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Type", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ShortType", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ShortType", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3721,6 +3736,7 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexTop", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexBottom", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexBottom", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SubZone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LinkageOr", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageOr", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ID_Flat", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ID_Flat", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Type", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Type", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_ShortType", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "ShortType", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -3737,8 +3753,8 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_LightTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LightTop", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_IndexTop", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexTop", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_IndexBottom", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "IndexBottom", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_SubZone", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_SubZone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_LinkageOr", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageOr", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ID_Flat", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "ID_Flat", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
@@ -3756,7 +3772,7 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT        ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, 
-                         FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone
+                         FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone, LinkageOr
 FROM            C_Flats_PIK1";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
@@ -3773,15 +3789,15 @@ FROM            C_Flats_PIK1";
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LinkageAfter", global::System.Data.SqlDbType.NVarChar, 10, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageAfter", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[3].Connection = this.Connection;
-            this._commandCollection[3].CommandText = @"SELECT AreaInModule, AreaLive, AreaTotalStandart, AreaTotalStrong, FactorSmoke, ID_Flat, IndexBottom, IndexTop, LightBottom, LightTop, LinkageAfter, LinkageBefore, SelectedIndexBottom, SelectedIndexTop, ShortType, SubZone, Type FROM C_Flats_PIK1 WHERE (ID_Flat = @IDFLAT)";
+            this._commandCollection[3].CommandText = @"SELECT AreaInModule, AreaLive, AreaTotalStandart, AreaTotalStrong, FactorSmoke, ID_Flat, IndexBottom, IndexTop, LightBottom, LightTop, LinkageAfter, LinkageBefore, LinkageOr, SelectedIndexBottom, SelectedIndexTop, ShortType, SubZone, Type FROM C_Flats_PIK1 WHERE (ID_Flat = @IDFLAT)";
             this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IDFLAT", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "ID_Flat", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[4] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[4].Connection = this.Connection;
             this._commandCollection[4].CommandText = @"INSERT INTO C_Flats_PIK1
                          (Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, 
-                         LightBottom, LightTop, IndexTop, IndexBottom, SubZone)
-VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@AreaInModule,@SelectedIndexBottom,@SelectedIndexTop,@LinkageBefore,@LinkageAfter,@FactorSmoke,@LightBottom,@LightTop,@IndexTop,@IndexBottom,@SubZone);   ";
+                         LightBottom, LightTop, IndexTop, IndexBottom, SubZone, LinkageOr)
+VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@AreaInModule,@SelectedIndexBottom,@SelectedIndexTop,@LinkageBefore,@LinkageAfter,@FactorSmoke,@LightBottom,@LightTop,@IndexTop,@IndexBottom,@SubZone,@LinkageOr);     ";
             this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Type", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ShortType", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "ShortType", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3799,19 +3815,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
             this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexTop", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "IndexTop", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IndexBottom", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "IndexBottom", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@SubZone", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "SubZone", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(PIK1.C_Flats_PIK1DataTable dataTable) {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
-            if ((this.ClearBeforeFill == true)) {
-                dataTable.Clear();
-            }
-            int returnValue = this.Adapter.Fill(dataTable);
-            return returnValue;
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LinkageOr", global::System.Data.SqlDbType.NChar, 10, global::System.Data.ParameterDirection.Input, 0, 0, "LinkageOr", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3887,7 +3891,8 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string Original_LightTop, 
                     string Original_IndexTop, 
                     string Original_IndexBottom, 
-                    string Original_SubZone) {
+                    string Original_SubZone, 
+                    string Original_LinkageOr) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ID_Flat));
             if ((Original_Type == null)) {
                 throw new global::System.ArgumentNullException("Original_Type");
@@ -3950,12 +3955,16 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                 this.Adapter.DeleteCommand.Parameters[15].Value = ((string)(Original_IndexBottom));
             }
             if ((Original_SubZone == null)) {
-                this.Adapter.DeleteCommand.Parameters[16].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[17].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("Original_SubZone");
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[16].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[17].Value = ((string)(Original_SubZone));
+                this.Adapter.DeleteCommand.Parameters[16].Value = ((string)(Original_SubZone));
+            }
+            if ((Original_LinkageOr == null)) {
+                throw new global::System.ArgumentNullException("Original_LinkageOr");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[17].Value = ((string)(Original_LinkageOr));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -3993,7 +4002,8 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string LightTop, 
                     string IndexTop, 
                     string IndexBottom, 
-                    string SubZone) {
+                    string SubZone, 
+                    string LinkageOr) {
             if ((Type == null)) {
                 throw new global::System.ArgumentNullException("Type");
             }
@@ -4055,10 +4065,16 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                 this.Adapter.InsertCommand.Parameters[14].Value = ((string)(IndexBottom));
             }
             if ((SubZone == null)) {
-                this.Adapter.InsertCommand.Parameters[15].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("SubZone");
             }
             else {
                 this.Adapter.InsertCommand.Parameters[15].Value = ((string)(SubZone));
+            }
+            if ((LinkageOr == null)) {
+                throw new global::System.ArgumentNullException("LinkageOr");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[16].Value = ((string)(LinkageOr));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -4097,6 +4113,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string IndexTop, 
                     string IndexBottom, 
                     string SubZone, 
+                    string LinkageOr, 
                     int Original_ID_Flat, 
                     string Original_Type, 
                     string Original_ShortType, 
@@ -4114,6 +4131,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string Original_IndexTop, 
                     string Original_IndexBottom, 
                     string Original_SubZone, 
+                    string Original_LinkageOr, 
                     int ID_Flat) {
             if ((Type == null)) {
                 throw new global::System.ArgumentNullException("Type");
@@ -4176,81 +4194,91 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                 this.Adapter.UpdateCommand.Parameters[14].Value = ((string)(IndexBottom));
             }
             if ((SubZone == null)) {
-                this.Adapter.UpdateCommand.Parameters[15].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("SubZone");
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[15].Value = ((string)(SubZone));
             }
-            this.Adapter.UpdateCommand.Parameters[16].Value = ((int)(Original_ID_Flat));
+            if ((LinkageOr == null)) {
+                throw new global::System.ArgumentNullException("LinkageOr");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[16].Value = ((string)(LinkageOr));
+            }
+            this.Adapter.UpdateCommand.Parameters[17].Value = ((int)(Original_ID_Flat));
             if ((Original_Type == null)) {
                 throw new global::System.ArgumentNullException("Original_Type");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[17].Value = ((string)(Original_Type));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(Original_Type));
             }
             if ((Original_ShortType == null)) {
                 throw new global::System.ArgumentNullException("Original_ShortType");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(Original_ShortType));
+                this.Adapter.UpdateCommand.Parameters[19].Value = ((string)(Original_ShortType));
             }
-            this.Adapter.UpdateCommand.Parameters[19].Value = ((double)(Original_AreaLive));
-            this.Adapter.UpdateCommand.Parameters[20].Value = ((double)(Original_AreaTotalStandart));
-            this.Adapter.UpdateCommand.Parameters[21].Value = ((double)(Original_AreaTotalStrong));
-            this.Adapter.UpdateCommand.Parameters[22].Value = ((int)(Original_AreaInModule));
-            this.Adapter.UpdateCommand.Parameters[23].Value = ((int)(Original_SelectedIndexBottom));
-            this.Adapter.UpdateCommand.Parameters[24].Value = ((int)(Original_SelectedIndexTop));
+            this.Adapter.UpdateCommand.Parameters[20].Value = ((double)(Original_AreaLive));
+            this.Adapter.UpdateCommand.Parameters[21].Value = ((double)(Original_AreaTotalStandart));
+            this.Adapter.UpdateCommand.Parameters[22].Value = ((double)(Original_AreaTotalStrong));
+            this.Adapter.UpdateCommand.Parameters[23].Value = ((int)(Original_AreaInModule));
+            this.Adapter.UpdateCommand.Parameters[24].Value = ((int)(Original_SelectedIndexBottom));
+            this.Adapter.UpdateCommand.Parameters[25].Value = ((int)(Original_SelectedIndexTop));
             if ((Original_LinkageBefore == null)) {
                 throw new global::System.ArgumentNullException("Original_LinkageBefore");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(Original_LinkageBefore));
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_LinkageBefore));
             }
             if ((Original_LinkageAfter == null)) {
                 throw new global::System.ArgumentNullException("Original_LinkageAfter");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(Original_LinkageAfter));
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(Original_LinkageAfter));
             }
             if ((Original_FactorSmoke == null)) {
                 throw new global::System.ArgumentNullException("Original_FactorSmoke");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(Original_FactorSmoke));
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_FactorSmoke));
             }
             if ((Original_LightBottom == null)) {
                 throw new global::System.ArgumentNullException("Original_LightBottom");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(Original_LightBottom));
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(Original_LightBottom));
             }
             if ((Original_LightTop == null)) {
                 throw new global::System.ArgumentNullException("Original_LightTop");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(Original_LightTop));
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((string)(Original_LightTop));
             }
             if ((Original_IndexTop == null)) {
                 throw new global::System.ArgumentNullException("Original_IndexTop");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((string)(Original_IndexTop));
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((string)(Original_IndexTop));
             }
             if ((Original_IndexBottom == null)) {
                 throw new global::System.ArgumentNullException("Original_IndexBottom");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((string)(Original_IndexBottom));
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((string)(Original_IndexBottom));
             }
             if ((Original_SubZone == null)) {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("Original_SubZone");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(0));
                 this.Adapter.UpdateCommand.Parameters[33].Value = ((string)(Original_SubZone));
             }
-            this.Adapter.UpdateCommand.Parameters[34].Value = ((int)(ID_Flat));
+            if ((Original_LinkageOr == null)) {
+                throw new global::System.ArgumentNullException("Original_LinkageOr");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((string)(Original_LinkageOr));
+            }
+            this.Adapter.UpdateCommand.Parameters[35].Value = ((int)(ID_Flat));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -4288,6 +4316,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string IndexTop, 
                     string IndexBottom, 
                     string SubZone, 
+                    string LinkageOr, 
                     int Original_ID_Flat, 
                     string Original_Type, 
                     string Original_ShortType, 
@@ -4304,8 +4333,9 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string Original_LightTop, 
                     string Original_IndexTop, 
                     string Original_IndexBottom, 
-                    string Original_SubZone) {
-            return this.Update(Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone, Original_ID_Flat, Original_Type, Original_ShortType, Original_AreaLive, Original_AreaTotalStandart, Original_AreaTotalStrong, Original_AreaInModule, Original_SelectedIndexBottom, Original_SelectedIndexTop, Original_LinkageBefore, Original_LinkageAfter, Original_FactorSmoke, Original_LightBottom, Original_LightTop, Original_IndexTop, Original_IndexBottom, Original_SubZone, Original_ID_Flat);
+                    string Original_SubZone, 
+                    string Original_LinkageOr) {
+            return this.Update(Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, AreaInModule, SelectedIndexBottom, SelectedIndexTop, LinkageBefore, LinkageAfter, FactorSmoke, LightBottom, LightTop, IndexTop, IndexBottom, SubZone, LinkageOr, Original_ID_Flat, Original_Type, Original_ShortType, Original_AreaLive, Original_AreaTotalStandart, Original_AreaTotalStrong, Original_AreaInModule, Original_SelectedIndexBottom, Original_SelectedIndexTop, Original_LinkageBefore, Original_LinkageAfter, Original_FactorSmoke, Original_LightBottom, Original_LightTop, Original_IndexTop, Original_IndexBottom, Original_SubZone, Original_LinkageOr, Original_ID_Flat);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4397,7 +4427,8 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                     string LightTop, 
                     string IndexTop, 
                     string IndexBottom, 
-                    string SubZone) {
+                    string SubZone, 
+                    string LinkageOr) {
             global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[4];
             if ((Type == null)) {
                 throw new global::System.ArgumentNullException("Type");
@@ -4460,10 +4491,16 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                 command.Parameters[14].Value = ((string)(IndexBottom));
             }
             if ((SubZone == null)) {
-                command.Parameters[15].Value = global::System.DBNull.Value;
+                throw new global::System.ArgumentNullException("SubZone");
             }
             else {
                 command.Parameters[15].Value = ((string)(SubZone));
+            }
+            if ((LinkageOr == null)) {
+                throw new global::System.ArgumentNullException("LinkageOr");
+            }
+            else {
+                command.Parameters[16].Value = ((string)(LinkageOr));
             }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -4952,11 +4989,11 @@ WHERE        (C_Sections.ID_Section = @IDSECTION)";
 FROM            C_Flats_PIK1 INNER JOIN
                          F_nn_FlatsInSection ON C_Flats_PIK1.ID_Flat = F_nn_FlatsInSection.ID_Flat INNER JOIN
                          C_Sections ON F_nn_FlatsInSection.ID_Section = C_Sections.ID_Section
-WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Levels = @Levels) AND (C_Sections.Type = @Type)";
+WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @Type) AND (C_Sections.Levels = @Levels)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CountModules", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "CountModules", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Levels", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Levels", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "TypeSection", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Levels", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Levels", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4986,20 +5023,20 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Levels = 
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.FlatsInSectionsDataTable GetFlatsInTypeSection(int CountModules, string Levels, string Type) {
+        public virtual PIK1.FlatsInSectionsDataTable GetFlatsInTypeSection(int CountModules, string Type, string Levels) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(CountModules));
-            if ((Levels == null)) {
-                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.SelectCommand.Parameters[1].Value = ((string)(Levels));
-            }
             if ((Type == null)) {
                 throw new global::System.ArgumentNullException("Type");
             }
             else {
-                this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Type));
+                this.Adapter.SelectCommand.Parameters[1].Value = ((string)(Type));
+            }
+            if ((Levels == null)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Levels));
             }
             PIK1.FlatsInSectionsDataTable dataTable = new PIK1.FlatsInSectionsDataTable();
             this.Adapter.Fill(dataTable);

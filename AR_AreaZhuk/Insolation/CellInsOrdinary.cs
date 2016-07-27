@@ -22,6 +22,7 @@ namespace AR_AreaZhuk.Insolation
         public string InsSideTopRight { get; private set; } = "";
         public string InsSideBotRight { get; private set; } = "";
         public bool HasSideIns { get; private set; }
+        public EnumEndSide EndSide { get; private set; }
 
         public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
         {                       
@@ -31,13 +32,18 @@ namespace AR_AreaZhuk.Insolation
         {
             var invert = new CellInsOrdinary((InsCheckOrdinary)insCheck);
             invert.InsTop = InsBot.Reverse().ToArray();
-            invert.InsBot = InsTop.Reverse().ToArray();
+            invert.InsBot = InsTop;
 
             invert.InsSideBotLeft = InsSideTopRight;
             invert.InsSideBotRight = InsSideTopLeft;
             invert.InsSideTopLeft = InsSideBotRight;
             invert.InsSideTopRight = InsSideBotLeft;
 
+            if (EndSide == EnumEndSide.Left)
+                invert.EndSide = EnumEndSide.Right;
+            else if (EndSide == EnumEndSide.Right)
+                invert.EndSide = EnumEndSide.Left;
+                
             return invert;
         }
 
@@ -47,45 +53,44 @@ namespace AR_AreaZhuk.Insolation
             
             Cell cellTop = insCheck.startCellHelper.StartCell;            
             Cell cellBot = cellTop;
-            Cell offset = new Cell();            
+            Cell dirGeneral = new Cell();
+            Cell dirOrtho = new Cell();
 
             if (isVertic)
             {
                 // Для вертикальной секции, ЛЛУ справа       
                 cellBot.Col -= indexWithSection;
-                offset.Row = -1;
-
-                // Торцевая инсоляция
-                if (insCheck.IsEndSection())
-                {
-                    var cel = new Cell(cellTop.Row, cellTop.Col - 1);
-                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
-                    cel.Col--;
-                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
-                    cel.Row -= countStep - 1;
-                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
-                    cel.Col++;
-                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
-                }
+                dirGeneral.Row = -1;
+                dirOrtho.Col = -1;           
             }
             else
             {
                 // Для горизонтальной секции, ЛЛУ сверху                    
                 cellBot.Row += indexWithSection;
-                offset.Col = -1;
+                dirGeneral.Col = -1;
+                dirOrtho.Row = 1;
+            }
 
-                // Торцевая инсоляция
-                if (insCheck.IsEndSection())
-                {
-                    var cel = new Cell(cellTop.Row + 1, cellTop.Col);
-                    InsSideTopRight = GetInsIndex(cel, isRequired: false);
-                    cel.Row++;
-                    InsSideBotRight = GetInsIndex(cel, isRequired: false);
-                    cel.Col -= countStep - 1;
-                    InsSideBotLeft = GetInsIndex(cel, isRequired: false);
-                    cel.Row--;
-                    InsSideTopLeft = GetInsIndex(cel, isRequired: false);
-                }                
+            // Торцевая инсоляция
+            EndSide = GetSectionEndSide();
+            if (EndSide == EnumEndSide.Left)
+            {
+                // Торец слева
+                var cel = insCheck.startCellHelper.StartCell;
+                cel.Offset(dirGeneral* (countStep-1));
+                cel.Offset(dirOrtho);
+                InsSideTopLeft = GetInsIndex(cel, isRequired: false);
+                cel.Offset(dirOrtho);
+                InsSideBotLeft = GetInsIndex(cel, isRequired: false);
+            }
+            else if (EndSide == EnumEndSide.Right)
+            {
+                // Торец справа
+                var cel = insCheck.startCellHelper.StartCell;
+                cel.Offset(dirOrtho);
+                InsSideTopRight = GetInsIndex(cel, isRequired: false);
+                cel.Offset(dirOrtho);
+                InsSideBotRight = GetInsIndex(cel, isRequired: false);
             }
 
             // Задана ли боковая инсоляция
@@ -96,11 +101,55 @@ namespace AR_AreaZhuk.Insolation
                 InsTop[i] = GetInsIndex(cellTop);
                 InsBot[i] = GetInsIndex(cellBot);
 
-                cellTop.Offset(offset);
-                cellBot.Offset(offset);                
+                cellTop.Offset(dirGeneral);
+                cellBot.Offset(dirGeneral);                
             }
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();
-        }        
+        }
+
+        public override EnumEndSide GetSectionEndSide ()
+        {
+            EnumEndSide res = EnumEndSide.None;
+
+            if (insCheck.IsStartSection())
+            {
+                if (insCheck.isVertical)
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                    {
+                        res = EnumEndSide.Left;
+                    }
+                    else
+                    {
+                        res = EnumEndSide.Right;
+                    }
+                }
+                else
+                {
+                    res = EnumEndSide.Left;
+                }
+            }
+            else if (insCheck.IsEndSection())
+            {
+                if (insCheck.isVertical)
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                    {
+                        res = EnumEndSide.Right;
+                    }
+                    else
+                    {
+                        res = EnumEndSide.Left;
+                    }
+                }
+                else
+                {
+                    res = EnumEndSide.Right;
+                }
+            }
+
+            return res;
+        }
     }
 }

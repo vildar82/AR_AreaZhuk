@@ -67,27 +67,19 @@ namespace AR_AreaZhuk.Insolation
             insCurSide = null;
             insOtherSide = null;
 
-            if (isTop)
-            {                
-                insCurSide = cellInsCur.InsTop;
-                insOtherSide = cellInsCur.InsBot.Reverse().ToArray(); 
-            }
-            else
-            {                
-                insCurSide = cellInsCur.InsBot;
-                // У нижних квартир не нужно проверять верх, т.к. верха у них быть не может                
-            }
+            insCurSide = cellInsCur.InsTop;
+            insOtherSide = isTop? cellInsCur.InsBot.Reverse().ToArray(): null; // У нижних квартир не нужно проверять другую сторону                       
 
             for (int i = 0; i < curSideFlats.Count; i++)
             {
-                flat = curSideFlats[i];
-                curFlatIndex = i;
                 specialFail = false;
+                flat = curSideFlats[i];
+                curFlatIndex = i;                
                 bool flatPassed = false;
                 string lightingCurSide = null;
                 string lightingOtherSide = null;
-                isFirstFlatInSide = IsFirstFlatInSide();
-                isLastFlatInSide = IsLastFlatInSide();
+                isFirstFlatInSide = IsEndFirstFlatInSide();
+                isLastFlatInSide = IsEndLastFlatInSide();
 
                 if (flat.SubZone == "0")
                 {
@@ -143,11 +135,19 @@ namespace AR_AreaZhuk.Insolation
                     }
                 }
 
+#if TEST
+                flat.IsInsPassed = flatPassed;
+                if (specialFail)
+                {
+                    flat.IsInsPassed = false;
+                }
+#else
                 if (!flatPassed || specialFail)
                 {
-                    // квартира не прошла инсоляцию - вся секция не проходит
+                    // квартира не прошла инсоляцию - вся секция не проходит                    
                     return false;
-                }
+                }                
+#endif
                 // Сдвиг шага
                 step += isTop ? flat.SelectedIndexTop : flat.SelectedIndexBottom;
             }
@@ -175,77 +175,133 @@ namespace AR_AreaZhuk.Insolation
             // Округление вниз - от окон внутри одного помещения
             var isPassed = RequirementsIsEmpty(requires);                    
             return isPassed;            
-        }        
-
-        
+        }   
 
         /// <summary>
         /// Проверка инсоляции боковин
         /// </summary>        
         private void CheckLightingSide (ref List<InsRequired> requires)
         {
-            // Если это не крайняя квартира на стороне, то точно боковой инсоляции нет.
-            // И если не задана боковая инсоляция для квартиры
-            // И если не задана боковая инсоляция в пятне инсоляции
-            bool isSideFlat = isFirstFlatInSide || isLastFlatInSide;
-            bool flatHasSide = flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;            
-            if (!isSideFlat || !flatHasSide || !cellInsCur.HasSideIns || RequirementsIsEmpty(requires))
+            // Если это не боковая квартра по типу (не заданы боковые индексы инсоляции), то у такой квартиры не нужно проверять боковую инсоляцию
+            bool flatHasSide = flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;
+            if (!flatHasSide)
             {
                 return;
             }
 
-            if(isTop)
+            // Квартира боковая по типу (заданы боковые индексы инсоляции)
+
+            // Если это не крайняя квартира на стороне, то такую секцию нельзя пропускать дальше
+            var endFlat = GetEndFlatSide();
+            if (endFlat == EnumEndSide.None)
             {
-                // Правая сторона
-                if (isFirstFlatInSide)
-                {
-                    // Верхняя правая боковая ячейка  (InsSideTopRight)
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopRight) && flatLightIndexSideCurSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopRight);
-                    }
-                    // Нижняя правая боковая ячейка (InsSideBotRight)
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotRight) && flatLightIndexOtherSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexOtherSide[0], cellInsStandart.InsSideBotRight);
-                    }
-                }           
-                // Левая сторона     
-                else if (isLastFlatInSide)
-                {
-                    // Верхняя левая боковая ячейка 
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopLeft) && flatLightIndexSideCurSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopLeft);
-                    }
-                    // Нижняя левая боковая ячейка 
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotLeft) && flatLightIndexOtherSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexOtherSide[0], cellInsStandart.InsSideBotLeft);
-                    }
-                }                
+                specialFail = true;
+                return;
             }
-            else
+
+            // Если сторона квартиры не соответствует стороне торца, такую секцию нельзя пропускать дальше 
+            if (endFlat != cellInsCur.EndSide)
             {
-                if (isFirstFlatInSide)
+                specialFail = true;
+                return;
+            }            
+
+            // Если требования инсоляции уже удовлетворены, то не нужно проверять дальше
+            if (RequirementsIsEmpty(requires))
+            {
+                return;
+            }
+
+            int flatLightingSide =0;
+            int flatLightingSideOther =0;
+            string insSideValue = null;
+            string insSideOtherValue = null;
+
+            if (endFlat == EnumEndSide.Right)
+            {
+                // Правый торец
+                if (isTop)
                 {
-                    // Левая нижняя ячейка боковой инсоляции                    
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideBotRight) && flatLightIndexSideCurSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideBotRight);
-                    }
-                }                
-                else if (isLastFlatInSide)
+                    // Праввая верхняя ячейка инсоляции
+                    insSideValue = cellInsCur.InsSideTopRight;
+                    flatLightingSide = flatLightIndexSideCurSide[0];
+                    // для верхних квартир проверить нижнюю ячейку инсоляции
+                    insSideOtherValue = cellInsCur.InsSideBotRight;
+                    flatLightingSideOther= flatLightIndexSideOtherSide[0];
+                }
+                else
                 {
-                    // Верхняя левая боковая ячейка 
-                    if (!string.IsNullOrEmpty(cellInsStandart.InsSideTopLeft) && flatLightIndexSideCurSide.Count == 1)
-                    {
-                        CalcRequire(ref requires, flatLightIndexSideCurSide[0], cellInsStandart.InsSideTopLeft);
-                    }
+                    // Праввая нижняя ячейка инсоляции
+                    insSideValue = cellInsCur.InsSideBotRight;
+                    flatLightingSide = flatLightIndexSideCurSide[0];
                 }
             }
+            else if (endFlat == EnumEndSide.Left)
+            {
+                // Левый торец
+                if (isTop)
+                {
+                    // Левая верхняя ячейка инсоляции
+                    insSideValue = cellInsCur.InsSideTopLeft;
+                    flatLightingSide = flatLightIndexSideCurSide[0];
+                    // для верхних квартир проверить нижнюю ячейку инсоляции
+                    insSideOtherValue = cellInsCur.InsSideBotLeft;
+                    flatLightingSideOther = flatLightIndexSideOtherSide[0];
+                }
+                else
+                {
+                    // Левая нижняя ячейка инсоляции
+                    insSideValue = cellInsCur.InsSideBotLeft;
+                    flatLightingSide = flatLightIndexSideCurSide[0];
+                }
+            }
+            
+            double lightWeight;
+            int indexLighting = GetLightingValue(flatLightingSide, out lightWeight);
+            CalcRequire(ref requires, lightWeight, insSideValue);
+            
+            indexLighting = GetLightingValue(flatLightingSideOther, out lightWeight);
+            CalcRequire(ref requires, lightWeight, insSideOtherValue);
         }
 
-        
+        /// <summary>
+        /// Определение с какого торца секции расположена квартира
+        /// </summary>        
+        private EnumEndSide GetEndFlatSide ()
+        {
+            EnumEndSide res = EnumEndSide.None;
+            if (isFirstFlatInSide)
+            {
+                if (isTop)
+                {
+                    res = EnumEndSide.Right;
+                }
+                else
+                {
+                    res = EnumEndSide.Left;
+                }
+            }
+            else if (isLastFlatInSide)
+            {
+                if (isTop)
+                {
+                    res = EnumEndSide.Left;
+                }
+                else
+                {
+                    res = EnumEndSide.Right;
+                }
+            }
+
+            if (!isRightOrTopLLu)
+            {
+                if (res == EnumEndSide.Right)
+                    res = EnumEndSide.Left;
+                else if (res == EnumEndSide.Left)
+                    res = EnumEndSide.Right;
+            }
+
+            return res;
+        }
     }
 }

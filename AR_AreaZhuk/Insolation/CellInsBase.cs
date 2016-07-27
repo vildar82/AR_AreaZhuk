@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace AR_AreaZhuk.Insolation
 {
     abstract class CellInsBase
-    {
-        
+    {        
         protected InsCheckBase insCheck;
         protected int countStep;
         protected bool isVertic;
@@ -22,6 +21,8 @@ namespace AR_AreaZhuk.Insolation
         public string[] InsBot { get; set; }
 
         public abstract void DefineIns ();
+
+        public abstract EnumEndSide GetSectionEndSide ();
 
         public CellInsBase (InsCheckBase insCheck)
         {
@@ -59,8 +60,6 @@ namespace AR_AreaZhuk.Insolation
                 throw new Exception("Не задан индекс инсоляции в ячейке [c"+ cell.Col + ",r"+ cell.Row + "].");
             }
             return resInsIndex;
-        }
-
-        
+        }        
     }
 }

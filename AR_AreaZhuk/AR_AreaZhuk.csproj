@@ -9,24 +9,24 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AR_AreaZhuk</RootNamespace>
     <AssemblyName>AR_AreaZhuk</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>1.0.202.3084</AssemblyVersion>
+    <AssemblyVersion>1.0.208.3382</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,11 +43,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\Revit_server\10. Dll's\Dll\PIK\Dlls\AdvancedDataGridView.dll</HintPath>
     </Reference>
-    <Reference Include="AR_Zhuk_DataModel">
-      <HintPath>Z:\Revit_server\10. Dll's\Dll\PIK\Dlls\AR_Zhuk_DataModel.dll</HintPath>
+    <Reference Include="AR_Zhuk_DataModel, Version=1.0.204.30, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AR_Zhuk_DataModel\AR_Zhuk_DataModel\bin\Debug\AR_Zhuk_DataModel.dll</HintPath>
     </Reference>
-    <Reference Include="BeetlyVisualisation">
-      <HintPath>Z:\Revit_server\10. Dll's\Dll\PIK\Dlls\BeetlyVisualisation.dll</HintPath>
+    <Reference Include="BeetlyVisualisation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\beetlyvisualization\BeetlyVisualisation\BeetlyVisualisation\bin\Debug\BeetlyVisualisation.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus">
       <HintPath>Z:\Revit_server\10. Dll's\Dll\EPPlus.dll</HintPath>
@@ -86,17 +88,19 @@
     <Compile Include="Insolation\CellInsBase.cs" />
     <Compile Include="Insolation\CellInsCorner.cs" />
     <Compile Include="Insolation\CellInsOrdinary.cs" />
+    <Compile Include="Insolation\EnumSectionEndSide.cs" />
     <Compile Include="Insolation\IInsCheck.cs" />
     <Compile Include="Insolation\InsCheckBase.cs" />
     <Compile Include="Insolation\InsCheckCorner.cs" />
     <Compile Include="Insolation\InsCheckFactory.cs" />
     <Compile Include="Insolation\InsCheckOrdinary.cs" />
     <Compile Include="Insolation\InsolationFrameWork.cs" />
+    <Compile Include="Insolation\InsolationSpot.cs" />
     <Compile Include="Insolation\LightingStringParser.cs" />
     <Compile Include="Insolation\SideFlatFake.cs" />
     <Compile Include="Insolation\StartCellHelper.cs" />
+    <Compile Include="Model\CodeSection.cs" />
     <Compile Include="Model\HouseInfo.cs" />
-    <Compile Include="Insolation\InsolationSpot.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +123,7 @@
     <Compile Include="Model\SpotInfo.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="SpotHouseInfo.cs" />
+    <Compile Include="Test\CreateHouseImage.cs" />
     <EmbeddedResource Include="FormPreviewImage.resx">
       <DependentUpon>FormPreviewImage.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +176,7 @@
   <ItemGroup>
     <None Include="Resources\up.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

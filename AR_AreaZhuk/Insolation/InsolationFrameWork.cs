@@ -10,23 +10,41 @@ namespace AR_AreaZhuk.Insolation
 {
     class InsolationFrameWork
     {
-        public List<RoomInfo> GetTopFlatsInSection (List<RoomInfo> sectionFlats)
+        public List<RoomInfo> GetTopFlatsInSection (List<RoomInfo> sectionFlats, bool isTop)
         {
             List<RoomInfo> topFlats = new List<RoomInfo>();
 
-            for (int i = 4; i < sectionFlats.Count; i++)
+            if (isTop)
             {
-                if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                topFlats.Add(sectionFlats[i]);
-            }
+                int indexFirstBottomFlat = 0;
+                for (int i = 0; i < sectionFlats.Count; i++)
+                {
+                    indexFirstBottomFlat = i;
+                    if (sectionFlats[i].SelectedIndexTop == 0)
+                        break;
+                }                
 
-            for (int i = 0; i < 4; i++)
+                for (int i = indexFirstBottomFlat; i < sectionFlats.Count; i++)
+                {
+                    if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                    topFlats.Add(sectionFlats[i]);
+                }
+
+                for (int i = 0; i < indexFirstBottomFlat; i++)
+                {
+                    if (sectionFlats[i].SelectedIndexTop == 0) continue;
+                    topFlats.Add(sectionFlats[i]);
+                }
+            }
+            else
             {
-                if (sectionFlats[i].SelectedIndexTop == 0) continue;
-                topFlats.Add(sectionFlats[i]);
+                for (int i = 0; i < sectionFlats.Count; i++)
+                {
+                    if (sectionFlats[i].SelectedIndexTop != 0) continue;
+                    topFlats.Add(sectionFlats[i]);
+                }
             }
-
-            Debug.Assert(topFlats.Count != 1, "GetTopFlatsInSection - Одна квартира на стороне!!!");
+                        
             return topFlats;
         }
 

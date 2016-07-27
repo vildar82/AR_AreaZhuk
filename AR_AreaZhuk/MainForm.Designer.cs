@@ -3,14 +3,14 @@ using Zuby.ADGV;
 namespace AR_AreaZhuk
 {
 
-    //public class DataGridViewEx : AdvancedDataGridView
-    //{
-    //    public DataGridViewEx()
-    //        : base()
-    //    {
-    //        SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-    //    }
-    //}
+    public class DataGridViewEx : AdvancedDataGridView
+    {
+        public DataGridViewEx()
+            : base()
+        {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
+    }
    
     partial class MainForm
     {
@@ -46,68 +46,68 @@ namespace AR_AreaZhuk
         {
             this.components = new System.ComponentModel.Container();
             this.dg = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnViewPercentsge = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dg2 = new AR_AreaZhuk.DataGridViewEx();
             this.btnStartScan = new System.Windows.Forms.Button();
             this.lblCountObjects = new System.Windows.Forms.Label();
             this.chkDominant = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtOffsetDominants = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.numMainCountFloor = new System.Windows.Forms.NumericUpDown();
-            this.numDomCountFloor = new System.Windows.Forms.NumericUpDown();
             this.chkListP1 = new System.Windows.Forms.CheckedListBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.chkListP2 = new System.Windows.Forms.CheckedListBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.chkListP3 = new System.Windows.Forms.CheckedListBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.chkListP4 = new System.Windows.Forms.CheckedListBox();
+            this.txtOffsetDominants = new System.Windows.Forms.NumericUpDown();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chkEnableDominant = new System.Windows.Forms.CheckBox();
+            this.numDomCountFloor = new System.Windows.Forms.NumericUpDown();
+            this.numMainCountFloor = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.pnlMenu = new System.Windows.Forms.Panel();
+            this.pnlMenuGroup3 = new System.Windows.Forms.Panel();
+            this.btnMenuGroup3 = new System.Windows.Forms.Button();
+            this.pb = new System.Windows.Forms.PictureBox();
+            this.contextMenuStripImage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.сохранитьКакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMenuGroup2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.btnMenuGroup2 = new System.Windows.Forms.Button();
             this.pnlMenuGroup1 = new System.Windows.Forms.Panel();
             this.btnMenuGroup1 = new System.Windows.Forms.Button();
-            this.pb = new System.Windows.Forms.PictureBox();
-            this.btnMenuGroup3 = new System.Windows.Forms.Button();
-            this.pnlMenuGroup3 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.contextMenuStripImage = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.сохранитьКакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chkEnableDominant = new System.Windows.Forms.CheckBox();
             this.GetFile = new System.Windows.Forms.Button();
-            this.dg2 = new AdvancedDataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dg)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dg2)).BeginInit();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOffsetDominants)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMainCountFloor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOffsetDominants)).BeginInit();
+            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDomCountFloor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMainCountFloor)).BeginInit();
             this.pnlMenu.SuspendLayout();
+            this.pnlMenuGroup3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb)).BeginInit();
+            this.contextMenuStripImage.SuspendLayout();
             this.pnlMenuGroup2.SuspendLayout();
             this.panel5.SuspendLayout();
             this.pnlMenuGroup1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pb)).BeginInit();
-            this.pnlMenuGroup3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.contextMenuStripImage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dg2)).BeginInit();
             this.SuspendLayout();
             // 
             // dg
@@ -127,32 +127,6 @@ namespace AR_AreaZhuk
             this.dg.Size = new System.Drawing.Size(328, 289);
             this.dg.TabIndex = 0;
             this.dg.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellValueChanged);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Зона";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 80;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Метраж";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 80;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Процент";
-            this.Column2.Name = "Column2";
-            this.Column2.Width = 80;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Погрешность";
-            this.Column4.Name = "Column4";
-            this.Column4.Width = 80;
             // 
             // btnViewPercentsge
             // 
@@ -203,6 +177,26 @@ namespace AR_AreaZhuk
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Подробная информация";
             // 
+            // dg2
+            // 
+            this.dg2.AllowUserToAddRows = false;
+            this.dg2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dg2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dg2.FilterAndSortEnabled = true;
+            this.dg2.Location = new System.Drawing.Point(6, 19);
+            this.dg2.MultiSelect = false;
+            this.dg2.Name = "dg2";
+            this.dg2.ReadOnly = true;
+            this.dg2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dg2.Size = new System.Drawing.Size(598, 756);
+            this.dg2.TabIndex = 1;
+            this.dg2.SortStringChanged += new System.EventHandler(this.dg2_SortStringChanged);
+            this.dg2.FilterStringChanged += new System.EventHandler(this.dg2_FilterStringChanged);
+            this.dg2.SelectionChanged += new System.EventHandler(this.dg2_SelectionChanged);
+            this.dg2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dg2_MouseClick);
+            // 
             // btnStartScan
             // 
             this.btnStartScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -223,7 +217,7 @@ namespace AR_AreaZhuk
             this.lblCountObjects.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblCountObjects.Location = new System.Drawing.Point(954, 784);
             this.lblCountObjects.Name = "lblCountObjects";
-            this.lblCountObjects.Size = new System.Drawing.Size(17, 16);
+            this.lblCountObjects.Size = new System.Drawing.Size(16, 16);
             this.lblCountObjects.TabIndex = 14;
             this.lblCountObjects.Text = "0";
             // 
@@ -251,41 +245,15 @@ namespace AR_AreaZhuk
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             // 
-            // groupBox4
+            // groupBox1
             // 
-            this.groupBox4.Controls.Add(this.chkEnableDominant);
-            this.groupBox4.Controls.Add(this.numDomCountFloor);
-            this.groupBox4.Controls.Add(this.numMainCountFloor);
-            this.groupBox4.Controls.Add(this.label1);
-            this.groupBox4.Location = new System.Drawing.Point(6, 12);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(192, 64);
-            this.groupBox4.TabIndex = 2;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Этажность";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Основная";
-            // 
-            // txtOffsetDominants
-            // 
-            this.txtOffsetDominants.Enabled = false;
-            this.txtOffsetDominants.Location = new System.Drawing.Point(234, 17);
-            this.txtOffsetDominants.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.txtOffsetDominants.Name = "txtOffsetDominants";
-            this.txtOffsetDominants.Size = new System.Drawing.Size(31, 20);
-            this.txtOffsetDominants.TabIndex = 2;
-            this.txtOffsetDominants.ValueChanged += new System.EventHandler(this.txtOffsetDominants_ValueChanged);
+            this.groupBox1.Controls.Add(this.tabControl1);
+            this.groupBox1.Location = new System.Drawing.Point(6, 82);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(348, 142);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Пятна объекта";
             // 
             // tabControl1
             // 
@@ -313,6 +281,24 @@ namespace AR_AreaZhuk
             this.tabPage1.Text = "P1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chkListP1
+            // 
+            this.chkListP1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkListP1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.chkListP1.CheckOnClick = true;
+            this.chkListP1.FormattingEnabled = true;
+            this.chkListP1.Items.AddRange(new object[] {
+            "Первая секция",
+            "Вторая секция",
+            "Третья секция",
+            "Предпоследняя секция",
+            "Последняя секция"});
+            this.chkListP1.Location = new System.Drawing.Point(6, 7);
+            this.chkListP1.Name = "chkListP1";
+            this.chkListP1.Size = new System.Drawing.Size(316, 75);
+            this.chkListP1.TabIndex = 2;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.chkListP2);
@@ -323,6 +309,22 @@ namespace AR_AreaZhuk
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "P2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // chkListP2
+            // 
+            this.chkListP2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.chkListP2.CheckOnClick = true;
+            this.chkListP2.FormattingEnabled = true;
+            this.chkListP2.Items.AddRange(new object[] {
+            "Первая секция",
+            "Вторая секция",
+            "Третья секция",
+            "Предпоследняя секция",
+            "Последняя секция"});
+            this.chkListP2.Location = new System.Drawing.Point(6, 7);
+            this.chkListP2.Name = "chkListP2";
+            this.chkListP2.Size = new System.Drawing.Size(316, 75);
+            this.chkListP2.TabIndex = 3;
             // 
             // tabPage3
             // 
@@ -335,6 +337,22 @@ namespace AR_AreaZhuk
             this.tabPage3.Text = "P3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // chkListP3
+            // 
+            this.chkListP3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.chkListP3.CheckOnClick = true;
+            this.chkListP3.FormattingEnabled = true;
+            this.chkListP3.Items.AddRange(new object[] {
+            "Первая секция",
+            "Вторая секция",
+            "Третья секция",
+            "Предпоследняя секция",
+            "Последняя секция"});
+            this.chkListP3.Location = new System.Drawing.Point(6, 7);
+            this.chkListP3.Name = "chkListP3";
+            this.chkListP3.Size = new System.Drawing.Size(316, 75);
+            this.chkListP3.TabIndex = 3;
+            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.chkListP4);
@@ -346,22 +364,59 @@ namespace AR_AreaZhuk
             this.tabPage4.Text = "P4";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // numMainCountFloor
+            // chkListP4
             // 
-            this.numMainCountFloor.Location = new System.Drawing.Point(18, 34);
-            this.numMainCountFloor.Maximum = new decimal(new int[] {
-            25,
+            this.chkListP4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.chkListP4.CheckOnClick = true;
+            this.chkListP4.FormattingEnabled = true;
+            this.chkListP4.Items.AddRange(new object[] {
+            "Первая секция",
+            "Вторая секция",
+            "Третья секция",
+            "Предпоследняя секция",
+            "Последняя секция"});
+            this.chkListP4.Location = new System.Drawing.Point(6, 7);
+            this.chkListP4.Name = "chkListP4";
+            this.chkListP4.Size = new System.Drawing.Size(316, 75);
+            this.chkListP4.TabIndex = 3;
+            // 
+            // txtOffsetDominants
+            // 
+            this.txtOffsetDominants.Enabled = false;
+            this.txtOffsetDominants.Location = new System.Drawing.Point(234, 17);
+            this.txtOffsetDominants.Maximum = new decimal(new int[] {
+            5,
             0,
             0,
             0});
-            this.numMainCountFloor.Name = "numMainCountFloor";
-            this.numMainCountFloor.Size = new System.Drawing.Size(45, 20);
-            this.numMainCountFloor.TabIndex = 15;
-            this.numMainCountFloor.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
+            this.txtOffsetDominants.Name = "txtOffsetDominants";
+            this.txtOffsetDominants.Size = new System.Drawing.Size(31, 20);
+            this.txtOffsetDominants.TabIndex = 2;
+            this.txtOffsetDominants.ValueChanged += new System.EventHandler(this.txtOffsetDominants_ValueChanged);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chkEnableDominant);
+            this.groupBox4.Controls.Add(this.numDomCountFloor);
+            this.groupBox4.Controls.Add(this.numMainCountFloor);
+            this.groupBox4.Controls.Add(this.label1);
+            this.groupBox4.Location = new System.Drawing.Point(6, 12);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(192, 64);
+            this.groupBox4.TabIndex = 2;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Этажность";
+            // 
+            // chkEnableDominant
+            // 
+            this.chkEnableDominant.AutoSize = true;
+            this.chkEnableDominant.Location = new System.Drawing.Point(102, 12);
+            this.chkEnableDominant.Name = "chkEnableDominant";
+            this.chkEnableDominant.Size = new System.Drawing.Size(84, 17);
+            this.chkEnableDominant.TabIndex = 4;
+            this.chkEnableDominant.Text = "Доминанта";
+            this.chkEnableDominant.UseVisualStyleBackColor = true;
+            this.chkEnableDominant.CheckedChanged += new System.EventHandler(this.chkEnableDominant_CheckedChanged);
             // 
             // numDomCountFloor
             // 
@@ -381,71 +436,31 @@ namespace AR_AreaZhuk
             0,
             0});
             // 
-            // chkListP1
+            // numMainCountFloor
             // 
-            this.chkListP1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkListP1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chkListP1.CheckOnClick = true;
-            this.chkListP1.FormattingEnabled = true;
-            this.chkListP1.Items.AddRange(new object[] {
-            "Первая секция",
-            "Вторая секция",
-            "Третья секция",
-            "Предпоследняя секция",
-            "Последняя секция"});
-            this.chkListP1.Location = new System.Drawing.Point(6, 7);
-            this.chkListP1.Name = "chkListP1";
-            this.chkListP1.Size = new System.Drawing.Size(316, 75);
-            this.chkListP1.TabIndex = 2;
+            this.numMainCountFloor.Location = new System.Drawing.Point(18, 34);
+            this.numMainCountFloor.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.numMainCountFloor.Name = "numMainCountFloor";
+            this.numMainCountFloor.Size = new System.Drawing.Size(45, 20);
+            this.numMainCountFloor.TabIndex = 15;
+            this.numMainCountFloor.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
             // 
-            // chkListP2
+            // label1
             // 
-            this.chkListP2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chkListP2.CheckOnClick = true;
-            this.chkListP2.FormattingEnabled = true;
-            this.chkListP2.Items.AddRange(new object[] {
-            "Первая секция",
-            "Вторая секция",
-            "Третья секция",
-            "Предпоследняя секция",
-            "Последняя секция"});
-            this.chkListP2.Location = new System.Drawing.Point(6, 7);
-            this.chkListP2.Name = "chkListP2";
-            this.chkListP2.Size = new System.Drawing.Size(316, 75);
-            this.chkListP2.TabIndex = 3;
-            // 
-            // chkListP3
-            // 
-            this.chkListP3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chkListP3.CheckOnClick = true;
-            this.chkListP3.FormattingEnabled = true;
-            this.chkListP3.Items.AddRange(new object[] {
-            "Первая секция",
-            "Вторая секция",
-            "Третья секция",
-            "Предпоследняя секция",
-            "Последняя секция"});
-            this.chkListP3.Location = new System.Drawing.Point(6, 7);
-            this.chkListP3.Name = "chkListP3";
-            this.chkListP3.Size = new System.Drawing.Size(316, 75);
-            this.chkListP3.TabIndex = 3;
-            // 
-            // chkListP4
-            // 
-            this.chkListP4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chkListP4.CheckOnClick = true;
-            this.chkListP4.FormattingEnabled = true;
-            this.chkListP4.Items.AddRange(new object[] {
-            "Первая секция",
-            "Вторая секция",
-            "Третья секция",
-            "Предпоследняя секция",
-            "Последняя секция"});
-            this.chkListP4.Location = new System.Drawing.Point(6, 7);
-            this.chkListP4.Name = "chkListP4";
-            this.chkListP4.Size = new System.Drawing.Size(316, 75);
-            this.chkListP4.TabIndex = 3;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Основная";
             // 
             // pnlMenu
             // 
@@ -457,6 +472,58 @@ namespace AR_AreaZhuk
             this.pnlMenu.Name = "pnlMenu";
             this.pnlMenu.Size = new System.Drawing.Size(416, 855);
             this.pnlMenu.TabIndex = 20;
+            // 
+            // pnlMenuGroup3
+            // 
+            this.pnlMenuGroup3.Controls.Add(this.btnMenuGroup3);
+            this.pnlMenuGroup3.Controls.Add(this.pb);
+            this.pnlMenuGroup3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlMenuGroup3.Location = new System.Drawing.Point(0, 582);
+            this.pnlMenuGroup3.Name = "pnlMenuGroup3";
+            this.pnlMenuGroup3.Size = new System.Drawing.Size(416, 273);
+            this.pnlMenuGroup3.TabIndex = 33;
+            // 
+            // btnMenuGroup3
+            // 
+            this.btnMenuGroup3.BackColor = System.Drawing.Color.DimGray;
+            this.btnMenuGroup3.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.btnMenuGroup3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuGroup3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnMenuGroup3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnMenuGroup3.Location = new System.Drawing.Point(0, 0);
+            this.btnMenuGroup3.Name = "btnMenuGroup3";
+            this.btnMenuGroup3.Size = new System.Drawing.Size(416, 25);
+            this.btnMenuGroup3.TabIndex = 0;
+            this.btnMenuGroup3.Text = "Эскиз";
+            this.btnMenuGroup3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuGroup3.UseVisualStyleBackColor = false;
+            this.btnMenuGroup3.Click += new System.EventHandler(this.btnMenuGroup3_Click);
+            // 
+            // pb
+            // 
+            this.pb.ContextMenuStrip = this.contextMenuStripImage;
+            this.pb.Location = new System.Drawing.Point(50, 31);
+            this.pb.Name = "pb";
+            this.pb.Size = new System.Drawing.Size(307, 239);
+            this.pb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pb.TabIndex = 13;
+            this.pb.TabStop = false;
+            this.pb.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pb_MouseClick);
+            this.pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pb_MouseDoubleClick);
+            // 
+            // contextMenuStripImage
+            // 
+            this.contextMenuStripImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.сохранитьКакToolStripMenuItem});
+            this.contextMenuStripImage.Name = "contextMenuStripImage";
+            this.contextMenuStripImage.Size = new System.Drawing.Size(163, 26);
+            // 
+            // сохранитьКакToolStripMenuItem
+            // 
+            this.сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
+            this.сохранитьКакToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.сохранитьКакToolStripMenuItem.Text = "Сохранить как...";
+            this.сохранитьКакToolStripMenuItem.Click += new System.EventHandler(this.сохранитьКакToolStripMenuItem_Click);
             // 
             // pnlMenuGroup2
             // 
@@ -522,79 +589,6 @@ namespace AR_AreaZhuk
             this.btnMenuGroup1.UseVisualStyleBackColor = false;
             this.btnMenuGroup1.Click += new System.EventHandler(this.btnMenuGroup1_Click_1);
             // 
-            // pb
-            // 
-            this.pb.ContextMenuStrip = this.contextMenuStripImage;
-            this.pb.Location = new System.Drawing.Point(50, 31);
-            this.pb.Name = "pb";
-            this.pb.Size = new System.Drawing.Size(307, 239);
-            this.pb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pb.TabIndex = 13;
-            this.pb.TabStop = false;
-            this.pb.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pb_MouseClick);
-            this.pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pb_MouseDoubleClick);
-            // 
-            // btnMenuGroup3
-            // 
-            this.btnMenuGroup3.BackColor = System.Drawing.Color.DimGray;
-            this.btnMenuGroup3.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.btnMenuGroup3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuGroup3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnMenuGroup3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnMenuGroup3.Location = new System.Drawing.Point(0, 0);
-            this.btnMenuGroup3.Name = "btnMenuGroup3";
-            this.btnMenuGroup3.Size = new System.Drawing.Size(416, 25);
-            this.btnMenuGroup3.TabIndex = 0;
-            this.btnMenuGroup3.Text = "Эскиз";
-            this.btnMenuGroup3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuGroup3.UseVisualStyleBackColor = false;
-            this.btnMenuGroup3.Click += new System.EventHandler(this.btnMenuGroup3_Click);
-            // 
-            // pnlMenuGroup3
-            // 
-            this.pnlMenuGroup3.Controls.Add(this.btnMenuGroup3);
-            this.pnlMenuGroup3.Controls.Add(this.pb);
-            this.pnlMenuGroup3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlMenuGroup3.Location = new System.Drawing.Point(0, 582);
-            this.pnlMenuGroup3.Name = "pnlMenuGroup3";
-            this.pnlMenuGroup3.Size = new System.Drawing.Size(416, 273);
-            this.pnlMenuGroup3.TabIndex = 33;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.tabControl1);
-            this.groupBox1.Location = new System.Drawing.Point(6, 82);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(348, 142);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Пятна объекта";
-            // 
-            // contextMenuStripImage
-            // 
-            this.contextMenuStripImage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.сохранитьКакToolStripMenuItem});
-            this.contextMenuStripImage.Name = "contextMenuStripImage";
-            this.contextMenuStripImage.Size = new System.Drawing.Size(163, 26);
-            // 
-            // сохранитьКакToolStripMenuItem
-            // 
-            this.сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
-            this.сохранитьКакToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.сохранитьКакToolStripMenuItem.Text = "Сохранить как...";
-            this.сохранитьКакToolStripMenuItem.Click += new System.EventHandler(this.сохранитьКакToolStripMenuItem_Click);
-            // 
-            // chkEnableDominant
-            // 
-            this.chkEnableDominant.AutoSize = true;
-            this.chkEnableDominant.Location = new System.Drawing.Point(102, 12);
-            this.chkEnableDominant.Name = "chkEnableDominant";
-            this.chkEnableDominant.Size = new System.Drawing.Size(84, 17);
-            this.chkEnableDominant.TabIndex = 4;
-            this.chkEnableDominant.Text = "Доминанта";
-            this.chkEnableDominant.UseVisualStyleBackColor = true;
-            this.chkEnableDominant.CheckedChanged += new System.EventHandler(this.chkEnableDominant_CheckedChanged);
-            // 
             // GetFile
             // 
             this.GetFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -607,25 +601,35 @@ namespace AR_AreaZhuk
             this.GetFile.UseVisualStyleBackColor = true;
             this.GetFile.Click += new System.EventHandler(this.GetFile_Click);
             // 
-            // dg2
+            // Column1
             // 
-            this.dg2.AllowUserToAddRows = false;
-            this.dg2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dg2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dg2.FilterAndSortEnabled = true;
-            this.dg2.Location = new System.Drawing.Point(6, 19);
-            this.dg2.MultiSelect = false;
-            this.dg2.Name = "dg2";
-            this.dg2.ReadOnly = true;
-            this.dg2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dg2.Size = new System.Drawing.Size(598, 756);
-            this.dg2.TabIndex = 1;
-            this.dg2.SortStringChanged += new System.EventHandler(this.dg2_SortStringChanged);
-            this.dg2.FilterStringChanged += new System.EventHandler(this.dg2_FilterStringChanged);
-            this.dg2.SelectionChanged += new System.EventHandler(this.dg2_SelectionChanged);
-            this.dg2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dg2_MouseClick);
+            this.Column1.HeaderText = "Зона";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 80;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Метраж";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column3.Width = 80;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Процент";
+            this.Column2.Name = "Column2";
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2.Width = 80;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Погрешность";
+            this.Column4.Name = "Column4";
+            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column4.Width = 80;
             // 
             // MainForm
             // 
@@ -647,27 +651,27 @@ namespace AR_AreaZhuk
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dg)).EndInit();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dg2)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOffsetDominants)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numMainCountFloor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOffsetDominants)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDomCountFloor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMainCountFloor)).EndInit();
             this.pnlMenu.ResumeLayout(false);
+            this.pnlMenuGroup3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pb)).EndInit();
+            this.contextMenuStripImage.ResumeLayout(false);
             this.pnlMenuGroup2.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.pnlMenuGroup1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pb)).EndInit();
-            this.pnlMenuGroup3.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.contextMenuStripImage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dg2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -681,12 +685,8 @@ namespace AR_AreaZhuk
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnStartScan;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column3;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column4;
         private Label lblCountObjects;
-        private AdvancedDataGridView dg2;
+        private DataGridViewEx dg2;
         private CheckBox chkDominant;
         private GroupBox groupBox3;
         private GroupBox groupBox4;
@@ -717,6 +717,10 @@ namespace AR_AreaZhuk
         private ToolStripMenuItem сохранитьКакToolStripMenuItem;
         private CheckBox chkEnableDominant;
         private Button GetFile;
+        private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn Column4;
     }
 }
 

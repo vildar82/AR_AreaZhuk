@@ -33,6 +33,7 @@
             // 
             // progressIndicator
             // 
+            this.progressIndicator.CircleColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.progressIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.progressIndicator.Location = new System.Drawing.Point(0, 0);
             this.progressIndicator.Name = "progressIndicator";

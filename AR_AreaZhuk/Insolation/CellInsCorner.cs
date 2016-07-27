@@ -76,8 +76,9 @@ namespace AR_AreaZhuk.Insolation
             int indexStep = 0;
 
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
-            if (insCheck.IsEndSection())
-            {
+            var endSide = GetSectionEndSide();
+            if (endSide == EnumEndSide.Left || endSide == EnumEndSide.Right)
+            {                
                 var cellSide = cell;
                 cellSide.Offset(directionOrthoFromLLU);
                 InsSideTop = GetInsIndex(cellSide, isRequired: false);
@@ -86,7 +87,7 @@ namespace AR_AreaZhuk.Insolation
             }
 
             // Инсоляция верхних квартир (справа-налево), до 1 углового шага (сверху)
-            var topFlats = insCheck.insSpot.insFramework.GetTopFlatsInSection(insCheck.sections.First().Flats);            
+            var topFlats = insCheck.insSpot.insFramework.GetTopFlatsInSection(insCheck.sections.First().Flats, isTop:true);            
             foreach (var topFlat in topFlats)
             {
                 if (topFlat.SubZone == "0")
@@ -127,6 +128,46 @@ namespace AR_AreaZhuk.Insolation
                 InsBot[i] = GetInsIndex(cell);
                 cell.OffsetNegative(directionGeneralToLLU);
             }
+        }
+
+        public override EnumEndSide GetSectionEndSide ()
+        {
+            EnumEndSide res = EnumEndSide.None;
+            if (insCheck.IsStartSection())
+            {
+                if (insCheck.isVertical)
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                        res = EnumEndSide.Left;
+                    else
+                        res = EnumEndSide.Right;
+                }
+                else
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                        res = EnumEndSide.Right;
+                    else
+                        res = EnumEndSide.Left;
+                }
+            }
+            else if (insCheck.IsEndSection())
+            {
+                if (insCheck.isVertical)
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                        res = EnumEndSide.Right;
+                    else
+                        res = EnumEndSide.Left;
+                }
+                else
+                {
+                    if (insCheck.startCellHelper.IsDirectionDown)
+                        res = EnumEndSide.Right;
+                    else
+                        res = EnumEndSide.Left;
+                }
+            }
+            return res;
         }
     }
 }

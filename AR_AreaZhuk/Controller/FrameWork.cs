@@ -105,11 +105,11 @@ namespace AR_AreaZhuk
         {
             List<InsolationSpot> insulations = new List<InsolationSpot>();
             insulations.Add(GetInsulationSpot("P1|", path));
-            //insulations.Add(GetInsulationSpot("P2|", path));
+            insulations.Add(GetInsulationSpot("P2|", path));
             return insulations;
         }
 
-        private static InsolationSpot GetInsulationSpot(string nameSpot, string path)
+        private static InsolationSpot GetInsulationSpot (string nameSpot, string path)
         {
             InsolationSpot insulation = new InsolationSpot();
             insulation.Name = nameSpot;
@@ -120,7 +120,7 @@ namespace AR_AreaZhuk
             insulation.MaxRightXY = new List<int>();
             insulation.MinRightXY = new List<int>();
             List<RoomInfo> roomsInfo = new List<RoomInfo>();
-           // path = @"E:\Задание по инсоляции ПИК1.xlsx";
+            // path = @"E:\Задание по инсоляции ПИК1.xlsx";
             using (var xlPackage = new ExcelPackage(new FileInfo(path.ToString())))
             {
                 int firstRow = 1;
@@ -129,21 +129,19 @@ namespace AR_AreaZhuk
                 // string nameSpot = "P2|";
                 int minColumn = 5000;
                 int maxColumn = -5000;
-
-                var workSheet = xlPackage.Workbook.Worksheets[1];
-
                 for (int column = 1; column < 100; column++)
                 {
                     for (int row = 1; row < 100; row++)
                     {
-                        var cellVal = Convert.ToString(workSheet.Cells[row, column].Value);
-                        if (cellVal.Contains(nameSpot))
+                        if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
+                            .Contains(nameSpot))
                         {
                             if (minColumn > column - 1)
                                 minColumn = column - 1;
                             if (maxColumn < column - 1)
                                 maxColumn = column - 1;
-                            insulation.Matrix[column - 1, row - 1] = cellVal;
+                            insulation.Matrix[column - 1, row - 1] =
+                                Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
                         }
                         else insulation.Matrix[column - 1, row - 1] = string.Empty;
                     }
@@ -275,8 +273,6 @@ namespace AR_AreaZhuk
                         }
                     }
 
-
-
                     counter++;
                 }
             }
@@ -298,8 +294,8 @@ namespace AR_AreaZhuk
         {
             SpotInfo spotInfo = new SpotInfo();
             spotInfo.requirments.Add(new Requirment("01", 22, 23, 14, 0, 3, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("1", 33, 35, 21, 0, 4, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("1", 45, 47, 6, 0, 4, 0, 0, 5));
+            spotInfo.requirments.Add(new Requirment("01", 33, 35, 21, 0, 4, 0, 0, 5));
+            spotInfo.requirments.Add(new Requirment("1", 35, 47, 6, 0, 4, 0, 0, 5));
             spotInfo.requirments.Add(new Requirment("2", 45, 47, 17, 0, 3, 0, 0, 5));
             spotInfo.requirments.Add(new Requirment("2", 53, 56, 12, 0, 3, 0, 0, 5));
             spotInfo.requirments.Add(new Requirment("2", 68, 70, 8, 0, 3, 0, 0, 5));
@@ -319,7 +315,7 @@ namespace AR_AreaZhuk
             // double currentSum = 569.95 + 51.84;//spotInfo.SpotArea / 4; //569.95+51.84;//571.5;//+51.84;
             int countIndexes = countModulesInSection / 2;
 
-            int limit = 5000000;
+            int limit = 1000000;
             int iteration = 0;
             Random random = new Random();
             // bool isContinue = true;
@@ -405,9 +401,10 @@ namespace AR_AreaZhuk
                     flatsInSectionTemp.Add(f);
                 }
                 RoomInfo lastRoomTemp = new RoomInfo(lastRoom, lastRoom.LinkageDO, lastRoom.LinkagePOSLE);
-                bool isTopNull = false;
+               
                 for (int i = 0; i < 11; i++)
                 {
+                    bool isTopNull = false;
                     string[] lastRoomConfig = lastRoomTemp.LinkagePOSLE.Split('/')[0].Split('|');
                     int[] intMass = new int[10];
 
@@ -430,18 +427,24 @@ namespace AR_AreaZhuk
                     int indexTop = GetIndexSection(tempRoomInfo[indexRandom], lastRoomTemp, false);
                     if (indexTop == 0)
                         isTopNull = true;
-                   
+
 
                     indexSummNizTemp += indexNiz;
                     indexSummTopTemp += indexTop;
-                    
+
 
                     if (indexSummNizTemp < 0 | indexSummTopTemp < 0)
                         continue;
                     if (isTopNull & indexNiz == 0)
                     {
-                        if (indexSummNizTemp != countIndexes/2)
+                        if (!isCornerLeftNiz & indexSummNizTemp != countIndexes / 2)
                             break;
+                        if (isCornerLeftNiz)
+                        {
+                            if (countModulesInSection / 4 - 4 + 7 != indexSummNizTemp)
+                                break;
+                        }
+
                     }
                     summTemp += randomValue;
                     lastRoomTemp = tempRoomInfo[indexRandom];
@@ -473,9 +476,11 @@ namespace AR_AreaZhuk
                             break;
                         if (Math.Abs(summTemp - countModulesInSection).Equals(0))
                         {
-                            //if (flatsInSectionTemp[1].SubZone.Equals("2"))
+                            //if (flatsInSectionTemp[1].SubZone.Equals("3") & flatsInSectionTemp[flatsInSectionTemp.Count - 1].SubZone.Equals("3"))
                             //{
-
+                            //    if (flatsInSectionTemp[1].SubZone.Equals("3") & flatsInSectionTemp[flatsInSectionTemp.Count - 1].SubZone.Equals("3"))
+                            //    {
+                            //    }
                             //}
 
                             if (indexSummNizTemp + indexSummTopTemp == countIndexes & indexSummNizTemp == countIndexes / 2 &
@@ -675,7 +680,7 @@ namespace AR_AreaZhuk
         //   return rrrrr;
         //}
 
-        public List<FlatInfo> GetAllSectionsFromDB (int countModulesInSection,
+        public List<FlatInfo> GetAllSectionsFromDB(int countModulesInSection,
             bool isCornerLeftNiz, bool isCornerRightNiz, int countFloors)
         {
             List<FlatInfo> sectionsBySyze = new List<FlatInfo>();
@@ -695,8 +700,19 @@ namespace AR_AreaZhuk
                 levels = "Угловая лево";
             if (isCornerRightNiz)
                 levels = "Угловая право";
-            var sections = sects.GetSectionByID(countFl, levels, countModulesInSection / 4);
-            var flats = flatsIsSection.GetFlatsInTypeSection(countModulesInSection / 4, countFl, levels);
+           // var sections = sects.GetSectionByID(countFl, levels, countModulesInSection / 4);
+            //PIK1.FlatsInSectionsDataTable flats = null;
+            //try
+            //{
+            var flats = flatsIsSection.GetFlatsInTypeSection(countModulesInSection / 4, levels, countFl).ToList();
+            flats = flats.OrderBy(x => x.ID_FlatInSection).ToList();
+            //}
+            //catch
+            //{
+            //    return sectionsBySyze;
+            //}
+
+           
             int counter = 0;
             int lastIdSection = 0;
             FlatInfo fl = new FlatInfo();
@@ -706,7 +722,16 @@ namespace AR_AreaZhuk
                 if (f.ID_Section != lastIdSection)
                 {
                     if (counter != 0)
+                    {
                         sectionsBySyze.Add(fl);
+                        //if (fl.CountFlats <= 5)
+                        //{
+                        //    if (fl.CountFlats <= 5)
+                        //    {
+
+                        //    }
+                        //}
+                    }
                     fl = new FlatInfo();
                     fl.IdSection = f.ID_Section;
                     fl.Floors = countFloors;
@@ -746,7 +771,7 @@ namespace AR_AreaZhuk
                 //if (!isValid) continue;
 
                 counter++;
-                if (counter < 1000) continue;
+                if (sectionsBySyze.Count < 250) continue;
                 break;
             }
             //foreach (var s in sections)
@@ -779,11 +804,12 @@ namespace AR_AreaZhuk
             //    //if (!isValid) continue;
             //    sectionsBySyze.Add(fl);
             //    counter++;
-            //if (counter < 3000) continue;
-            //break;
+            //    if (counter < 1000) continue;
+            //    break;
             //}
             return sectionsBySyze;
         }
+
 
 
         private void AddToListSections(List<FlatInfo> listSections, List<RoomInfo> listRooms1, List<RoomInfo> allRooms, bool isLeftCorner, int countFloors)
@@ -799,15 +825,21 @@ namespace AR_AreaZhuk
             if (!listRooms1[listRooms1.Count - 1].LinkagePOSLE.Split('|')[2].Equals(
                 listRooms1[0].LinkageDO.Split('|')[2]) & !listRooms1[listRooms1.Count - 1].LinkagePOSLE.Split('|')[2].Equals("E"))
                 return;
+            //if (listRooms1[1].SubZone.Equals("3") & listRooms1[listRooms1.Count-1].SubZone.Equals("3"))
+            //{
+            //    if (listRooms1[1].SubZone.Equals("3") & listRooms1[listRooms1.Count - 1].SubZone.Equals("3"))
+            //    {
+            //    }
+            //}
             if (!isExist)
             {
                 if (IsValidSmoke(listRooms1, allRooms, isLeftCorner, countFloors, listSections))
                 {
-                    if (listRooms1.Where(x => x.ShortType.Equals("2KL2")).ToList().Count > 1)
-                    {
-                        int a = 0;
-                        int b = a+1;
-                    }
+                    //if (listRooms1.Where(x => x.ShortType.Equals("2KL2")).ToList().Count > 1)
+                    //{
+                    //    int a = 0;
+                    //    int b = a+1;
+                    //}
                     FlatInfo fi = new FlatInfo();
                     fi.Flats = listRooms1;
                     //if (fi.Flats[1].ShortType == "1KS1" && fi.Flats[2].ShortType == "2KL3" && fi.Flats[fi.Flats.Count-2].ShortType == "2KL3")
@@ -1005,8 +1037,18 @@ namespace AR_AreaZhuk
                 return true;
             if (selectedRoom.ShortType.Equals("2KL2") & preRoom.ShortType.Equals("2KL2"))
                 return false;
+           
             if (selectedRoom.IndexLenghtNIZ.Split('/')[0].Equals("!") | selectedRoom.SubZone.Equals("0"))
+                return false;
+            //Условия компановки
+            if (preRoom.LinkageOR.Contains(">"))
             {
+                string[] mass = preRoom.LinkageOR.Split(';');
+                for (int i = 0; i < mass.Length; i++)
+                {
+                    if (mass[i].Replace(">", "").Equals(selectedRoom.LinkageDO))
+                        return true;
+                }
                 return false;
             }
             //if (selectedRoom.ShortType.Equals("2NM2"))
@@ -1230,13 +1272,15 @@ namespace AR_AreaZhuk
 
             if (listRooms1.Count > 7)
             {
-                if (listRooms1[3].ShortType.Equals("2NM2"))
-                {
+                //if (listRooms1[3].ShortType.Equals("2NM2"))
+                //{
 
-                }
+                //}
+
+                
 
                 RoomInfo rr = allRooms.Where(x => x.SubZone.Equals("0"))
-                          .Where(x => x.LevelsSection.Equals("10-18")).Where(x=>x.Requirment!="0")
+                          .Where(x => x.LevelsSection.Equals("10-18")).Where(x => x.Requirment != "0")
                           .Where(x => x.TypeSection.Equals("Рядовая")).Where(x => x.TypeHouse.Equals("Секционный")).Where(x => !x.FactorSmoke.Equals(""))
                           .ToList()[0];
                 if (countFloors == 25)
@@ -1258,8 +1302,24 @@ namespace AR_AreaZhuk
                 listRooms1[0].SelectedIndexBottom = Convert.ToInt16(rr.SelectedIndexBottom);
                 int countTop = 0;
                 int counter = 0;
-                if (isCorner)
+                if (listRooms1[1].ShortType == "1KS1")
                 {
+                    if (listRooms1[2].ShortType == "2KL3")
+                    {
+                        if (listRooms1[3].ShortType == "1KL1")
+                        {
+                            if (listRooms1[4].ShortType == "1NM3")
+                            {
+                                if (listRooms1[5].ShortType == "2NM1")
+                                {
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+                //if (isCorner)
+                //{
                     while (listRooms1[counter].SelectedIndexTop > 0)
                     {
                         if (counter == 0)
@@ -1275,7 +1335,7 @@ namespace AR_AreaZhuk
                         counter++;
                     }
                     counter--;
-                }
+               // }
                 int countBottom = 0;
                 while (listRooms1[counter].SelectedIndexBottom >= 0)
                 {

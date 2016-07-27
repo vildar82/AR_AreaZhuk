@@ -65,8 +65,8 @@ namespace AR_AreaZhuk
           dt.Columns.Add("Кол-во одинаковых секций (шт.)", typeof(string));
           dt.Columns.Add("Кол-во квартир (шт.)", typeof(Int16));
           dt.Columns.Add("Студии 22-23м2 (%)", typeof(Double));
-          dt.Columns.Add("Однокомн. 33-35м2 (%)", typeof(Double));
-          dt.Columns.Add("Однокомн. 45-47м2 (%)", typeof(Double));
+          dt.Columns.Add("Студии 33-35м2 (%)", typeof(Double));
+          dt.Columns.Add("Однокомн. 35-47м2 (%)", typeof(Double));
           dt.Columns.Add("Двухкомн. 45-47м2 (%)", typeof(Double));
           dt.Columns.Add("Двухкомн. 53-56м2 (%)", typeof(Double));
           dt.Columns.Add("Двухкомн. 68-70м2 (%)", typeof(Double));

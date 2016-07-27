@@ -31,7 +31,7 @@ namespace AR_AreaZhuk.Insolation
         protected bool isCurSide;
         protected int curFlatIndex;
         protected List<RoomInfo> curSideFlats;
-        protected bool specialFail; // Спец. условия не прохождения инсоляции - например торцевая квартира в средней секции
+        protected bool specialFail;               
 
         protected abstract bool CheckFlats ();
 
@@ -52,13 +52,21 @@ namespace AR_AreaZhuk.Insolation
             this.isRightOrTopLLu = isRightOrTopLLu;
             checkSection = sect;
 
-            topFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats);
-            bottomFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats);
+            topFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop: true);
+            bottomFlats = insSpot.insFramework.GetTopFlatsInSection(sect.Flats, isTop: false);
 
             // Проверка инсоляции квартир сверху
             isTop = true;
             curSideFlats = topFlats;
             res = CheckFlats();
+
+#if TEST
+
+            // Проверка инсоляции квартир снизу                
+            isTop = false;
+            curSideFlats = bottomFlats;
+            res = CheckFlats();
+#else
             if (res) // прошла инсоляция верхних квартир
             {
                 // Проверка инсоляции квартир снизу                
@@ -66,19 +74,25 @@ namespace AR_AreaZhuk.Insolation
                 curSideFlats = bottomFlats;
                 res = CheckFlats();
             }
+#endif
             return res;
         }
 
         /// <summary>
-        /// Проверка - это концевая секция (1 или последняя)
+        /// Проверка - это первая секция в доме
+        /// </summary>        
+        public bool IsStartSection ()
+        {            
+            var res = section.NumberInSpot == 1;                
+            return res;
+        }
+
+        /// <summary>
+        /// Проверка - это последняя секция в доме (1 или последняя)
         /// </summary>        
         public bool IsEndSection ()
-        {            
-            var res = section.NumberInSpot == 1;
-            if (res) return res;
-            // Последняя секция в доме
-            //res = section.NumberInSpot == sp.TotalSections; // Как определить последнюю секция в доме ?????
-            res = true;
+        {   
+            var res = section.NumberInSpot == insSpot.curNumbersSectionsInSpot;
             return res;
         }
 
@@ -94,7 +108,6 @@ namespace AR_AreaZhuk.Insolation
             return res;
         }
 
-
         /// <summary>
         /// Проверка правила инсоляции
         /// </summary>
@@ -109,24 +122,39 @@ namespace AR_AreaZhuk.Insolation
             foreach (var item in light)
             {
                 if (item.Equals(0)) break;
-                double countLigth = 1;
 
-                int lightIndexInFlat;
-                if (item > 0)
-                {
-                    lightIndexInFlat = item - 1;
-                }
-                else
-                {
-                    // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
-                    lightIndexInFlat = -item - 1;
-                    countLigth = 0.5;
-                }
+                double ligthWeight;
+                int lightIndexInFlat = GetLightingValue(item, out ligthWeight);
 
                 string insIndexProject = ins[step + lightIndexInFlat];
 
-                CalcRequire(ref requires, countLigth, insIndexProject);
+                CalcRequire(ref requires, ligthWeight, insIndexProject);
             }
+        }
+
+        /// <summary>
+        /// Определение индекса окна инсоляции и веса инсоляции
+        /// Определение веса инсоляции окна 1 - одно инсолируемое окно в помещении
+        /// 0,5 - когда два окна в одном помещении
+        /// </summary>
+        /// <param name="item">Индекс инсоляционного окна в квартире - может быть с минусом, когда 2 окна в одном помещении</param>
+        /// <param name="ligthWeight">Вес инсоляционнного окна - 1, или 0,5 если два окна в одном помещении</param>
+        /// <returns>Индекс инсоляционного окна (без знака минус)</returns>
+        protected static int GetLightingValue (int item, out double ligthWeight)
+        {
+            ligthWeight = 1;
+            int lightIndexInFlat;
+            if (item > 0)
+            {
+                lightIndexInFlat = item - 1;
+            }
+            else
+            {
+                // несколько окон в одном помещении в квартире (для инсоляции считается только одно окно в одном помещении)
+                lightIndexInFlat = -item - 1;
+                ligthWeight = 0.5;
+            }
+            return lightIndexInFlat;
         }
 
         protected static void CalcRequire (ref List<InsRequired> requires, double countLigth, string insIndexProject)
@@ -145,14 +173,51 @@ namespace AR_AreaZhuk.Insolation
             }
         }
 
-        protected bool IsFirstFlatInSide ()
+        /// <summary>
+        /// Это первая торцевая квартира, на текущей стророне
+        /// </summary>        
+        protected bool IsEndFirstFlatInSide ()
         {
-            return curFlatIndex == 0;
+            bool res = false;
+            if (isTop)
+            {
+                if (curFlatIndex == 0)
+                {
+                    res = true;
+                }
+            }
+            else
+            {
+                if (curFlatIndex == 0 && topFlats.Last().SelectedIndexBottom ==0)
+                {
+                    res = true;
+                }
+            }
+            return res;
         }
 
-        protected bool IsLastFlatInSide ()
+        /// <summary>
+        /// Это последняя торцевая квартра на стороне
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsEndLastFlatInSide ()
         {
-            return curFlatIndex == curSideFlats.Count - 1;
+            bool res = false;
+            if (isTop)
+            {
+                if (curFlatIndex == curSideFlats.Count - 1)
+                {
+                    res = true;
+                }
+            }
+            else
+            {
+                if (curFlatIndex == (curSideFlats.Count - 1) && topFlats.First().SelectedIndexBottom==0)
+                {
+                    res = true;
+                }
+            }   
+            return res;
         }
     }
 }
