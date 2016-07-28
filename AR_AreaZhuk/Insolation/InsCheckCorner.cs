@@ -57,17 +57,11 @@ namespace AR_AreaZhuk.Insolation
                     continue;
                 }
 
-                string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;
+                string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;                
 
-                // Временно - подмена индекса освещенностим для боковых квартир!!!???
-                var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
-                if (sideFlat != null)
-                {
-                    // Если угловая секция крайняя, то нужно проверять инсоляция с торца ???!!!                    
-                }
-
-                List<int> sideLighting; 
-                var lightingFlatIndexes = LightingStringParser.GetLightings(lightingFlat, out sideLighting);
+                List<int> sideLighting;
+                EnumEndSide flatEndSide;
+                var lightingFlatIndexes = LightingStringParser.GetLightings(lightingFlat, out sideLighting, isTop, out flatEndSide);
 
                 var ruleInsFlat = insSpot.FindRule(flat);
                 if (ruleInsFlat == null)
@@ -89,13 +83,15 @@ namespace AR_AreaZhuk.Insolation
                         if (IsEndFirstFlatInSide())
                         {
                             // проверка низа для первой верхней квартиры
-                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
+                            EnumEndSide end;
+                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting, true, out end);
                             CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot.Reverse().ToArray(), 0);
                         }
                         // Для последней - проверка низа
                         else if (IsEndLastFlatInSide())
                         {
-                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting);
+                            EnumEndSide end;
+                            var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting, false, out end);
                             CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
                             // начальный отступ шагов для проверки нижних квартир
                             indexBot = flat.SelectedIndexBottom;

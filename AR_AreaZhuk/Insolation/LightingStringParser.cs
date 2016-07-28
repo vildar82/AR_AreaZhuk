@@ -8,8 +8,13 @@ namespace AR_AreaZhuk.Insolation
 {
     public static class LightingStringParser
     {
-        public static List<int> GetLightings (string lightingString, out List<int> sideLightings)
-        {   
+        static bool isRange;
+        static bool isLeaf; // окно в большой комнате с несколькими окнами
+        static bool prevIsSide; // предыдущий индекс - это боковушка
+
+        public static List<int> GetLightings (string lightingString, out List<int> sideLightings, bool isTopSide, out EnumEndSide endSide)
+        {
+            endSide = EnumEndSide.None;
             List<int> lightings = new List<int>();
             sideLightings = new List<int>();
 
@@ -18,16 +23,26 @@ namespace AR_AreaZhuk.Insolation
                 return null;
             }
 
-            bool isRange = false;
-            bool isLeaf = false; // окно в большой комнате с несколькими окнами
+            isRange = false;
+            isLeaf = false;
+            prevIsSide = false;
 
             for (int i = 0; i < lightingString.Length; i++)
             {
                 char item = lightingString[i];
                 if (char.IsDigit(item))
                 {
-                    AddLightingValue((int)char.GetNumericValue(item), lightings, isRange, isLeaf);
+                    prevIsSide = false;                        
+                    AddLightingValue((int)char.GetNumericValue(item), lightings);
                     continue;                  
+                }
+
+                if (item == 'B')
+                {
+                    // Боковая освещенность
+                    AddSideLightingValue(lightingString, sideLightings, ref i);
+                    prevIsSide = true;
+                    continue;
                 }
 
                 isRange = false;
@@ -43,22 +58,56 @@ namespace AR_AreaZhuk.Insolation
                 {
                     isLeaf = true;
                     // изменение знака предыдущего индекса
-                    var lastLight = lightings.Last();
-                    lightings[lightings.Count - 1] = lastLight * -1;
+                    if (!prevIsSide)
+                    {
+                        var lastLight = lightings.Last();
+                        lightings[lightings.Count - 1] = lastLight * -1;
+                    }
+                    else
+                    {
+                        var lastLight = sideLightings.Last();
+                        sideLightings[sideLightings.Count - 1] = lastLight * -1;
+                    }
                     continue;
-                }
-
-                if (item == 'B')
-                {
-                    // Боковая освещенность
-                    AddSideLightingValue(lightingString, sideLightings, ref i, isLeaf, isRange);
-                }                              
+                }                                      
             }
 
+            // Определение стороны по боковой инсоляции
+            if (sideLightings.Count > 0)
+            {
+                // освещенность заканчивается боковой инсоляцией
+                if (prevIsSide)
+                {
+                    if (isTopSide)
+                    {
+                        // Верх - левая сторона
+                        endSide = EnumEndSide.Left;
+                    }
+                    else
+                    {
+                        // Низ - правая строна
+                        endSide = EnumEndSide.Right;
+                    }
+                }
+                else
+                {
+                    // Освещенность заканчивается обычными рядовым шагом, значит начиналась с боковой
+                    if (isTopSide)
+                    {
+                        // Верх - правая сторона
+                        endSide = EnumEndSide.Right;
+                    }
+                    else
+                    {
+                        // Низ - левая строна
+                        endSide = EnumEndSide.Left;
+                    }
+                }
+            }
             return lightings;
         }        
 
-        private static void AddLightingValue (int value, List<int> lightings, bool isRange, bool isLeaf)
+        private static void AddLightingValue (int value, List<int> lightings)
         {
             int factorLeaf = isLeaf ? -1 : 1;
             if (isRange)
@@ -75,7 +124,7 @@ namespace AR_AreaZhuk.Insolation
         }
 
         private static void AddSideLightingValue (string lightingString, List<int> sideLightings, 
-            ref int iLightingString, bool isLeaf, bool isRange)
+            ref int iLightingString)
         {
             int factorLeaf = isLeaf ? -1 : 1;
             // индекс стороны

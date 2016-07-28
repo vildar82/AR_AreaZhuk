@@ -25,6 +25,7 @@ namespace AR_AreaZhuk.Insolation
         string[] insOtherSide;
         bool isFirstFlatInSide;
         bool isLastFlatInSide;
+        EnumEndSide flatEndSide;
 
         public InsCheckOrdinary (InsolationSpot insSpot,Section section,
             StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp) 
@@ -105,21 +106,17 @@ namespace AR_AreaZhuk.Insolation
                         lightingCurSide = flat.LightingNiz;
                     }
 
-                    // Временно - подмена индекса освещенностим для боковых квартир!!!???
-                    var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
-                    if (sideFlat != null)
-                    {
-                        lightingCurSide = sideFlat.LightingStringWithB;
-                    }
-
-                    flatLightIndexCurSide = LightingStringParser.GetLightings(lightingCurSide, out flatLightIndexSideCurSide);
+                    flatLightIndexCurSide = LightingStringParser.GetLightings(lightingCurSide, 
+                                out flatLightIndexSideCurSide, isTop, out flatEndSide);
                     flatLightIndexOtherSide = null;
+                    flatLightIndexSideOtherSide = null;
                     // Для верхних крайних верхних квартир нужно проверить низ
                     if (isTop)
                     {
                         if (lightingOtherSide != null && (isFirstFlatInSide || isLastFlatInSide))
                         {
-                            flatLightIndexOtherSide = LightingStringParser.GetLightings(lightingOtherSide, out flatLightIndexSideOtherSide);
+                            flatLightIndexOtherSide = LightingStringParser.GetLightings(lightingOtherSide, 
+                                out flatLightIndexSideOtherSide, false, out flatEndSide);
                         }
                     }
 
@@ -141,13 +138,13 @@ namespace AR_AreaZhuk.Insolation
                         }
                     }
                 }
-
 #if TEST
                 flat.IsInsPassed = flatPassed;
                 if (specialFail)
                 {
                     flat.IsInsPassed = false;
                 }
+                //Trace.WriteLine(checkSection.IdSection + "_flat=" + flat.Type + ", flatPassed=" + flatPassed + ", specialFail=" + specialFail + ", isTop=" + isTop);
 #else
                 if (!flatPassed || specialFail)
                 {
@@ -190,7 +187,7 @@ namespace AR_AreaZhuk.Insolation
         private void CheckLightingSide (ref List<InsRequired> requires)
         {
             // Если это не боковая квартра по типу (не заданы боковые индексы инсоляции), то у такой квартиры не нужно проверять боковую инсоляцию
-            bool flatHasSide = flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;
+            bool flatHasSide = flatEndSide != EnumEndSide.None; //flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;
             if (!flatHasSide)
             {
                 return;
@@ -199,19 +196,18 @@ namespace AR_AreaZhuk.Insolation
             // Квартира боковая по типу (заданы боковые индексы инсоляции)
 
             // Если это не крайняя квартира на стороне, то такую секцию нельзя пропускать дальше
-            var endFlat = GetEndFlatSide();
+            var endFlat = flatEndSide; //GetEndFlatSide();
             if (endFlat == EnumEndSide.None)
             {
                 specialFail = true;
                 return;
             }
-
-            // Если сторона квартиры не соответствует стороне торца, такую секцию нельзя пропускать дальше 
-            if (endFlat != cellInsCur.EndSide)
+            bool isStoppor = IsStoppor();
+            if (endFlat != cellInsCur.EndSide && isStoppor)
             {
                 specialFail = true;
                 return;
-            }            
+            }
 
             // Если требования инсоляции уже удовлетворены, то не нужно проверять дальше
             if (RequirementsIsEmpty(requires))
@@ -219,8 +215,8 @@ namespace AR_AreaZhuk.Insolation
                 return;
             }
 
-            int flatLightingSide =0;
-            int flatLightingSideOther =0;
+            int flatLightingSide = 0;
+            int flatLightingSideOther = 0;
             string insSideValue = null;
             string insSideOtherValue = null;
 
@@ -234,7 +230,7 @@ namespace AR_AreaZhuk.Insolation
                     flatLightingSide = flatLightIndexSideCurSide[0];
                     // для верхних квартир проверить нижнюю ячейку инсоляции
                     insSideOtherValue = cellInsCur.InsSideBotRight;
-                    flatLightingSideOther= flatLightIndexSideOtherSide[0];
+                    flatLightingSideOther = flatLightIndexSideOtherSide[0];
                 }
                 else
                 {
@@ -262,44 +258,55 @@ namespace AR_AreaZhuk.Insolation
                     flatLightingSide = flatLightIndexSideCurSide[0];
                 }
             }
-            
+
             double lightWeight;
             int indexLighting = GetLightingValue(flatLightingSide, out lightWeight);
             CalcRequire(ref requires, lightWeight, insSideValue);
-            
+
             indexLighting = GetLightingValue(flatLightingSideOther, out lightWeight);
             CalcRequire(ref requires, lightWeight, insSideOtherValue);
         }
 
-        /// <summary>
-        /// Определение с какого торца секции расположена квартира
-        /// </summary>        
-        private EnumEndSide GetEndFlatSide ()
+        private bool IsStoppor ()
         {
-            EnumEndSide res = EnumEndSide.None;
-            if (isFirstFlatInSide)
-            {
-                if (isTop)
-                {
-                    res = EnumEndSide.Right;
-                }
-                else
-                {
-                    res = EnumEndSide.Left;
-                }
-            }
-            else if (isLastFlatInSide)
-            {
-                if (isTop)
-                {
-                    res = EnumEndSide.Left;
-                }
-                else
-                {
-                    res = EnumEndSide.Right;
-                }
-            }            
+            // Если боковое окно единственное в помещени, то такую квартиру нельзя ставить в глухой торец (без окна с торца на улицу)
+            // Если сторона квартиры не соответствует стороне торца, такую секцию нельзя пропускать дальше 
+            // Только если индекс боковины не половинчатый - если не половинчатый, то боковое окно - будет заткнуто торцом и в комнате не останется окон
+            var res = (flatLightIndexSideCurSide!=null && flatLightIndexSideCurSide.Count != 0 && flatLightIndexSideCurSide[0] == 1);
+            if (res) return res;
+            res = (flatLightIndexSideOtherSide!=null && flatLightIndexSideOtherSide.Count != 0 && flatLightIndexSideOtherSide[0] == 1);
             return res;
         }
+
+        ///// <summary>
+        ///// Определение с какого торца секции расположена квартира
+        ///// </summary>        
+        //private EnumEndSide GetEndFlatSide ()
+        //{
+        //    EnumEndSide res = EnumEndSide.None;
+        //    if (isFirstFlatInSide)
+        //    {
+        //        if (isTop)
+        //        {
+        //            res = EnumEndSide.Right;
+        //        }
+        //        else
+        //        {
+        //            res = EnumEndSide.Left;
+        //        }
+        //    }
+        //    else if (isLastFlatInSide)
+        //    {
+        //        if (isTop)
+        //        {
+        //            res = EnumEndSide.Left;
+        //        }
+        //        else
+        //        {
+        //            res = EnumEndSide.Right;
+        //        }
+        //    }            
+        //    return res;
+        //}
     }
 }

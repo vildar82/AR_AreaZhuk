@@ -34,5 +34,10 @@ namespace AR_AreaZhuk.Insolation
             Cell res = new Cell(cell.Row * factor, cell.Col * factor);            
             return res;
         }
+
+        public override string ToString ()
+        {
+            return "s[r" + Row + ",c" + Col + "]";
+        }
     }
 }

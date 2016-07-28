@@ -95,33 +95,38 @@ namespace AR_AreaZhuk.Insolation
             foreach (var sect in sections)
             {
                 // Пропуск секций с малым количеством квартир (меньше 5 (вместе с ЛЛУ))
-                if (sect.Flats.Count < 5)
-                    continue;
+                //if (sect.Flats.Count < 5)
+                //    continue;
 
 #if TEST
                 //// !!!! Только для тестирования!!!! - добавление всех секций с пометками квартир прошедших/непрошедших инсоляцию
-                insCheck.CheckSection(sect, isRightOrTopLLu: true);
                 FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: false);
+                insCheck.CheckSection(flats, isRightOrTopLLu: true);                
                 s.Sections.Add(flats);
 
-                insCheck.CheckSection(sect, isRightOrTopLLu: false);
-                flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: true);
-                s.Sections.Add(flats);
-
+                if (!isCorner)
+                {
+                    flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: true);                    
+                    insCheck.CheckSection(flats, isRightOrTopLLu: false);                    
+                    s.Sections.Add(flats);
+                }
 #else
-
                 // Добавление прошедших инсоляцию секций
                 if (insCheck.CheckSection(sect, isRightOrTopLLu: true))
                 {
                     FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert:false);
                     s.Sections.Add(flats);
                 }
-                // Проверка инсоляции инвертированной секции
-                if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
+
+                if (!isCorner)
                 {
-                    FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert:true);
-                    s.Sections.Add(flats);
-                }                
+                    // Проверка инсоляции инвертированной секции
+                    if (insCheck.CheckSection(sect, isRightOrTopLLu: false))
+                    {
+                        FlatInfo flats = NewFlats(isVertical, isCorner, numberSection, sect, isInvert: true);
+                        s.Sections.Add(flats);
+                    }
+                }               
 #endif
             }
             return s;
@@ -150,6 +155,17 @@ namespace AR_AreaZhuk.Insolation
             flats.NumberInSpot = numberSection;
 #if TEST
             flats.Flats = sect.Flats.Select(f => (RoomInfo)f.Clone()).ToList();
+            // Временно - подмена индекса освещенностим для боковых квартир!!!???
+            foreach (var flat in flats.Flats)
+            {         
+                var sideFlat = SideFlatFake.GetSideFlat(flat.Type);
+                if (sideFlat != null)
+                {
+                    flat.LightingTop = sideFlat.LightingTop;
+                    flat.LightingNiz = sideFlat.LightingBot;
+                }
+            }            
+            flats.StartSextionCell = startCellHelper.StartCell.ToString();
 #else
             flats.Flats = sect.Flats;
 #endif

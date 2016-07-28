@@ -53,6 +53,12 @@ namespace AR_AreaZhuk
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
+            btnStartScan.Enabled = true;
+            PathToFileInsulation = @"c:\Задание по инсоляции ПИК1.xlsx";
+            chkEnableDominant.Checked = true;
+            chkListP1.SetItemChecked(chkListP1.Items.Count - 1, true);
+            chkListP2.SetItemChecked(chkListP2.Items.Count - 1, true);
+
             btnMenuGroup1.Image = Properties.Resources.up;
             btnMenuGroup2.Image = Properties.Resources.up;
             btnMenuGroup3.Image = Properties.Resources.up;
@@ -63,7 +69,7 @@ namespace AR_AreaZhuk
             //  Requirment requirment = new Requirment();
             // this.pb.Image = global::AR_AreaZhuk.Properties.Resources.объект;
             FrameWork fw = new FrameWork();
-            var roomInfo = fw.GetRoomData("");
+            //var roomInfo = fw.GetRoomData("");
             spotInfo = fw.GetSpotInformation();
             foreach (var r in spotInfo.requirments)
             {
@@ -82,7 +88,7 @@ namespace AR_AreaZhuk
             dg.Rows.Add();
             dg[1, dg.RowCount - 1].Value = "Всего:";
             dg[2, dg.RowCount - 1].Value = per;
-            isEvent = true;
+            isEvent = true;            
         }
 
 
@@ -1916,30 +1922,42 @@ namespace AR_AreaZhuk
                                     //if (sectionInfos.Count > 4 & counterr == 1)
                                     //    break;
                                     //if (sectionInfos.Count < i + 1)
-                                    //    break;
-                                    HouseInfo hi = new HouseInfo();
-                                    hi.Sections = new List<FlatInfo>();
+                                    //    break;                                    
                                     try
                                     {
-                                        List<FlatInfo> secs = new List<FlatInfo>();
-                                        int[] ids = new int[i + 1];
-                                        for (int j = 0; j <= i; j++)
+                                        int sectBySize = sectionInfos[0].Sections.Count;
+                                        for (int s = 0; s < sectBySize; s++)
                                         {
-                                            if (sectionInfos[j].Sections.Count == 0 || indexSelectedSection[j] >= sectionInfos[j].Sections.Count)
+                                            HouseInfo hi = new HouseInfo();
+                                            hi.Sections = new List<FlatInfo>();
+
+                                            for (int j = 0; j <= i; j++)
                                             {
-                                                isContinue2 = false;
-                                                break;
+                                                int index = s;
+                                                var sect = sectionInfos[j];
+                                                if (sectBySize>sect.Sections.Count)
+                                                {
+                                                    index = s / 2;
+                                                }
+                                                hi.Sections.Add(sectionInfos[j].Sections[index]);                                                
+
+                                                //if (sectionInfos[j].Sections.Count == 0 || indexSelectedSection[j] >= sectionInfos[j].Sections.Count)
+                                                //{
+                                                //    isContinue2 = false;
+                                                //    break;
+                                                //}
+                                                ////  if ()
+                                                //hi.Sections.Add(sectionInfos[j].Sections[indexSelectedSection[j]]);
+                                                //  else continue;
+                                                // if (i != hi.Sections.Count)
+                                                // break;
+                                                //ids[j] = hi.Sections[j].IdSection;
                                             }
-                                            //  if ()
-                                            hi.Sections.Add(sectionInfos[j].Sections[indexSelectedSection[j]]);
-                                            //  else continue;
-                                            // if (i != hi.Sections.Count)
-                                            // break;
-                                            ids[j] = hi.Sections[j].IdSection;
+                                            Test.CreateHouseImage.TestCreateImage(hi);
                                         }
 
-                                        if (!isContinue2)
-                                            break;
+                                        //if (!isContinue2)
+                                        //    break;
                                         //if (ids.GroupBy(x => x).ToList().Count == hi.Sections.Count)         //Отсев секций без повторений
                                         //{
                                         //    indexSelectedSection[i]++;
@@ -1952,24 +1970,20 @@ namespace AR_AreaZhuk
                                         //}
                                         //else
                                         //{
-                                            GetHousePercentage(ref hi, spotInfo, insulation);
-                                            housesTemp.Add(hi);
-                                            indexSelectedSection[i]++;
-                                            if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
-                                            {
-                                                if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
-                                                    isContinue2 = false;
-                                            }
+                                            ////GetHousePercentage(ref hi, spotInfo, insulation);
+                                            //housesTemp.Add(hi);
+                                            //indexSelectedSection[i]++;
+                                            //if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
+                                            //{
+                                            //    if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
+                                            //        isContinue2 = false;
+                                            //}
                                         //}
-
-                                        Test.CreateHouseImage.TestCreateImage(hi);
-
                                     }
                                     catch
                                     {
                                         break;
-                                    }
-
+                                    }                                    
                                 }
                             }
                             indexSelectedSize[i]++;
@@ -2003,7 +2017,7 @@ namespace AR_AreaZhuk
                // totalObject.Add(variantHouses);
 
 
-                  totalObject.Add(housesTemp);
+                  //totalObject.Add(housesTemp);
             }
 
             //for (int i = 0; i < totalObject[0].Count; i++)
@@ -2119,7 +2133,7 @@ namespace AR_AreaZhuk
             FormManager.ViewDataProcentage(dg2, spinfos);
             th.Abort();
             lblCountObjects.Text = ob.Count.ToString();
-            //  this.pb.Image = global::AR_AreaZhuk.Properties.Resources.объект;
+              this.pb.Image = global::AR_AreaZhuk.Properties.Resources.объект;
 
         }
 
