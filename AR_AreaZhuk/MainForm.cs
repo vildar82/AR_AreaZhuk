@@ -583,7 +583,7 @@ namespace AR_AreaZhuk
                                             break;
                                         sectionsGood.Add(list[0]);
                                     }
-                                    
+
                                 }
                                 if (sectionsGood.Count != i + 1)
                                 {
@@ -709,10 +709,10 @@ namespace AR_AreaZhuk
                                         else
                                         {
                                             cellStart = new Cell(16, 0);
-                                        }                                                                                
-                                        var listSections1 = insulation.GetInsulationSections(sections, isVertical, isCorner, m + 1, i+1, 
+                                        }
+                                        var listSections1 = insulation.GetInsulationSections(sections, isVertical, isCorner, m + 1, i + 1,
                                             spotInfo, cellStart);
-                                        s1 = listSections1;                                        
+                                        s1 = listSections1;
                                     }
 
                                     countEnter++;
@@ -729,75 +729,76 @@ namespace AR_AreaZhuk
 
                                 }
 
-                                indexSelectedSection = new int[15];
-                                while (isContinue2)
+                                //indexSelectedSection = new int[15];
+                                //while (isContinue2)
+                                //{
+                                //if (sectionInfos.Count > 4 & counterr == 1)
+                                //    break;
+                                //if (sectionInfos.Count < i + 1)
+                                //    break;                                    
+                                try
                                 {
-                                    //if (sectionInfos.Count > 4 & counterr == 1)
-                                    //    break;
-                                    //if (sectionInfos.Count < i + 1)
-                                    //    break;                                    
-                                    try
+                                    int sectBySize = sectionInfos.Max(s => s.Sections.Count);
+                                    for (int s = 0; s < sectBySize; s++)
                                     {
-                                        int sectBySize = sectionInfos[0].Sections.Count;
-                                        for (int s = 0; s < sectBySize; s++)
+                                        HouseInfo hi = new HouseInfo();
+                                        hi.Sections = new List<FlatInfo>();
+
+                                        for (int j = 0; j <= i; j++)
                                         {
-                                            HouseInfo hi = new HouseInfo();
-                                            hi.Sections = new List<FlatInfo>();
-
-                                            for (int j = 0; j <= i; j++)
+                                            int index = s;
+                                            var sect = sectionInfos[j];
+                                            if (index > sect.Sections.Count - 1)
                                             {
-                                                int index = s;
-                                                var sect = sectionInfos[j];
-                                                if (index > sect.Sections.Count-1)
-                                                {
-                                                    index = sect.Sections.Count-1;
-                                                }
-                                                hi.Sections.Add(sectionInfos[j].Sections[index]);                                                
-
-                                                //if (sectionInfos[j].Sections.Count == 0 || indexSelectedSection[j] >= sectionInfos[j].Sections.Count)
-                                                //{
-                                                //    isContinue2 = false;
-                                                //    break;
-                                                //}
-                                                ////  if ()
-                                                //hi.Sections.Add(sectionInfos[j].Sections[indexSelectedSection[j]]);
-                                                //  else continue;
-                                                // if (i != hi.Sections.Count)
-                                                // break;
-                                                //ids[j] = hi.Sections[j].IdSection;
+                                                index = sect.Sections.Count - 1;
                                             }
-                                            Test.CreateHouseImage.TestCreateImage(hi);
-                                        }
+                                            hi.Sections.Add(sectionInfos[j].Sections[index]);
 
-                                        //if (!isContinue2)
-                                        //    break;
-                                        //if (ids.GroupBy(x => x).ToList().Count == hi.Sections.Count)         //Отсев секций без повторений
-                                        //{
-                                        //    indexSelectedSection[i]++;
-                                        //    if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
-                                        //    {
-                                        //        if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
-                                        //            isContinue2 = false;
-                                        //    }
-                                        //    continue;
-                                        //}
-                                        //else
-                                        //{
-                                            ////GetHousePercentage(ref hi, spotInfo, insulation);
-                                            //housesTemp.Add(hi);
-                                            //indexSelectedSection[i]++;
-                                            //if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
+                                            //if (sectionInfos[j].Sections.Count == 0 || indexSelectedSection[j] >= sectionInfos[j].Sections.Count)
                                             //{
-                                            //    if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
-                                            //        isContinue2 = false;
+                                            //    isContinue2 = false;
+                                            //    break;
                                             //}
-                                        //}
+                                            ////  if ()
+                                            //hi.Sections.Add(sectionInfos[j].Sections[indexSelectedSection[j]]);
+                                            //  else continue;
+                                            // if (i != hi.Sections.Count)
+                                            // break;
+                                            //ids[j] = hi.Sections[j].IdSection;
+                                        }
+                                        Test.CreateHouseImage.TestCreateImage(hi);
+                                        housesTemp.Add(hi);
                                     }
-                                    catch
-                                    {
-                                        break;
-                                    }                                    
+
+                                    //if (!isContinue2)
+                                    //    break;
+                                    //if (ids.GroupBy(x => x).ToList().Count == hi.Sections.Count)         //Отсев секций без повторений
+                                    //{
+                                    //    indexSelectedSection[i]++;
+                                    //    if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
+                                    //    {
+                                    //        if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
+                                    //            isContinue2 = false;
+                                    //    }
+                                    //    continue;
+                                    //}
+                                    //else
+                                    //{
+                                    //GetHousePercentage(ref hi, spotInfo, insulation);
+                                    //housesTemp.Add(hi);
+                                    //indexSelectedSection[i]++;
+                                    //if (indexSelectedSection[i] >= sectionInfos[i].Sections.Count)
+                                    //{
+                                    //    if (!SetIndexesSection(indexSelectedSection, indexSelectedSize, i, sectionInfos))
+                                    //        isContinue2 = false;
+                                    //}
+                                    //}
                                 }
+                                catch
+                                {
+                                    break;
+                                }
+                                //}
                             }
                             indexSelectedSize[i]++;
                             if (indexSelectedSize[i] >= masSizes.Length)
@@ -830,7 +831,7 @@ namespace AR_AreaZhuk
                // totalObject.Add(variantHouses);
 
 
-                  //totalObject.Add(housesTemp);
+                  totalObject.Add(housesTemp);
             }
 
             //for (int i = 0; i < totalObject[0].Count; i++)
@@ -856,7 +857,7 @@ namespace AR_AreaZhuk
 
             //}
 
-             GetAllSectionPercentage(totalObject, requirment);
+             //GetAllSectionPercentage(totalObject, requirment);
 
 
 
