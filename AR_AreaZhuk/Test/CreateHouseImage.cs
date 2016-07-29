@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
@@ -12,23 +13,33 @@ namespace AR_AreaZhuk.Test
 {
     static class CreateHouseImage
     {
-        static CreateHouseImage()
-        {   
-            var imgs = Directory.GetFiles(@"c:\work\!Acad_РГ\АР\ЖУКИ\Инсоляция\Тест\");
-            foreach (var item in imgs)
-            {
-                File.Delete(item);
-            }
-        }
+        static long countFile = 0;
+        static string contFileString;
+        static string testsResultFolder;
+        static string steps;
+        static int countSteps;
 
-        static long countFile = 0;        
+        static CreateHouseImage()
+        {
+            var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            testsResultFolder = Path.Combine(curDir, "Результаты");
+
+            if (!Directory.Exists(testsResultFolder))
+            {
+                Directory.CreateDirectory(testsResultFolder);
+            }
+            else
+            {
+                var files = Directory.GetFiles(testsResultFolder);
+                foreach (var item in files)
+                {
+                    File.Delete(item);
+                }
+            }            
+        }
+        
         public static void TestCreateImage (HouseInfo house)
         {
-            countFile++;
-
-            // Лог дома
-            LogHouse(house, countFile);
-
             GeneralObject go = new GeneralObject();
             go.SpotInf = house.SpotInf;
             //double area = GetTotalArea(house);            
@@ -38,24 +49,38 @@ namespace AR_AreaZhuk.Test
             // ob.Add(go);
 
             string spotName = house.Sections.First().SpotOwner.Split('|')[0];
-            string steps = string.Join(".", house.Sections.Select(s=>s.CountStep.ToString()));
-            string ids = string.Join("_", house.Sections.Select(s => s.IdSection.ToString()));
-            string name = $"{ids}_{steps}_{spotName}_{countFile}.png";            
+            string curSteps = string.Join(".", house.Sections.Select(s=>s.CountStep.ToString()));
 
-            string imagePath = @"c:\work\!Acad_РГ\АР\ЖУКИ\Инсоляция\Тест\" + name;
+            if (steps != curSteps)
+            {
+                steps = curSteps;
+                countFile = 0;
+                countSteps++;
+            }
+
+            countFile++;
+            contFileString = countSteps.ToString("0000") + "_" +  countFile.ToString("0000");
+
+            string ids = string.Join("_", house.Sections.Select(s => s.IdSection.ToString()));
+            string name = $"{contFileString}_{spotName}_{steps}_{ids}.png";            
+
+            string imagePath = Path.Combine( testsResultFolder, name);
 
             string sourceImgFlats = @"z:\Revit_server\13. Settings\02_RoomManager\00_PNG_ПИК1\";
-            string ExcelDataPath = @"c:\work\!Acad_РГ\АР\ЖУКИ\Инсоляция\БД_Параметрические данные квартир ПИК1 -Не трогать.xlsx";
+            string ExcelDataPath = "БД_Параметрические данные квартир ПИК1 -Не трогать.xlsx";
 
             BeetlyVisualisation.ImageCombiner imgComb = new BeetlyVisualisation.ImageCombiner(go, ExcelDataPath, sourceImgFlats, 72);
             var img = imgComb.generateGeneralObject();
             img.Save(imagePath, ImageFormat.Png);
+
+            // Лог дома
+            LogHouse(house, contFileString);
         }
 
-        private static void LogHouse (HouseInfo house, long countFile)
+        private static void LogHouse (HouseInfo house, string countFileString)
         {
             StringBuilder logHouse = new StringBuilder();
-            logHouse.Append("HouseCount=").Append(countFile.ToString()).AppendLine();
+            logHouse.Append("HouseCount=").Append(countFileString).AppendLine();
             foreach (var section in house.Sections)
             {                
                 logHouse.Append("ID=").Append(section.IdSection.ToString()).Append(", IsInvert=").Append(section.IsInvert).AppendLine();
