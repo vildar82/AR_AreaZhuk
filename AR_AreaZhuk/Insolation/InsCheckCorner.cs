@@ -60,7 +60,7 @@ namespace AR_AreaZhuk.Insolation
                 string lightingFlat = isTop ? flat.LightingTop : flat.LightingNiz;                
 
                 List<int> sideLighting;
-                EnumEndSide flatEndSide;
+                Side flatEndSide;
                 var lightingFlatIndexes = LightingStringParser.GetLightings(lightingFlat, out sideLighting, isTop, out flatEndSide);
 
                 var ruleInsFlat = insSpot.FindRule(flat);
@@ -83,14 +83,14 @@ namespace AR_AreaZhuk.Insolation
                         if (IsEndFirstFlatInSide())
                         {
                             // проверка низа для первой верхней квартиры
-                            EnumEndSide end;
+                            Side end;
                             var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting, true, out end);
                             CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot.Reverse().ToArray(), 0);
                         }
                         // Для последней - проверка низа
                         else if (IsEndLastFlatInSide())
                         {
-                            EnumEndSide end;
+                            Side end;
                             var flatLightIndexBot = LightingStringParser.GetLightings(flat.LightingNiz, out sideLighting, false, out end);
                             CheckLighting(ref requires, flatLightIndexBot, cellIns.InsBot, 0);
                             // начальный отступ шагов для проверки нижних квартир

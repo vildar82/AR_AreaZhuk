@@ -22,7 +22,7 @@ namespace AR_AreaZhuk.Insolation
         public string InsSideTopRight { get; private set; } = "";
         public string InsSideBotRight { get; private set; } = "";
         public bool HasSideIns { get; private set; }
-        public EnumEndSide EndSide { get; private set; }
+        public Side EndSide { get; private set; }
 
         public CellInsOrdinary (InsCheckOrdinary insCheck) : base(insCheck)
         {                       
@@ -39,10 +39,10 @@ namespace AR_AreaZhuk.Insolation
             invert.InsSideTopLeft = InsSideBotRight;
             invert.InsSideTopRight = InsSideBotLeft;
 
-            if (EndSide == EnumEndSide.Left)
-                invert.EndSide = EnumEndSide.Right;
-            else if (EndSide == EnumEndSide.Right)
-                invert.EndSide = EnumEndSide.Left;
+            if (EndSide == Side.Left)
+                invert.EndSide = Side.Right;
+            else if (EndSide == Side.Right)
+                invert.EndSide = Side.Left;
                 
             return invert;
         }
@@ -73,7 +73,7 @@ namespace AR_AreaZhuk.Insolation
 
             // Торцевая инсоляция
             EndSide = GetSectionEndSide();
-            if (EndSide == EnumEndSide.Left)
+            if (EndSide == Side.Left)
             {
                 // Торец слева
                 var cel = insCheck.startCellHelper.StartCell;
@@ -83,7 +83,7 @@ namespace AR_AreaZhuk.Insolation
                 cel.Offset(dirOrtho);
                 InsSideBotLeft = GetInsIndex(cel, isRequired: false);
             }
-            else if (EndSide == EnumEndSide.Right)
+            else if (EndSide == Side.Right)
             {
                 // Торец справа
                 var cel = insCheck.startCellHelper.StartCell;
@@ -108,9 +108,9 @@ namespace AR_AreaZhuk.Insolation
             InsBot = InsBot.Reverse().ToArray();
         }
 
-        public override EnumEndSide GetSectionEndSide ()
+        public override Side GetSectionEndSide ()
         {
-            EnumEndSide res = EnumEndSide.None;
+            Side res = Side.None;
 
             if (insCheck.IsStartSection())
             {
@@ -118,16 +118,16 @@ namespace AR_AreaZhuk.Insolation
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
                     {
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                     }
                     else
                     {
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                     }
                 }
                 else
                 {
-                    res = EnumEndSide.Left;
+                    res = Side.Left;
                 }
             }
             else if (insCheck.IsEndSection())
@@ -136,16 +136,16 @@ namespace AR_AreaZhuk.Insolation
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
                     {
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                     }
                     else
                     {
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                     }
                 }
                 else
                 {
-                    res = EnumEndSide.Right;
+                    res = Side.Right;
                 }
             }
 

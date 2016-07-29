@@ -77,7 +77,7 @@ namespace AR_AreaZhuk.Insolation
 
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
             var endSide = GetSectionEndSide();
-            if (endSide == EnumEndSide.Left || endSide == EnumEndSide.Right)
+            if (endSide == Side.Left || endSide == Side.Right)
             {                
                 var cellSide = cell;
                 cellSide.Offset(directionOrthoFromLLU);
@@ -130,24 +130,24 @@ namespace AR_AreaZhuk.Insolation
             }
         }
 
-        public override EnumEndSide GetSectionEndSide ()
+        public override Side GetSectionEndSide ()
         {
-            EnumEndSide res = EnumEndSide.None;
+            Side res = Side.None;
             if (insCheck.IsStartSection())
             {
                 if (insCheck.isVertical)
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                     else
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                 }
                 else
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                     else
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                 }
             }
             else if (insCheck.IsEndSection())
@@ -155,16 +155,16 @@ namespace AR_AreaZhuk.Insolation
                 if (insCheck.isVertical)
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                     else
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                 }
                 else
                 {
                     if (insCheck.startCellHelper.IsDirectionDown)
-                        res = EnumEndSide.Right;
+                        res = Side.Right;
                     else
-                        res = EnumEndSide.Left;
+                        res = Side.Left;
                 }
             }
             return res;

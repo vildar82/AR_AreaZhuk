@@ -4,16 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AR_AreaZhuk.Insolation
+namespace AR_AreaZhuk.Scheme
 {
     /// <summary>
-    /// Сторона торца
+    /// Пятно одного дома в объекте застройки
     /// </summary>
-    public enum EnumEndSide
+    public class HouseSpot
     {
-        None,
-        Left,
-        Right,
-        Both
     }
 }

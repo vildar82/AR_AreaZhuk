@@ -11,8 +11,8 @@ namespace AR_AreaZhuk.Insolation.Tests
     [TestFixture()]
     public class LightingStringParserTests
     {
-        EnumEndSide flatEndSideExpected;
-        EnumEndSide flatSideActual;
+        Side flatEndSideExpected;
+        Side flatSideActual;
         bool isTop;
 
         List<int> expectedLightings;
@@ -30,11 +30,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Assert.AreEqual(flatEndSideExpected, flatSideActual);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSimple1Test ()
         {
             string lightingstringFlat = "1";
-            flatSideActual = EnumEndSide.None;
+            flatSideActual = Side.None;
             
             expectedLightings = LightingStringParser.GetLightings(lightingstringFlat, out expectedSideLightings, isTop, out flatEndSideExpected);
 
@@ -43,11 +43,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, new List<int> ());
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSimple2Test ()
         {
             string lightingstringFlat = "1-3";
-            flatSideActual = EnumEndSide.None;
+            flatSideActual = Side.None;
             List<int> actualLightings = new List<int> { 1, 2, 3 };
 
             expectedLightings = LightingStringParser.GetLightings(lightingstringFlat, out expectedSideLightings, isTop, out flatEndSideExpected);            
@@ -55,11 +55,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, new List<int>());            
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsHard1Test ()
         {
             string lightingstringFlat = "1|2-3";
-            flatSideActual = EnumEndSide.None;
+            flatSideActual = Side.None;
             List<int> actualLightings = new List<int> { -1, -2, 3 };
             
             expectedLightings = LightingStringParser.GetLightings(lightingstringFlat, out expectedSideLightings, isTop, out flatEndSideExpected);            
@@ -67,11 +67,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, new List<int>());
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsHard2Test ()
         {
             string lightingstringFlat = "1-2|3";
-            flatSideActual = EnumEndSide.None;
+            flatSideActual = Side.None;
             List<int> actualLightings = new List<int> { 1, -2, -3 };
 
             expectedLightings = LightingStringParser.GetLightings(lightingstringFlat, out expectedSideLightings, isTop, out flatEndSideExpected);            
@@ -79,11 +79,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, new List<int>());
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsHard3Test ()
         {
             string lightingstringFlat = "1-2|3-4";
-            flatSideActual = EnumEndSide.None;
+            flatSideActual = Side.None;
             List<int> actualLightings = new List<int> { 1, -2, -3, 4 };
 
             expectedLightings = LightingStringParser.GetLightings(lightingstringFlat, out expectedSideLightings, isTop, out flatEndSideExpected);            
@@ -91,11 +91,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, new List<int>());
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSide1Test ()
         {
             string lightingstringFlat = "B,1|2";            
-            flatSideActual = EnumEndSide.Right;
+            flatSideActual = Side.Right;
             isTop = true;
             List<int> actualLightings = new List<int> { -1, -2 };
             List<int> actualSideLightings = new List<int> { 1 };
@@ -105,11 +105,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }        
 
-        [Test()]
+        [Test]
         public void GetLightingsSide2Test ()
         {
             string lightingstringFlat = "2|3,B";            
-            flatSideActual = EnumEndSide.Left;
+            flatSideActual = Side.Left;
             isTop = true;
             List<int> actualLightings = new List<int> { -2, -3 };
             List<int> actualSideLightings = new List<int> { 1 };
@@ -119,11 +119,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSide3Test ()
         {
             string lightingstringFlat = "B,1|2";            
-            flatSideActual = EnumEndSide.Left;
+            flatSideActual = Side.Left;
             isTop = false;
             List<int> actualLightings = new List<int> { -1, -2 };
             List<int> actualSideLightings = new List<int> { 1 };
@@ -133,11 +133,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSide4Test ()
         {
             string lightingstringFlat = "B|1";            
-            flatSideActual = EnumEndSide.Right;
+            flatSideActual = Side.Right;
             isTop = true;
             List<int> actualLightings = new List<int> { -1 };
             List<int> actualSideLightings = new List<int> { -1 };
@@ -147,11 +147,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSide5Test ()
         {
             string lightingstringFlat = "1|B";            
-            flatSideActual = EnumEndSide.Right;
+            flatSideActual = Side.Right;
             isTop = false;
             List<int> actualLightings = new List<int> { -1 };
             List<int> actualSideLightings = new List<int> { -1 };
@@ -161,11 +161,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSideHard1Test ()
         {
             string lightingstringFlat = "1-2|B1,B2";            
-            flatSideActual = EnumEndSide.Right;
+            flatSideActual = Side.Right;
             isTop = false;
             List<int> actualLightings = new List<int> { 1, -2 };
             List<int> actualSideLightings = new List<int> { -1, 2 };
@@ -175,11 +175,11 @@ namespace AR_AreaZhuk.Insolation.Tests
             Expect(actualLightings, actualSideLightings);
         }
 
-        [Test()]
+        [Test]
         public void GetLightingsSideHard2Test ()
         {
             string lightingstringFlat = "1|2,3|B";            
-            flatSideActual = EnumEndSide.Right;
+            flatSideActual = Side.Right;
             isTop = false;
             List<int> actualLightings = new List<int> { -1, -2, -3 };
             List<int> actualSideLightings = new List<int> { -1 };

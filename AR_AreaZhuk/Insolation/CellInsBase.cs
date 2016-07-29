@@ -22,7 +22,7 @@ namespace AR_AreaZhuk.Insolation
 
         public abstract void DefineIns ();
 
-        public abstract EnumEndSide GetSectionEndSide ();
+        public abstract Side GetSectionEndSide ();
 
         public CellInsBase (InsCheckBase insCheck)
         {

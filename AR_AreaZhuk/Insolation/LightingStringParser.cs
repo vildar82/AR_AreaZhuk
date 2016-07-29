@@ -12,9 +12,9 @@ namespace AR_AreaZhuk.Insolation
         static bool isLeaf; // окно в большой комнате с несколькими окнами
         static bool prevIsSide; // предыдущий индекс - это боковушка
 
-        public static List<int> GetLightings (string lightingString, out List<int> sideLightings, bool isTopSide, out EnumEndSide endSide)
+        public static List<int> GetLightings (string lightingString, out List<int> sideLightings, bool isTopSide, out Side endSide)
         {
-            endSide = EnumEndSide.None;
+            endSide = Side.None;
             List<int> lightings = new List<int>();
             sideLightings = new List<int>();
 
@@ -81,12 +81,12 @@ namespace AR_AreaZhuk.Insolation
                     if (isTopSide)
                     {
                         // Верх - левая сторона
-                        endSide = EnumEndSide.Left;
+                        endSide = Side.Left;
                     }
                     else
                     {
                         // Низ - правая строна
-                        endSide = EnumEndSide.Right;
+                        endSide = Side.Right;
                     }
                 }
                 else
@@ -95,12 +95,12 @@ namespace AR_AreaZhuk.Insolation
                     if (isTopSide)
                     {
                         // Верх - правая сторона
-                        endSide = EnumEndSide.Right;
+                        endSide = Side.Right;
                     }
                     else
                     {
                         // Низ - левая строна
-                        endSide = EnumEndSide.Left;
+                        endSide = Side.Left;
                     }
                 }
             }

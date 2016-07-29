@@ -25,7 +25,7 @@ namespace AR_AreaZhuk.Insolation
         string[] insOtherSide;
         bool isFirstFlatInSide;
         bool isLastFlatInSide;
-        EnumEndSide flatEndSide;
+        Side flatEndSide;
 
         public InsCheckOrdinary (InsolationSpot insSpot,Section section,
             StartCellHelper startCellHelper, List<FlatInfo> sections, SpotInfo sp) 
@@ -187,7 +187,7 @@ namespace AR_AreaZhuk.Insolation
         private void CheckLightingSide (ref List<InsRequired> requires)
         {
             // Если это не боковая квартра по типу (не заданы боковые индексы инсоляции), то у такой квартиры не нужно проверять боковую инсоляцию
-            bool flatHasSide = flatEndSide != EnumEndSide.None; //flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;
+            bool flatHasSide = flatEndSide != Side.None; //flatLightIndexSideCurSide.Count != 0 || flatLightIndexSideOtherSide.Count != 0;
             if (!flatHasSide)
             {
                 return;
@@ -197,7 +197,7 @@ namespace AR_AreaZhuk.Insolation
 
             // Если это не крайняя квартира на стороне, то такую секцию нельзя пропускать дальше
             var endFlat = flatEndSide; //GetEndFlatSide();
-            if (endFlat == EnumEndSide.None)
+            if (endFlat == Side.None)
             {
                 specialFail = true;
                 return;
@@ -220,7 +220,7 @@ namespace AR_AreaZhuk.Insolation
             string insSideValue = null;
             string insSideOtherValue = null;
 
-            if (endFlat == EnumEndSide.Right)
+            if (endFlat == Side.Right)
             {
                 // Правый торец
                 if (isTop)
@@ -239,7 +239,7 @@ namespace AR_AreaZhuk.Insolation
                     flatLightingSide = flatLightIndexSideCurSide[0];
                 }
             }
-            else if (endFlat == EnumEndSide.Left)
+            else if (endFlat == Side.Left)
             {
                 // Левый торец
                 if (isTop)
