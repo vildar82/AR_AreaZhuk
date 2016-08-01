@@ -1,7 +1,9 @@
-﻿namespace AR_AreaZhuk {
-    
-    
-    public partial class PIK1 {
+﻿namespace AR_AreaZhuk
+{
+
+
+    public partial class PIK1
+    {
     }
 }
 

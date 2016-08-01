@@ -15,9 +15,11 @@ namespace AR_AreaZhuk.Scheme
         /// Пятна домов в объекте застройки
         /// </summary>
         public List<HouseSpot> HouseSpots { get; private set; }
+        private List<HouseOptions> houseOptions;
 
-        public ProjectSpot ()
-        {            
+        public ProjectSpot (List<HouseOptions> houseOptions)
+        {
+            this.houseOptions = houseOptions;
         }        
 
         /// <summary>
@@ -29,7 +31,13 @@ namespace AR_AreaZhuk.Scheme
             // Чтение матрицы ячеек первого листа в Excel файле
             ISchemeParser parserExcel = new ParserExcel();
             parserExcel.Parse(schemeFile);
-            HouseSpots = parserExcel.HouseSpots;         
+            HouseSpots = parserExcel.HouseSpots;
+
+            foreach (var houseSpot in HouseSpots)
+            {
+                var houseOpt = houseOptions.Find(o => o.HouseName == houseSpot.SpotName);
+                houseSpot.HouseOptions = houseOpt;
+            }       
         }        
     }
 }

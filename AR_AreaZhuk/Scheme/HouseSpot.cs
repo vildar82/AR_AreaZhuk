@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AR_AreaZhuk.Scheme.SpatialIndex;
+using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.Scheme
 {
@@ -16,14 +17,24 @@ namespace AR_AreaZhuk.Scheme
         /// <summary>
         /// Ширина обычной секции в шагах
         /// </summary>
-        public const int WIDTHORDINARY = 4;
+        public const int WidthOrdinary = 4;
+        /// <summary>
+        /// Минимальный шаг угловой секции
+        /// </summary>
+        public const int CornerSectionMinStep = 8;        
 
         private RTree<Segment> tree = new RTree<Segment>();
         private readonly Cell cellStart;
         private readonly ISchemeParser parser;
 
         public string SpotName { get; private set; }
+        public bool IsTower { get; private set; }
         public List<Segment> Segments { get; private set; } = new List<Segment>();
+        public HouseOptions HouseOptions { get; set; }
+        /// <summary>
+        /// Кол-во шагов в доме
+        /// </summary>
+        public int CountSteps { get; private set; }
 
         public HouseSpot (string spotName, Cell cellStart, ISchemeParser parser)
         {
@@ -40,12 +51,47 @@ namespace AR_AreaZhuk.Scheme
             DefineOtherSegments();
         }
 
+        public Segment GetSegmentAtStep (int step, out int stepsInSegment)
+        {
+            stepsInSegment = step;
+            Segment res = null;
+            foreach (var segment in Segments)
+            {
+                if (stepsInSegment <= segment.CountSteps)
+                {
+                    res = segment;
+                    break;
+                }
+                else
+                {
+                    stepsInSegment -= segment.CountSteps;
+                }
+            }
+            return res;
+        }
+                
+        public Section GetSection (int startStepInHouse, int sectionCountStep)
+        {
+            int startStepInSeg;
+            var segment = GetSegmentAtStep(startStepInHouse, out startStepInSeg);
+            int endStepInSeg = startStepInSeg + sectionCountStep;
+            
+            // Еслм начальный шаг или конечный секции попали в мертвую зону (угол), то такой дом нельзя скомпановать
+            if (segment.StepInDeadZone(startStepInSeg) ||
+                segment.StepInDeadZone(endStepInSeg))
+            {
+                return null;
+            }
+        }
+
         protected void AddSegment (Segment segment)
         {
             Segments.Add(segment);
             // добавление прямоугольника сегмента в дерево, для проверки попадания любой ячейки в этот дом
             Rectangle r = GetRectangle(segment);
             tree.Add(r, segment);
+
+            CountSteps += segment.CountSteps;
         }
 
         /// <summary>
@@ -64,6 +110,8 @@ namespace AR_AreaZhuk.Scheme
             return res;
         }
 
+        
+
         /// <summary>
         /// определение стартового сегмента
         /// </summary>
@@ -71,12 +119,12 @@ namespace AR_AreaZhuk.Scheme
         {
             // Наименьшая длина дома от стартовой точки - определяет начало стартового сегмента.
             // Влево от стартовой точки 
-            Cell lastCellLeft;
+            Cell lastCellLeft;            
             var modulesLeft = parser.GetSteps(cellStart, Cell.Left, out lastCellLeft);
-            if (modulesLeft.Count == WIDTHORDINARY)
+            if (modulesLeft.Count == WidthOrdinary)
             {
                 // Сегмент вертикальный сверху-вниз
-                var startSegment = new Segment(lastCellLeft, cellStart, Cell.Down, parser);
+                var startSegment = new Segment(lastCellLeft, cellStart, Cell.Down, parser, this);
                 AddSegment(startSegment);
                 return;
             }
@@ -84,10 +132,10 @@ namespace AR_AreaZhuk.Scheme
             // Вниз от стартовой точки 
             Cell lastCellDown;
             var modulesDown = parser.GetSteps(cellStart, Cell.Down, out lastCellDown);
-            if (modulesDown.Count == WIDTHORDINARY)
+            if (modulesDown.Count == WidthOrdinary)
             {
                 // Сегмент горизонтальный слева-направо
-                var startSegment = new Segment(cellStart, lastCellDown, Cell.Right, parser);
+                var startSegment = new Segment(cellStart, lastCellDown, Cell.Right, parser, this);
                 AddSegment(startSegment);
                 return;
             }
@@ -95,10 +143,10 @@ namespace AR_AreaZhuk.Scheme
             // от нижней точки влево
             Cell lastCell;
             var modules = parser.GetSteps(lastCellDown, Cell.Left, out lastCell);
-            if (modules.Count == WIDTHORDINARY)
+            if (modules.Count == WidthOrdinary)
             {
                 // Сегмент вертикальный снизу-вверх
-                var startSegment = new Segment(lastCellDown, lastCell, Cell.Up, parser);
+                var startSegment = new Segment(lastCellDown, lastCell, Cell.Up, parser, this);
                 AddSegment(startSegment);
                 return;
             }
@@ -106,10 +154,10 @@ namespace AR_AreaZhuk.Scheme
             // Последний заворот, от последней точки вверх
             Cell lastCellLast;
             modules = parser.GetSteps(lastCell, Cell.Up, out lastCellLast);
-            if (modules.Count == WIDTHORDINARY)
+            if (modules.Count == WidthOrdinary)
             {
                 // Сегмент горизонтальный слева-направо
-                var startSegment = new Segment(lastCell, lastCellLast, Cell.Left, parser);
+                var startSegment = new Segment(lastCell, lastCellLast, Cell.Left, parser, this);
                 AddSegment(startSegment);
                 return;
             }
@@ -117,16 +165,22 @@ namespace AR_AreaZhuk.Scheme
             // Значит это башня    
             if (modulesLeft.Count < modulesDown.Count)
             {
-                var segment = new Segment(lastCellLeft, cellStart, Cell.Down, parser);
+                var segment = new Segment(lastCellLeft, cellStart, Cell.Down, parser, this);
+                AddSegment(segment);
+                return;
             }
             else
             {
-                var segment = new Segment(cellStart, lastCellDown, Cell.Left, parser);
-            }
+                var segment = new Segment(cellStart, lastCellDown, Cell.Left, parser, this);
+                AddSegment(segment);
+                return;
+            }            
 
             // Сюда не должен никогда попасть
             throw new InvalidOperationException("Не определено начало дома");
         }
+
+        
 
         /// <summary>
         /// Определение остальных сегментов дома
@@ -140,7 +194,7 @@ namespace AR_AreaZhuk.Scheme
             if (lastSegment.EndType == SegmentEnd.Normal)
             {
                 newSegment =new Segment(lastSegment.CellEndLeft.Offset(lastSegment.Direction),
-                    lastSegment.CellEndRight.Offset(lastSegment.Direction), lastSegment.Direction, parser);
+                    lastSegment.CellEndRight.Offset(lastSegment.Direction), lastSegment.Direction, parser, this);
                                
             }            
             else if (lastSegment.EndType != SegmentEnd.End)
@@ -148,7 +202,7 @@ namespace AR_AreaZhuk.Scheme
                 Cell newSegmentDir = lastSegment.EndType == SegmentEnd.CornerLeft ? 
                     lastSegment.Direction.ToLeft() : lastSegment.Direction.ToRight();                
                 newSegment = new Segment(lastSegment.CellEndLeft.Offset(lastSegment.Direction).Offset(newSegmentDir),
-                    lastSegment.CellEndRight.Offset(newSegmentDir), newSegmentDir, parser);
+                    lastSegment.CellEndRight.Offset(newSegmentDir), newSegmentDir, parser, this);
             }            
             else
             {

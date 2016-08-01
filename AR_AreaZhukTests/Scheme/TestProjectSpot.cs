@@ -15,7 +15,12 @@ namespace AR_AreaZhukTests.Scheme
         public void TestGetProjectSpot()
         {
             string insolationFile = @"c:\Задание по инсоляции ПИК1.xlsx";
-            ProjectSpot projectSpot = new ProjectSpot();
+            List<HouseOptions> options = new List<HouseOptions>() {
+                 new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false })
+            };
+
+
+            ProjectSpot projectSpot = new ProjectSpot(options);
 
             // Чтение файла схемы объекта
             projectSpot.ReadScheme(insolationFile);

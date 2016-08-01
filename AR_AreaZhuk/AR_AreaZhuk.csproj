@@ -72,6 +72,8 @@
     <Compile Include="Controller\Exporter.cs" />
     <Compile Include="Controller\FormManager.cs" />
     <Compile Include="Controller\FrameWork.cs" />
+    <Compile Include="DB\DBService.cs" />
+    <Compile Include="DB\IDBService.cs" />
     <Compile Include="FormPreviewImage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,11 +118,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scheme\Cutting\CuttingFactory.cs" />
+    <Compile Include="Scheme\Cutting\CuttingOrdinary.cs" />
+    <Compile Include="Scheme\Cutting\ICutting.cs" />
+    <Compile Include="Scheme\HouseOptions.cs" />
     <Compile Include="Scheme\HouseSpot.cs" />
     <Compile Include="Scheme\ISchemeParser.cs" />
     <Compile Include="Scheme\Module.cs" />
     <Compile Include="Scheme\ParserExcel.cs" />
     <Compile Include="Scheme\ProjectSpot.cs" />
+    <Compile Include="Scheme\SectionType.cs" />
     <Compile Include="Scheme\Segment.cs" />
     <Compile Include="Scheme\SegmentEnd.cs" />
     <Compile Include="Scheme\SpatialIndex\Node.cs" />

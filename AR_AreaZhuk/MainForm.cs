@@ -470,7 +470,6 @@ namespace AR_AreaZhuk
             th.Start();
             for (int k = 0; k < insulations.Count; k++)
             {
-
                 if (!dbSections.Any(x => x.Floors.Equals(insulations[k].CountFloorsMain) & x.IsLeftBottomCorner == false & x.IsRightBottomCorner == false))
                     Parallel.For(7, 15, (q) => GetDBSections(q, insulations[k], fw, dbSections, insulations[k].CountFloorsMain, false, false));
                 if (!dbSections.Any(x => x.Floors.Equals(insulations[k].CountFloorsDominant) & x.IsLeftBottomCorner == false & x.IsRightBottomCorner == false))
@@ -485,8 +484,6 @@ namespace AR_AreaZhuk
                             insulations[k].CountFloorsMain, insulations[k].IsLeftNizSection, insulations[k].IsRightNizSection));
 
                 // fw.GetAllSectionsFromDB(36,false,false,18);
-
-
             }
 
             List<List<HouseInfo>> totalObject = new List<List<HouseInfo>>();

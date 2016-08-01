@@ -28,8 +28,19 @@ namespace AR_AreaZhuk.Scheme
         public readonly SegmentEnd EndType;
         public readonly bool IsVertical;
 
-        public Segment(Cell cellStartLeft, Cell cellStartRight, Cell direction, ISchemeParser parser)
-        {   
+        public HouseSpot HouseSpot { get; private set; }
+
+        /// <summary>
+        /// Номер сегмента в доме
+        /// </summary>
+        public int Number { get; private set; }
+        public int CountSteps { get; private set; }
+
+        public Segment(Cell cellStartLeft, Cell cellStartRight, Cell direction, ISchemeParser parser, HouseSpot houseSpot)
+        {
+            HouseSpot = houseSpot;
+            Number = houseSpot.Segments.Count + 1;
+
             CellStartLeft = cellStartLeft;
             CellStartRight = cellStartRight;
             Direction = direction;
@@ -37,6 +48,9 @@ namespace AR_AreaZhuk.Scheme
             
             ModulesLeft = parser.GetSteps(cellStartLeft, direction, out CellEndLeft);
             ModulesRight = parser.GetSteps(cellStartRight, direction, out CellEndRight);
+
+            // Кол шагов в секции
+            CountSteps = ModulesLeft.Count > ModulesRight.Count ? ModulesLeft.Count : ModulesRight.Count;
 
             IsVertical = defineVertical();
 
@@ -46,7 +60,30 @@ namespace AR_AreaZhuk.Scheme
             // Определение вида торцов сегмента
             StartType = defineEndType(CellStartLeft, CellStartRight, direction.Negative, true);
             EndType = defineEndType(CellEndLeft, CellEndRight, direction, false);
-        }                
+        }
+
+        /// <summary>
+        /// Проверка попадает ли шаг в мертвую зону сегмента (угол)
+        /// </summary>
+        /// <param name="step">Шаг в сегменте</param>        
+        public bool StepInDeadZone (int step)
+        {
+            // Если стартовый торец секции - угловой и шаг попадает в угол
+            if ((StartType == SegmentEnd.CornerLeft || StartType == SegmentEnd.CornerRight) &&
+                (step < HouseSpot.CornerSectionMinStep-1 && step != HouseSpot.WidthOrdinary +1 ))
+            {
+                return true;
+            }
+            if (EndType == SegmentEnd.CornerLeft || EndType == SegmentEnd.CornerRight)
+            {
+                int counToEnd = CountSteps - step;
+                if (counToEnd< HouseSpot.CornerSectionMinStep && counToEnd != HouseSpot.WidthOrdinary+2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Определение вертикальности сегмента
