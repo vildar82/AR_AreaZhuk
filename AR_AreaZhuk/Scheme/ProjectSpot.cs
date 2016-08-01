@@ -24,9 +24,12 @@ namespace AR_AreaZhuk.Scheme
         /// Чтенее файла схемы инсоляции и определение пятен домов
         /// </summary>
         /// <param name="insolationFile">Excel файл схемы объекта застройки и инсоляции</param>
-        public void ReadScheme (string insolationFile)
+        public void ReadScheme (string schemeFile)
         {
             // Чтение матрицы ячеек первого листа в Excel файле
-        }
+            ISchemeParser parserExcel = new ParserExcel();
+            parserExcel.Parse(schemeFile);
+            HouseSpots = parserExcel.HouseSpots;         
+        }        
     }
 }

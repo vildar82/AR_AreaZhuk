@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AR_AreaZhuk.Scheme;
 
 namespace AR_AreaZhuk.Insolation
 {
@@ -78,11 +79,10 @@ namespace AR_AreaZhuk.Insolation
             // Если угловая секция первая или последняя в доме, то запись инсоляции в торце
             var endSide = GetSectionEndSide();
             if (endSide == Side.Left || endSide == Side.Right)
-            {                
-                var cellSide = cell;
-                cellSide.Offset(directionOrthoFromLLU);
+            {
+                var cellSide = cell.Offset(directionOrthoFromLLU);                
                 InsSideTop = GetInsIndex(cellSide, isRequired: false);
-                cellSide.Offset(directionOrthoFromLLU);
+                cellSide = cellSide.Offset(directionOrthoFromLLU);
                 InsSideBot = GetInsIndex(cellSide, isRequired: false);
             }
 
@@ -94,16 +94,15 @@ namespace AR_AreaZhuk.Insolation
                 {
                     // ячейка над ллу           
                     // скачек на две ячейки по основному направлению и на 1 в негативном орто направлении
-                    cell.Offset(directionGeneralToLLU);
-                    cell.Offset(directionGeneralToLLU);
-                    cell.OffsetNegative(directionOrthoFromLLU);
+                    cell = cell.Offset(directionGeneralToLLU*2);                    
+                    cell = cell.OffsetNegative(directionOrthoFromLLU);
                     InsTop[indexStep] = GetInsIndex(cell);
                     break;
                 }
                 for (int i = 0; i < topFlat.SelectedIndexTop; i++)
                 {
                     InsTop[indexStep] = GetInsIndex(cell);
-                    cell.Offset(directionGeneralToLLU);
+                    cell = cell.Offset(directionGeneralToLLU);
                     indexStep++;
                 }                
             }
@@ -118,7 +117,7 @@ namespace AR_AreaZhuk.Insolation
             for (int i = 0; i < 4; i++) // 4 - кол боковых ячеек (начиная с 1 шага)
             {                
                 InsBot[i] = GetInsIndex(cell);
-                cell.Offset(directionOrthoFromLLU);
+                cell = cell.Offset(directionOrthoFromLLU);
             }
             int indexBot = 4;            
 
@@ -126,7 +125,7 @@ namespace AR_AreaZhuk.Insolation
             for (int i = indexBot; i < countStep+indexBot-1; i++)
             {
                 InsBot[i] = GetInsIndex(cell);
-                cell.OffsetNegative(directionGeneralToLLU);
+                cell = cell.OffsetNegative(directionGeneralToLLU);
             }
         }
 

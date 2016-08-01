@@ -84,7 +84,7 @@
     <Compile Include="FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Insolation\Cell.cs" />
+    <Compile Include="Scheme\Cell.cs" />
     <Compile Include="Insolation\CellInsBase.cs" />
     <Compile Include="Insolation\CellInsCorner.cs" />
     <Compile Include="Insolation\CellInsOrdinary.cs" />
@@ -117,7 +117,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scheme\HouseSpot.cs" />
+    <Compile Include="Scheme\ISchemeParser.cs" />
+    <Compile Include="Scheme\Module.cs" />
+    <Compile Include="Scheme\ParserExcel.cs" />
     <Compile Include="Scheme\ProjectSpot.cs" />
+    <Compile Include="Scheme\Segment.cs" />
+    <Compile Include="Scheme\SegmentEnd.cs" />
+    <Compile Include="Scheme\SpatialIndex\Node.cs" />
+    <Compile Include="Scheme\SpatialIndex\Point.cs" />
+    <Compile Include="Scheme\SpatialIndex\Rectangle.cs" />
+    <Compile Include="Scheme\SpatialIndex\RTree.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="Test\CreateHouseImage.cs" />
     <EmbeddedResource Include="FormPreviewImage.resx">

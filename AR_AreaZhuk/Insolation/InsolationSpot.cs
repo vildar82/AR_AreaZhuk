@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AR_AreaZhuk.Scheme;
 
 namespace AR_AreaZhuk.Insolation
 {

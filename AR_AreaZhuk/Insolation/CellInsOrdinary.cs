@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AR_AreaZhuk.Scheme;
 
 namespace AR_AreaZhuk.Insolation
 {
@@ -76,20 +77,18 @@ namespace AR_AreaZhuk.Insolation
             if (EndSide == Side.Left)
             {
                 // Торец слева
-                var cel = insCheck.startCellHelper.StartCell;
-                cel.Offset(dirGeneral* (countStep-1));
-                cel.Offset(dirOrtho);
+                var cel = insCheck.startCellHelper.StartCell.Offset(dirGeneral * (countStep - 1));                
+                cel = cel.Offset(dirOrtho);
                 InsSideTopLeft = GetInsIndex(cel, isRequired: false);
-                cel.Offset(dirOrtho);
+                cel = cel.Offset(dirOrtho);
                 InsSideBotLeft = GetInsIndex(cel, isRequired: false);
             }
             else if (EndSide == Side.Right)
             {
                 // Торец справа
-                var cel = insCheck.startCellHelper.StartCell;
-                cel.Offset(dirOrtho);
+                var cel = insCheck.startCellHelper.StartCell.Offset(dirOrtho);                
                 InsSideTopRight = GetInsIndex(cel, isRequired: false);
-                cel.Offset(dirOrtho);
+                cel = cel.Offset(dirOrtho);
                 InsSideBotRight = GetInsIndex(cel, isRequired: false);
             }
 
@@ -101,8 +100,7 @@ namespace AR_AreaZhuk.Insolation
                 InsTop[i] = GetInsIndex(cellTop);
                 InsBot[i] = GetInsIndex(cellBot);
 
-                cellTop.Offset(dirGeneral);
-                cellBot.Offset(dirGeneral);                
+                cellTop = cellTop.Offset(dirGeneral*2);                
             }
             // реверс нижней инс?
             InsBot = InsBot.Reverse().ToArray();

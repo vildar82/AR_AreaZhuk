@@ -11,18 +11,6 @@ namespace AR_AreaZhukTests.Scheme
     [TestFixture]
     class TestProjectSpot
     {
-        [OneTimeSetUp]
-        public void init ()
-        {
-
-        }
-
-        [SetUp]
-        public void setup()
-        {
-            
-        }
-
         [Test]
         public void TestGetProjectSpot()
         {

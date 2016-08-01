@@ -21,6 +21,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using OfficeOpenXml;
 using AR_AreaZhuk.Insolation;
+using AR_AreaZhuk.Scheme;
 
 namespace AR_AreaZhuk
 {
