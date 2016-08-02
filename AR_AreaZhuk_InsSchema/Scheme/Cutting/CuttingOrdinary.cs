@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AR_AreaZhuk.DB;
-using AR_AreaZhuk.Insolation;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.Insolation;
 
-namespace AR_AreaZhuk.Scheme.Cutting
+namespace AR_Zhuk_InsSchema.Scheme.Cutting
 {
     class CuttingOrdinary : ICutting
     {

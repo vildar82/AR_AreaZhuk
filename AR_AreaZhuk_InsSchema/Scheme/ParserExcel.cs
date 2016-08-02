@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 using OfficeOpenXml;
 
-namespace AR_AreaZhuk.Scheme
+namespace AR_Zhuk_InsSchema.Scheme
 {
     class ParserExcel : ISchemeParser
     {

@@ -21,7 +21,7 @@
 using System;
 using System.Text;
 
-namespace AR_AreaZhuk.Scheme.SpatialIndex
+namespace AR_Zhuk_InsSchema.Scheme.SpatialIndex
 {
 
     /**

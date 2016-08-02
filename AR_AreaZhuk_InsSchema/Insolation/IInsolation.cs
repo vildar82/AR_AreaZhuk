@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 
-namespace AR_AreaZhuk.Insolation
+namespace AR_Zhuk_InsSchema.Insolation
 {
     /// <summary>
     /// Проверка инсоляции

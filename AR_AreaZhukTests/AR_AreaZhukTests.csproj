@@ -65,9 +65,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AR_AreaZhuk\AR_AreaZhuk.csproj">
-      <Project>{0815305E-D0A6-43DF-A5CA-763541117A3F}</Project>
-      <Name>AR_AreaZhuk</Name>
+    <ProjectReference Include="..\AR_AreaZhuk_InsSchema\AR_AreaZhuk_InsSchema.csproj">
+      <Project>{24d396bc-5e21-4f82-ad9a-53a75b20bc43}</Project>
+      <Name>AR_AreaZhuk_InsSchema</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

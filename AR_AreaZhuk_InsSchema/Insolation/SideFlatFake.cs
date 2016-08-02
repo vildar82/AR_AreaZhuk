@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AR_AreaZhuk.Insolation
+namespace AR_Zhuk_InsSchema.Insolation
 {
     /// <summary>
     /// Временно - для подмены индексов освещенности боковых квартир

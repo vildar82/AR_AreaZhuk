@@ -8,7 +8,7 @@ using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.DB
 {
-    class DBService : IDBService
+    public class DBService : IDBService
     {
         private static Dictionary<string, List<FlatInfo>> dictSections = new Dictionary<string, List<FlatInfo>>();
         public List<FlatInfo> GetSections (int countStep, string type, string levels)

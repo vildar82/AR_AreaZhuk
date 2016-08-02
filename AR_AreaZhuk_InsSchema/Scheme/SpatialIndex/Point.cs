@@ -17,7 +17,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 // Ported to C# By Dror Gluska, April 9th, 2009
-namespace AR_AreaZhuk.Scheme.SpatialIndex
+namespace AR_Zhuk_InsSchema.Scheme.SpatialIndex
 {
 
     /// <summary>

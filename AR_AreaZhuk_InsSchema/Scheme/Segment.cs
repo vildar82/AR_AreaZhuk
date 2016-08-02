@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 
-namespace AR_AreaZhuk.Scheme
+namespace AR_Zhuk_InsSchema.Scheme
 {
     /// <summary>
     /// Линейный сегмент дома

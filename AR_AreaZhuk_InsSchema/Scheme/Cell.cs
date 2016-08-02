@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AR_AreaZhuk.Scheme
+namespace AR_Zhuk_InsSchema.Scheme
 {
     /// <summary>
     /// Ячейка схемы инсоляции

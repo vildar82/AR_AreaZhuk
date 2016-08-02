@@ -27,7 +27,7 @@ using System;
 using System.Collections;
 
 
-namespace AR_AreaZhuk.Scheme.SpatialIndex
+namespace AR_Zhuk_InsSchema.Scheme.SpatialIndex
 {
 
     /// <summary>

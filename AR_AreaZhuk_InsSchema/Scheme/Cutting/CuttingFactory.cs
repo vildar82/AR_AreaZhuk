@@ -1,8 +1,8 @@
 ﻿using System;
 using AR_AreaZhuk.DB;
-using AR_AreaZhuk.Insolation;
+using AR_Zhuk_InsSchema.Insolation;
 
-namespace AR_AreaZhuk.Scheme.Cutting
+namespace AR_Zhuk_InsSchema.Scheme.Cutting
 {
     public static class CuttingFactory
     {

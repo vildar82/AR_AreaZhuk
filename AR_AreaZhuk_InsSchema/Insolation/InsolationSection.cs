@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 
-namespace AR_AreaZhuk.Insolation
+namespace AR_Zhuk_InsSchema.Insolation
 {
     class InsolationSection : IInsolation
     {
@@ -144,7 +144,7 @@ namespace AR_AreaZhuk.Insolation
                 }
             }            
 #else
-            flats.Flats = sect.Flats;
+            resFlats.Flats = flat.Flats;
 #endif            
             return resFlats;
         }
