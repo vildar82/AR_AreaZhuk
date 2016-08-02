@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace AR_AreaZhuk {
+namespace AR_Zhuk_InsSchema.DB {
     
     
     /// <summary>
@@ -20,9 +20,9 @@ namespace AR_AreaZhuk {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("PIK1")]
+    [global::System.Xml.Serialization.XmlRootAttribute("SAPR")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class PIK1 : global::System.Data.DataSet {
+    public partial class SAPR : global::System.Data.DataSet {
         
         private F_nn_FlatsInSectionDataTable tableF_nn_FlatsInSection;
         
@@ -42,7 +42,7 @@ namespace AR_AreaZhuk {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public PIK1() {
+        public SAPR() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -53,7 +53,7 @@ namespace AR_AreaZhuk {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected PIK1(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected SAPR(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -178,7 +178,7 @@ namespace AR_AreaZhuk {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            PIK1 cln = ((PIK1)(base.Clone()));
+            SAPR cln = ((SAPR)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -280,9 +280,9 @@ namespace AR_AreaZhuk {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "PIK1";
+            this.DataSetName = "SAPR";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/PIK1.xsd";
+            this.Namespace = "http://tempuri.org/SAPR.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableF_nn_FlatsInSection = new F_nn_FlatsInSectionDataTable();
@@ -342,7 +342,7 @@ namespace AR_AreaZhuk {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            PIK1 ds = new PIK1();
+            SAPR ds = new SAPR();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -667,7 +667,7 @@ namespace AR_AreaZhuk {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                PIK1 ds = new PIK1();
+                SAPR ds = new SAPR();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1212,7 +1212,7 @@ namespace AR_AreaZhuk {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                PIK1 ds = new PIK1();
+                SAPR ds = new SAPR();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1520,7 +1520,7 @@ namespace AR_AreaZhuk {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                PIK1 ds = new PIK1();
+                SAPR ds = new SAPR();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -2169,7 +2169,7 @@ namespace AR_AreaZhuk {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                PIK1 ds = new PIK1();
+                SAPR ds = new SAPR();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -3103,7 +3103,7 @@ namespace AR_AreaZhuk {
         }
     }
 }
-namespace AR_AreaZhuk.PIK1TableAdapters {
+namespace AR_Zhuk_InsSchema.DB.SAPRTableAdapters {
     
     
     /// <summary>
@@ -3272,7 +3272,7 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::AR_AreaZhuk.Properties.Settings.Default.SAPRConnectionString;
+            this._connection.ConnectionString = global::AR_Zhuk_InsSchema.Properties.Settings.Default.SAPRConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3310,7 +3310,7 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(PIK1.F_nn_FlatsInSectionDataTable dataTable) {
+        public virtual int Fill(SAPR.F_nn_FlatsInSectionDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -3323,9 +3323,9 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual PIK1.F_nn_FlatsInSectionDataTable GetData() {
+        public virtual SAPR.F_nn_FlatsInSectionDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            PIK1.F_nn_FlatsInSectionDataTable dataTable = new PIK1.F_nn_FlatsInSectionDataTable();
+            SAPR.F_nn_FlatsInSectionDataTable dataTable = new SAPR.F_nn_FlatsInSectionDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -3334,10 +3334,10 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.F_nn_FlatsInSectionDataTable GetFlatsInSection(int IdSection) {
+        public virtual SAPR.F_nn_FlatsInSectionDataTable GetFlatsInSection(int IdSection) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(IdSection));
-            PIK1.F_nn_FlatsInSectionDataTable dataTable = new PIK1.F_nn_FlatsInSectionDataTable();
+            SAPR.F_nn_FlatsInSectionDataTable dataTable = new SAPR.F_nn_FlatsInSectionDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -3345,14 +3345,14 @@ SELECT ID_Section, ID_Flat, SelectedIndexBottom, SelectedIndexTop, ID_FlatInSect
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(PIK1.F_nn_FlatsInSectionDataTable dataTable) {
+        public virtual int Update(SAPR.F_nn_FlatsInSectionDataTable dataTable) {
             return this.Adapter.Update(dataTable);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(PIK1 dataSet) {
+        public virtual int Update(SAPR dataSet) {
             return this.Adapter.Update(dataSet, "F_nn_FlatsInSection");
         }
         
@@ -3762,7 +3762,7 @@ SELECT ID_Flat, Type, ShortType, AreaLive, AreaTotalStandart, AreaTotalStrong, A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::AR_AreaZhuk.Properties.Settings.Default.SAPRConnectionString;
+            this._connection.ConnectionString = global::AR_Zhuk_InsSchema.Properties.Settings.Default.SAPRConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3822,9 +3822,9 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual PIK1.C_Flats_PIK1DataTable GetData() {
+        public virtual SAPR.C_Flats_PIK1DataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            PIK1.C_Flats_PIK1DataTable dataTable = new PIK1.C_Flats_PIK1DataTable();
+            SAPR.C_Flats_PIK1DataTable dataTable = new SAPR.C_Flats_PIK1DataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -3833,10 +3833,10 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.C_Flats_PIK1DataTable GetTypeByID(int IDFLAT) {
+        public virtual SAPR.C_Flats_PIK1DataTable GetTypeByID(int IDFLAT) {
             this.Adapter.SelectCommand = this.CommandCollection[3];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(IDFLAT));
-            PIK1.C_Flats_PIK1DataTable dataTable = new PIK1.C_Flats_PIK1DataTable();
+            SAPR.C_Flats_PIK1DataTable dataTable = new SAPR.C_Flats_PIK1DataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -3844,14 +3844,14 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(PIK1.C_Flats_PIK1DataTable dataTable) {
+        public virtual int Update(SAPR.C_Flats_PIK1DataTable dataTable) {
             return this.Adapter.Update(dataTable);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(PIK1 dataSet) {
+        public virtual int Update(SAPR dataSet) {
             return this.Adapter.Update(dataSet, "C_Flats_PIK1");
         }
         
@@ -4652,7 +4652,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::AR_AreaZhuk.Properties.Settings.Default.SAPRConnectionString;
+            this._connection.ConnectionString = global::AR_Zhuk_InsSchema.Properties.Settings.Default.SAPRConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4689,7 +4689,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(PIK1.C_SectionsDataTable dataTable) {
+        public virtual int Fill(SAPR.C_SectionsDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -4702,9 +4702,9 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual PIK1.C_SectionsDataTable GetData() {
+        public virtual SAPR.C_SectionsDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            PIK1.C_SectionsDataTable dataTable = new PIK1.C_SectionsDataTable();
+            SAPR.C_SectionsDataTable dataTable = new SAPR.C_SectionsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -4713,7 +4713,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.C_SectionsDataTable GetSectionByID(string Level, string Type, int CountModule) {
+        public virtual SAPR.C_SectionsDataTable GetSectionByID(string Level, string Type, int CountModule) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             if ((Level == null)) {
                 this.Adapter.SelectCommand.Parameters[0].Value = global::System.DBNull.Value;
@@ -4728,7 +4728,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
                 this.Adapter.SelectCommand.Parameters[1].Value = ((string)(Type));
             }
             this.Adapter.SelectCommand.Parameters[2].Value = ((int)(CountModule));
-            PIK1.C_SectionsDataTable dataTable = new PIK1.C_SectionsDataTable();
+            SAPR.C_SectionsDataTable dataTable = new SAPR.C_SectionsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -4951,7 +4951,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::AR_AreaZhuk.Properties.Settings.Default.SAPRConnectionString;
+            this._connection.ConnectionString = global::AR_Zhuk_InsSchema.Properties.Settings.Default.SAPRConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5000,9 +5000,9 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual PIK1.FlatsInSectionsDataTable GetData() {
+        public virtual SAPR.FlatsInSectionsDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            PIK1.FlatsInSectionsDataTable dataTable = new PIK1.FlatsInSectionsDataTable();
+            SAPR.FlatsInSectionsDataTable dataTable = new SAPR.FlatsInSectionsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -5011,10 +5011,10 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.FlatsInSectionsDataTable GetFlatsInSection(int IDSECTION) {
+        public virtual SAPR.FlatsInSectionsDataTable GetFlatsInSection(int IDSECTION) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(IDSECTION));
-            PIK1.FlatsInSectionsDataTable dataTable = new PIK1.FlatsInSectionsDataTable();
+            SAPR.FlatsInSectionsDataTable dataTable = new SAPR.FlatsInSectionsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -5023,7 +5023,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual PIK1.FlatsInSectionsDataTable GetFlatsInTypeSection(int CountModules, string Type, string Levels) {
+        public virtual SAPR.FlatsInSectionsDataTable GetFlatsInTypeSection(int CountModules, string Type, string Levels) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(CountModules));
             if ((Type == null)) {
@@ -5038,7 +5038,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
             else {
                 this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Levels));
             }
-            PIK1.FlatsInSectionsDataTable dataTable = new PIK1.FlatsInSectionsDataTable();
+            SAPR.FlatsInSectionsDataTable dataTable = new SAPR.FlatsInSectionsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -5158,7 +5158,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateUpdatedRows(PIK1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateUpdatedRows(SAPR dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._c_Flats_PIK1TableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.C_Flats_PIK1.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
@@ -5186,7 +5186,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateInsertedRows(PIK1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateInsertedRows(SAPR dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._c_Flats_PIK1TableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.C_Flats_PIK1.Select(null, null, global::System.Data.DataViewRowState.Added);
@@ -5212,7 +5212,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateDeletedRows(PIK1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
+        private int UpdateDeletedRows(SAPR dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
             if ((this._f_nn_FlatsInSectionTableAdapter != null)) {
                 global::System.Data.DataRow[] deletedRows = dataSet.F_nn_FlatsInSection.Select(null, null, global::System.Data.DataViewRowState.Deleted);
@@ -5262,7 +5262,7 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public virtual int UpdateAll(PIK1 dataSet) {
+        public virtual int UpdateAll(SAPR dataSet) {
             if ((dataSet == null)) {
                 throw new global::System.ArgumentNullException("dataSet");
             }

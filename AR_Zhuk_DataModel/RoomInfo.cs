@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace AR_Zhuk_DataModel
 {
-    public class RoomInfo : IEquatable<RoomInfo>, ICloneable
+    public class RoomInfo : IEquatable<RoomInfo>
     {
-        /// <summary>
-        /// Тестовая пометка - прошлали квартира инсоляцию
-        /// </summary>
-        public bool IsInsPassed { get; set; }
+
         public string ShortType { get; set; }
         public string SubZone { get; set; }
         public string Type { get; set; }
@@ -42,28 +39,21 @@ namespace AR_Zhuk_DataModel
         public int CurrentOffsetX { get; set; }
         public string ImageNameSuffix { get; set; }
         public int HorisontalModules { get; set; }
-
-
-
-
-
-
-
-
+        public bool IsInsPassed { get; set; }
 
         public RoomInfo()
         { }
-        public RoomInfo(string shortType, string subZone, string type, string liveArea, string totalAreaStandart, string totalArea, string axisArea,
+        public RoomInfo(string shortType, string subZone, string type, 
     string indexLenghtNIZ, string indexLenghtTOP, string linkageBefore, string linkageAfter, string linkageOR, string requirment, string typeSection, string levelSection, string typeHouse,
             string order, string lightNiz, string lightTop, string factorSmoke)
         {
             this.ShortType = shortType;
             this.SubZone = subZone;
             this.Type = type;
-            this.AreaLive = Double.Parse(liveArea, CultureInfo.CurrentCulture);
-            this.AreaTotalStandart = Double.Parse(totalAreaStandart, CultureInfo.CurrentCulture);
-            this.AreaTotal = Double.Parse(totalArea, CultureInfo.CurrentCulture);
-            this.AreaModules = Double.Parse(axisArea, CultureInfo.CurrentCulture);
+            //this.AreaLive = Double.Parse(liveArea, CultureInfo.CurrentCulture);
+            //this.AreaTotalStandart = Double.Parse(totalAreaStandart, CultureInfo.CurrentCulture);
+            //this.AreaTotal = Double.Parse(totalArea, CultureInfo.CurrentCulture);
+            //this.AreaModules = Double.Parse(axisArea, CultureInfo.CurrentCulture);
             this.IndexLenghtNIZ = indexLenghtNIZ;
 
             this.LinkageDO = linkageBefore ?? "";
@@ -130,9 +120,10 @@ namespace AR_Zhuk_DataModel
             return Type.GetHashCode();
         }
 
-        public object Clone ()
+        public RoomInfo Clone ()
         {
-            return MemberwiseClone();
+            return (RoomInfo)MemberwiseClone();
         }
     }
+
 }

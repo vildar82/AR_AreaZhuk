@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HouseOptions.cs" />
     <Compile Include="Joint.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="SectionType.cs" />

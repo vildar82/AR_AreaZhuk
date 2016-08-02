@@ -13,7 +13,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using OfficeOpenXml.Style;
 using AR_Zhuk_DataModel;
-using AR_AreaZhuk.Insolation;
+using System.Drawing.Imaging;
 
 namespace AR_AreaZhuk
 {
@@ -101,132 +101,132 @@ namespace AR_AreaZhuk
             return index;
         }
 
-        //public List<InsolationSpot> GetInsulations(string path)
-        //{
-        //    List<InsolationSpot> insulations = new List<InsolationSpot>();
-        //    insulations.Add(GetInsulationSpot("P1|", path));
-        //    insulations.Add(GetInsulationSpot("P2|", path));
-        //    return insulations;
-        //}
+        public List<Insolation> GetInsulations(string path)
+        {
+            List<Insolation> insulations = new List<Insolation>();
+            insulations.Add(GetInsulationSpot("P1|", path));
+            insulations.Add(GetInsulationSpot("P2|", path));
+            return insulations;
+        }
 
-        //private static InsolationSpot GetInsulationSpot (string nameSpot, string path)
-        //{
-        //    InsolationSpot insulation = new InsolationSpot();
-        //    insulation.Name = nameSpot;
-        //    insulation.Matrix = new string[100, 100];
-        //    insulation.MaxLeftXY = new List<int>();
-        //    insulation.MinLeftXY = new List<int>();
+        private static Insolation GetInsulationSpot(string nameSpot, string path)
+        {
+            Insolation insulation = new Insolation();
+            insulation.Name = nameSpot;
+            insulation.Matrix = new string[100, 100];
+            insulation.MaxLeftXY = new List<int>();
+            insulation.MinLeftXY = new List<int>();
 
-        //    insulation.MaxRightXY = new List<int>();
-        //    insulation.MinRightXY = new List<int>();
-        //    List<RoomInfo> roomsInfo = new List<RoomInfo>();
-        //    // path = @"E:\Задание по инсоляции ПИК1.xlsx";
-        //    using (var xlPackage = new ExcelPackage(new FileInfo(path.ToString())))
-        //    {
-        //        int firstRow = 1;
-        //        int firstColumn = 1;
-        //        bool isAllBreak = false;
-        //        // string nameSpot = "P2|";
-        //        int minColumn = 5000;
-        //        int maxColumn = -5000;
-        //        for (int column = 1; column < 100; column++)
-        //        {
-        //            for (int row = 1; row < 100; row++)
-        //            {
-        //                if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
-        //                    .Contains(nameSpot))
-        //                {
-        //                    if (minColumn > column - 1)
-        //                        minColumn = column - 1;
-        //                    if (maxColumn < column - 1)
-        //                        maxColumn = column - 1;
-        //                    insulation.Matrix[column - 1, row - 1] =
-        //                        Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
-        //                }
-        //                else insulation.Matrix[column - 1, row - 1] = string.Empty;
-        //            }
-        //        }
+            insulation.MaxRightXY = new List<int>();
+            insulation.MinRightXY = new List<int>();
+            List<RoomInfo> roomsInfo = new List<RoomInfo>();
+            // path = @"E:\Задание по инсоляции ПИК1.xlsx";
+            using (var xlPackage = new ExcelPackage(new FileInfo(path.ToString())))
+            {
+                int firstRow = 1;
+                int firstColumn = 1;
+                bool isAllBreak = false;
+                // string nameSpot = "P2|";
+                int minColumn = 5000;
+                int maxColumn = -5000;
+                for (int column = 1; column < 100; column++)
+                {
+                    for (int row = 1; row < 100; row++)
+                    {
+                        if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
+                            .Contains(nameSpot))
+                        {
+                            if (minColumn > column - 1)
+                                minColumn = column - 1;
+                            if (maxColumn < column - 1)
+                                maxColumn = column - 1;
+                            insulation.Matrix[column - 1, row - 1] =
+                                Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
+                        }
+                        else insulation.Matrix[column - 1, row - 1] = string.Empty;
+                    }
+                }
 
 
-        //        int minRow = 5000;
-        //        int maxRow = -5000;
-        //        for (int i = 0; i < 100; i++)
-        //        {
-        //            if (string.IsNullOrEmpty(insulation.Matrix[minColumn, i]))
-        //                continue;
-        //            if (!insulation.Matrix[0, i].Contains(nameSpot))
-        //                continue;
-        //            if (minRow > i)
-        //                minRow = i;
-        //            if (maxRow < i)
-        //                maxRow = i;
-        //        }
-        //        insulation.MinLeftXY.Add(minColumn);
-        //        insulation.MinLeftXY.Add(minRow);
-        //        insulation.MaxLeftXY.Add(minColumn);
-        //        insulation.MaxLeftXY.Add(maxRow);
+                int minRow = 5000;
+                int maxRow = -5000;
+                for (int i = 0; i < 100; i++)
+                {
+                    if (string.IsNullOrEmpty(insulation.Matrix[minColumn, i]))
+                        continue;
+                    if (!insulation.Matrix[0, i].Contains(nameSpot))
+                        continue;
+                    if (minRow > i)
+                        minRow = i;
+                    if (maxRow < i)
+                        maxRow = i;
+                }
+                insulation.MinLeftXY.Add(minColumn);
+                insulation.MinLeftXY.Add(minRow);
+                insulation.MaxLeftXY.Add(minColumn);
+                insulation.MaxLeftXY.Add(maxRow);
 
-        //        minRow = 5000;
-        //        maxRow = -500;
-        //        for (int i = 0; i < 100; i++)
-        //        {
-        //            if (string.IsNullOrEmpty(insulation.Matrix[maxColumn - 1, i]))
-        //                continue;
-        //            if (!insulation.Matrix[maxColumn - 1, i].Contains(nameSpot))
-        //                continue;
-        //            if (minRow > i)
-        //                minRow = i;
-        //            if (maxRow < i)
-        //                maxRow = i;
-        //        }
-        //        insulation.MinRightXY.Add(maxColumn);
-        //        insulation.MinRightXY.Add(minRow);
-        //        insulation.MaxRightXY.Add(maxColumn);
-        //        insulation.MaxRightXY.Add(maxRow);
-        //        string info = "";
-        //        if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] == insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-        //        {
-        //            info += "П образная.";
-        //            string s = Convert.ToString(insulation.Matrix[insulation.MinLeftXY[0], insulation.MinLeftXY[1] + 8]);
-        //            if (string.IsNullOrEmpty(s))
-        //                info += " Низ.";
-        //            else info += " Верх.";
-        //        }
-        //        else
-        //        {
-        //            if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] > insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-        //            {
-        //                info += "Угловая. Левый угол. ";
-        //            }
-        //            else if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] <
-        //                     insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-        //            {
-        //                info += "Угловая. Правый угол. ";
-        //            }
-        //            if (insulation.MinLeftXY[1].Equals(insulation.MinRightXY[1]))
-        //                info += "Верх.";
-        //            else info += "Низ.";
-        //            switch (info)
-        //            {
-        //                case "Угловая. Левый угол. Верх.":
-        //                    insulation.IsLeftTopSection = true;
-        //                    break;
-        //                case "Угловая. Правый угол. Низ.":
-        //                    insulation.IsRightNizSection = true;
-        //                    break;
-        //                case "Угловая. Правый угол. Верх.":
-        //                    insulation.IsRightTopSection = true;
-        //                    break;
-        //                case "Угловая. Левый угол. Низ.":
-        //                    insulation.IsLeftNizSection = true;
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    return insulation;
-        //}
+                minRow = 5000;
+                maxRow = -500;
+                for (int i = 0; i < 100; i++)
+                {
+                    if (string.IsNullOrEmpty(insulation.Matrix[maxColumn - 1, i]))
+                        continue;
+                    if (!insulation.Matrix[maxColumn - 1, i].Contains(nameSpot))
+                        continue;
+                    if (minRow > i)
+                        minRow = i;
+                    if (maxRow < i)
+                        maxRow = i;
+                }
+                insulation.MinRightXY.Add(maxColumn);
+                insulation.MinRightXY.Add(minRow);
+                insulation.MaxRightXY.Add(maxColumn);
+                insulation.MaxRightXY.Add(maxRow);
+                string info = "";
+                if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] == insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+                {
+                    info += "П образная.";
+                    string s = Convert.ToString(insulation.Matrix[insulation.MinLeftXY[0], insulation.MinLeftXY[1] + 8]);
+                    if (string.IsNullOrEmpty(s))
+                        info += " Низ.";
+                    else info += " Верх.";
+                }
+                else
+                {
+                    if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] > insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+                    {
+                        info += "Угловая. Левый угол. ";
+                    }
+                    else if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] <
+                             insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+                    {
+                        info += "Угловая. Правый угол. ";
+                    }
+                    if (insulation.MinLeftXY[1].Equals(insulation.MinRightXY[1]))
+                        info += "Верх.";
+                    else info += "Низ.";
+                    switch (info)
+                    {
+                        case "Угловая. Левый угол. Верх.":
+                            insulation.IsLeftTopSection = true;
+                            break;
+                        case "Угловая. Правый угол. Низ.":
+                            insulation.IsRightNizSection = true;
+                            break;
+                        case "Угловая. Правый угол. Верх.":
+                            insulation.IsRightTopSection = true;
+                            break;
+                        case "Угловая. Левый угол. Низ.":
+                            insulation.IsLeftNizSection = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return insulation;
+        }
 
         public
              List<RoomInfo> GetRoomData(string path)
@@ -242,23 +242,23 @@ namespace AR_AreaZhuk
                     string shortType = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 1].Value);
                     string subzone = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 2].Value);
                     string type = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 3].Value);
-                    string liveArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 4].Value);
-                    string totalAreaStandart = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 5].Value);
-                    string totalArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 6].Value);
-                    string moduleArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 7].Value);
-                    string indexNIZ = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 8].Value);
-                    string indexTOP = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 9].Value);
-                    string linkageBefore = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 10].Value);
-                    string linkageAfter = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 11].Value);
-                    string linkageOr = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 12].Value);
-                    string req = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 13].Value);
-                    string factorSmoke = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 14].Value);
-                    string typeSection = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 15].Value);
-                    string typeHouse = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 16].Value);
-                    string levels = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 17].Value);
-                    string order = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 18].Value);
-                    string lightNiz = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 19].Value);
-                    string lightTop = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 20].Value);
+                    //string liveArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 4].Value);
+                    //string totalAreaStandart = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 5].Value);
+                    //string totalArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 6].Value);
+                    //string moduleArea = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 7].Value);
+                    string indexNIZ = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 4].Value);
+                    string indexTOP = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 5].Value);
+                    string linkageBefore = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 6].Value);
+                    string linkageAfter = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 7].Value);
+                    string linkageOr = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter,8].Value);
+                    string req = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 9].Value);
+                    string factorSmoke = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 10].Value);
+                    string typeSection = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 11].Value);
+                    string typeHouse = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 12].Value);
+                    string levels = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 13].Value);
+                    string order = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 14].Value);
+                    string lightNiz = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 15].Value);
+                    string lightTop = Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[counter, 26].Value);
                     string[] linkMasBefore = linkageBefore.Split(';');
                     string[] linkMasAfter = linkageAfter.Split(';');
 
@@ -266,14 +266,31 @@ namespace AR_AreaZhuk
                     {
                         for (int j = 0; j < linkMasAfter.Length; j++)
                         {
-                            RoomInfo ri = new RoomInfo(shortType, subzone, type, liveArea, totalAreaStandart, totalArea,
-                                moduleArea, indexNIZ, indexTOP, linkMasBefore[i], linkMasAfter[j], linkageOr,
+                            RoomInfo ri = new RoomInfo(shortType, subzone, type, indexNIZ, indexTOP, linkMasBefore[i], linkMasAfter[j], linkageOr,
                                 req, typeSection, levels, typeHouse, order, lightNiz, lightTop, factorSmoke);
                             roomsInfo.Add(ri);
                         }
                     }
 
+
+
                     counter++;
+                }
+
+                counter = 2;
+                while (xlPackage.Workbook.Worksheets[2].Cells[counter, 1].Value != null)
+                {
+
+                    string shortType = xlPackage.Workbook.Worksheets[2].Cells[counter, 2].Value.ToString();
+                    foreach (var r in roomsInfo.Where(x => x.ShortType.Equals(shortType)).ToList())
+                    {
+                        r.AreaModules = Convert.ToInt16(xlPackage.Workbook.Worksheets[2].Cells[counter, 3].Value);
+                        r.AreaTotal = Convert.ToDouble(xlPackage.Workbook.Worksheets[2].Cells[counter, 4].Value);
+                        r.AreaTotalStandart = Convert.ToDouble(xlPackage.Workbook.Worksheets[2].Cells[counter, 5].Value);
+                        r.AreaLive = Convert.ToDouble(xlPackage.Workbook.Worksheets[2].Cells[counter, 15].Value);
+                    }
+                   
+                         counter++;
                 }
             }
             return roomsInfo;
@@ -290,16 +307,58 @@ namespace AR_AreaZhuk
         //    return 0;
         //}
 
+
+        public static void TestCreateImage(HouseInfo house)
+        {
+            GeneralObject go = new GeneralObject();
+            go.SpotInf = house.SpotInf;
+            //double area = GetTotalArea(house);            
+            go.Houses.Add(house);
+            //go.SpotInf.RealArea = area;
+            go.GUID = Guid.NewGuid().ToString();
+            // ob.Add(go);
+
+            //string spotName = house.Sections.First().SpotOwner.Split('|')[0];
+            //string curSteps = string.Join(".", house.Sections.Select(s=>s.CountStep.ToString()));
+
+            //  if (steps != curSteps)
+            //  {
+            //      steps = curSteps;
+            //      countFile = 0;
+            //      countSteps++;
+            //  }
+
+            //  countFile++;
+            //  contFileString = countSteps.ToString("0000") + "_" +  countFile.ToString("0000");
+
+            //  string ids = string.Join("_", house.Sections.Select(s => s.IdSection.ToString()));
+            ////  string name = $"{contFileString}_{spotName}_{steps}_{ids}.png";            
+
+            string imagePath = Path.Combine(@"E:\Test\ЖУКИ\");
+
+            string sourceImgFlats = @"z:\Revit_server\13. Settings\02_RoomManager\00_PNG_ПИК1\";
+            string ExcelDataPath = @"\\ab4\CAD_Settings\Revit_server\13. Settings\02_RoomManager\БД_Параметрические данные квартир ПИК1 -Не трогать.xlsx";
+
+            BeetlyVisualisation.ImageCombiner imgComb = new BeetlyVisualisation.ImageCombiner(go, ExcelDataPath, sourceImgFlats, 72);
+            var img = imgComb.generateGeneralObject();
+            img.Save(imagePath + Guid.NewGuid() + ".png", ImageFormat.Png);
+
+            // Лог дома
+            //  LogHouse(house, contFileString);
+        }
+
+
+
         public SpotInfo GetSpotInformation()
         {
             SpotInfo spotInfo = new SpotInfo();
-            spotInfo.requirments.Add(new Requirment("01", 22, 23, 14, 0, 3, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("01", 33, 35, 21, 0, 4, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("1", 35, 47, 6, 0, 4, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("2", 45, 47, 17, 0, 3, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("2", 53, 56, 12, 0, 3, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("2", 68, 70, 8, 0, 3, 0, 0, 5));
-            spotInfo.requirments.Add(new Requirment("3", 85, 95, 22, 0, 2, 0, 0, 5));
+            spotInfo.requirments.Add(new Requirment("Студия", 22, 23, 15, 15, 3, 0, 0, 1,"01"));
+            spotInfo.requirments.Add(new Requirment("Студия", 33, 35, 8, 0, 8, 0, 0, 4,"01"));
+            spotInfo.requirments.Add(new Requirment("Однокомн.", 33, 47, 17, 0, 4, 0, 0, 1,"1"));
+            spotInfo.requirments.Add(new Requirment("Двухкомн.", 45, 47, 16, 0, 3, 0, 0, 4, "2"));
+            spotInfo.requirments.Add(new Requirment("Двухкомн.", 57, 60, 11, 0, 3, 0, 0, 8, "2"));
+            spotInfo.requirments.Add(new Requirment("Двухкомн.", 68, 71, 12, 0, 3, 0, 0, 1,"2"));
+            spotInfo.requirments.Add(new Requirment("Трехкомн.", 85, 95, 21, 0, 2, 0, 0, 1,"3"));
             return spotInfo;
         }
 
@@ -315,7 +374,7 @@ namespace AR_AreaZhuk
             // double currentSum = 569.95 + 51.84;//spotInfo.SpotArea / 4; //569.95+51.84;//571.5;//+51.84;
             int countIndexes = countModulesInSection / 2;
 
-            int limit = 1000000;
+            int limit = 500000;
             int iteration = 0;
             Random random = new Random();
             // bool isContinue = true;
@@ -401,10 +460,10 @@ namespace AR_AreaZhuk
                     flatsInSectionTemp.Add(f);
                 }
                 RoomInfo lastRoomTemp = new RoomInfo(lastRoom, lastRoom.LinkageDO, lastRoom.LinkagePOSLE);
-               
+                bool isTopNull = false;
                 for (int i = 0; i < 11; i++)
                 {
-                    bool isTopNull = false;
+
                     string[] lastRoomConfig = lastRoomTemp.LinkagePOSLE.Split('/')[0].Split('|');
                     int[] intMass = new int[10];
 
@@ -681,7 +740,7 @@ namespace AR_AreaZhuk
         //}
 
         public List<FlatInfo> GetAllSectionsFromDB(int countModulesInSection,
-            bool isCornerLeftNiz, bool isCornerRightNiz, int countFloors)
+            bool isCornerLeftNiz, bool isCornerRightNiz, int countFloors, SpotInfo sp)
         {
             List<FlatInfo> sectionsBySyze = new List<FlatInfo>();
             FrameWork fw = new FrameWork();
@@ -689,8 +748,6 @@ namespace AR_AreaZhuk
             string countFl = "10-18";
             if (countFloors > 18 & countFloors <= 25)
                 countFl = "19-25";
-            //if (countFloors > 9 & countFloors <= 18)
-            //    countFl = "10-18";
             if (countFloors < 9)
                 countFl = "9";
             PIK1TableAdapters.C_SectionsTableAdapter sects = new C_SectionsTableAdapter();
@@ -700,79 +757,70 @@ namespace AR_AreaZhuk
                 levels = "Угловая лево";
             if (isCornerRightNiz)
                 levels = "Угловая право";
-           // var sections = sects.GetSectionByID(countFl, levels, countModulesInSection / 4);
-            //PIK1.FlatsInSectionsDataTable flats = null;
-            //try
-            //{
+
             var flats = flatsIsSection.GetFlatsInTypeSection(countModulesInSection / 4, levels, countFl).ToList();
             flats = flats.OrderBy(x => x.ID_FlatInSection).ToList();
-            //}
-            //catch
-            //{
-            //    return sectionsBySyze;
-            //}
 
-           
             int counter = 0;
             int lastIdSection = 0;
             FlatInfo fl = new FlatInfo();
-            for (int i = 0; i < flats.Count; i++)
+            bool isValidSection = true;
+            var groupFlats = flats.GroupBy(x => x.ID_Section).Select(x => x.ToList()).ToList();
+            foreach (var gg in groupFlats)
             {
-                var f = flats[i];
-                if (f.ID_Section != lastIdSection)
+                fl = new FlatInfo();
+
+                fl.Floors = countFloors;
+                fl.CountStep = countModulesInSection / 4;
+                fl.Flats = new List<RoomInfo>();
+                fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
+                isValidSection = true;
+                for (int i = 0; i < gg.Count; i++)
                 {
-                    if (counter != 0)
-                    {
-                        sectionsBySyze.Add(fl);
-                        //if (fl.CountFlats <= 5)
-                        //{
-                        //    if (fl.CountFlats <= 5)
-                        //    {
-
-                        //    }
-                        //}
-                    }
-                    fl = new FlatInfo();
+                    var f = gg[i];
                     fl.IdSection = f.ID_Section;
-                    fl.Floors = countFloors;
-                    fl.CountStep = countModulesInSection / 4;
-                    fl.Flats = new List<RoomInfo>();
-                    fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
-                    lastIdSection = f.ID_Section;
+                    bool isContains = false;
+                    if (!f.SubZone.Equals("0"))
+                    {
+                        isValidSection = false;
+                        foreach (var r in sp.requirments.Where(x => x.CodeZone.Equals(f.SubZone)).ToList())
+                        {
+                            if (!(r.MinArea - 4 <= f.AreaTotalStandart & r.MaxArea + 4 >= f.AreaTotalStandart))
+                                continue;
+                            isContains = true;
+                            break;
+                        }
+
+                        if (!isContains)
+                        {
+                            isValidSection = false;
+                            break;
+                        }
+                    }
+
+                    var fflat = new RoomInfo(f.ShortType, f.SubZone, f.TypeFlat, "",
+                        "", f.LinkageBefore, f.LinkageAfter, "", "", "", f.Levels, "", "", f.LightBottom, f.LightTop,
+                        "");
+                    fflat.AreaModules = f.AreaInModule;
+                    fflat.AreaTotal = f.AreaTotalStrong;
+                    fflat.AreaTotalStandart = f.AreaTotalStandart;
+                    fflat.SelectedIndexTop = f.SelectedIndexTop;
+                    fflat.SelectedIndexBottom = f.SelectedIndexBottom;
+                    fl.Flats.Add(fflat);
+
+                    //if (sectionsBySyze.Count < 250) continue;
+                    //break;
+
+                    if (!isValidSection)
+                        continue;
+
+
+
+
                 }
-                var fflat = new RoomInfo(f.ShortType, f.SubZone, f.TypeFlat, f.AreaLive.ToString(),
-                       f.AreaTotalStandart.ToString(),
-                       f.AreaTotalStrong.ToString(), f.CountModules.ToString(), "",
-                       "", f.LinkageBefore, f.LinkageAfter, "", "", "", f.Levels, "", "", f.LightBottom, f.LightTop,
-                       "");
-                fflat.SelectedIndexTop = f.SelectedIndexTop;
-                fflat.SelectedIndexBottom = f.SelectedIndexBottom;
-                fl.Flats.Add(fflat);
-                //if (counter == 0 | lastIdSection != f.ID_Section)
-                //{
-                //    fl.IdSection = f.ID_Section;
-                //    fl.Floors = countFloors;
-                //    fl.CountStep = countModulesInSection / 4;
-                //    fl.Flats = new List<RoomInfo>();
-                //    fl.IsCorner = isCornerLeftNiz | isCornerRightNiz;
-                //}
+                sectionsBySyze.Add(fl);
 
-                // List<RoomInfo> secs = new List<RoomInfo>();
-                //try
-                //{
-                // var flatsInSection = flats.Where(x => x.ID_Section.Equals(s.ID_Section)).OrderBy(x => x.ID_FlatInSection).ToList();
-                //bool isValid = true;
-                //bool is2KL2 = false;
-                //foreach (var f in flatsInSection)
-                //{
-
-
-                //}
-                //if (!isValid) continue;
-
-                counter++;
-                if (sectionsBySyze.Count < 10) continue;
-                break;
+                // lastIdSection = f.ID_Section;
             }
             //foreach (var s in sections)
             //{
@@ -831,17 +879,24 @@ namespace AR_AreaZhuk
             //    {
             //    }
             //}
+            double area = listRooms1.Sum(room => room.AreaTotalStandart);
+            if (area > 549)
+                return;
             if (!isExist)
             {
                 if (IsValidSmoke(listRooms1, allRooms, isLeftCorner, countFloors, listSections))
                 {
-                    //if (listRooms1.Where(x => x.ShortType.Equals("2KL2")).ToList().Count > 1)
-                    //{
-                    //    int a = 0;
-                    //    int b = a+1;
-                    //}
+
                     FlatInfo fi = new FlatInfo();
                     fi.Flats = listRooms1;
+                    if (listRooms1.Where(x => x.SubZone.Equals("4")).ToList().Count > 0)
+                    {
+                        int a = 0;
+                        int b = a + 1;
+                        HouseInfo h = new HouseInfo();
+                        h.Sections.Add(fi);
+                        FrameWork.TestCreateImage(h);
+                    }
                     //if (fi.Flats[1].ShortType == "1KS1" && fi.Flats[2].ShortType == "2KL3" && fi.Flats[fi.Flats.Count-2].ShortType == "2KL3")
                     //{
                     //    listSections.Add(fi);
@@ -862,8 +917,8 @@ namespace AR_AreaZhuk
                 counter11++;
                 if (ri.IndexLenghtNIZ.Split('/')[0].Equals("!") | ri.SubZone.Equals("0"))
                     continue;
-                if (ri.SubZone.Equals("4"))
-                    continue;
+                //if (ri.SubZone.Equals("4"))
+                //    continue;
                 if (ri.TypeSection.Contains("Угл") & !isCornerLeftNiz)
                     continue;
                 if (ri.TypeHouse.Contains("Баш"))
@@ -1037,7 +1092,7 @@ namespace AR_AreaZhuk
                 return true;
             if (selectedRoom.ShortType.Equals("2KL2") & preRoom.ShortType.Equals("2KL2"))
                 return false;
-           
+
             if (selectedRoom.IndexLenghtNIZ.Split('/')[0].Equals("!") | selectedRoom.SubZone.Equals("0"))
                 return false;
             //Условия компановки
@@ -1277,7 +1332,7 @@ namespace AR_AreaZhuk
 
                 //}
 
-                
+
 
                 RoomInfo rr = allRooms.Where(x => x.SubZone.Equals("0"))
                           .Where(x => x.LevelsSection.Equals("10-18")).Where(x => x.Requirment != "0")
@@ -1312,7 +1367,7 @@ namespace AR_AreaZhuk
                             {
                                 if (listRooms1[5].ShortType == "2NM1")
                                 {
-                                    
+
                                 }
                             }
                         }
@@ -1320,22 +1375,22 @@ namespace AR_AreaZhuk
                 }
                 //if (isCorner)
                 //{
-                    while (listRooms1[counter].SelectedIndexTop > 0)
+                while (listRooms1[counter].SelectedIndexTop > 0)
+                {
+                    if (counter == 0)
                     {
-                        if (counter == 0)
-                        {
-                            string indexSmoke = listRooms1[counter].FactorSmoke;
-                            string[] masSmoke = indexSmoke.Split('|');
-                            if (masSmoke.Length == 2)
-                                countTop += Convert.ToInt16(masSmoke[0]);
-                            counter++;
-                            continue;
-                        }
-                        countTop += listRooms1[counter].SelectedIndexTop;
+                        string indexSmoke = listRooms1[counter].FactorSmoke;
+                        string[] masSmoke = indexSmoke.Split('|');
+                        if (masSmoke.Length == 2)
+                            countTop += Convert.ToInt16(masSmoke[0]);
                         counter++;
+                        continue;
                     }
-                    counter--;
-               // }
+                    countTop += listRooms1[counter].SelectedIndexTop;
+                    counter++;
+                }
+                counter--;
+                // }
                 int countBottom = 0;
                 while (listRooms1[counter].SelectedIndexBottom >= 0)
                 {

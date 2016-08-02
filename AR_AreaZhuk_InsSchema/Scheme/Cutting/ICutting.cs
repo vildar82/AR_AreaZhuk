@@ -5,6 +5,6 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
 {
     public interface ICutting
     {
-        List<Section> Cut ();
+        List<HouseInfo> Cut ();
     }
 }

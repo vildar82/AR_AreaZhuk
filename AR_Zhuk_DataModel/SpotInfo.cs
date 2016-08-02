@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AR_Zhuk_DataModel
 {
+
     public class SpotInfo
     {
         public double SpotArea = 2280.96 - 1.152;
@@ -21,7 +22,7 @@ namespace AR_Zhuk_DataModel
             SpotInfo s = new SpotInfo();
             foreach (var r in sp.requirments)
             {
-                s.requirments.Add(new Requirment(r.SubZone, r.MinArea, r.MaxArea, r.Percentage, r.MinCountFlat, r.MaxCountFlat, 0, 0, r.OffSet));
+                s.requirments.Add(new Requirment(r.SubZone, r.MinArea, r.MaxArea, r.Percentage, r.MinCountFlat, r.MaxCountFlat, 0, 0, r.OffSet,r.CodeZone));
             }
             return s;
         }
@@ -32,17 +33,18 @@ namespace AR_Zhuk_DataModel
         public double RealPercentage { get; set; }
         public int RealCountFlats { get; set; }
         public string SubZone { get; set; }
+        public string CodeZone { get; set; }
         public int MinArea { get; set; }
         public int MaxArea { get; set; }
         public int Percentage { get; set; }
 
-        public int OffSet { get; set; }
+        public double OffSet { get; set; }
         // public  List<RoomInfo> RoomsGeneral { get; set; }
         public int CountFlats { get; set; }
         public int MaxCountFlat { get; set; }
         public int MinCountFlat { get; set; }
 
-        public Requirment(string subZone, int minArea, int maxArea, int percentage, int minCountFlats, int maxCountFlats, int realCount, double realPercentage, int offset)
+        public Requirment(string subZone, int minArea, int maxArea, int percentage, int minCountFlats, int maxCountFlats, int realCount, double realPercentage, double offset,string codeZone)
         {
             this.SubZone = subZone;
             this.MinArea = minArea;
@@ -54,6 +56,7 @@ namespace AR_Zhuk_DataModel
             this.RealCountFlats = realCount;
             this.RealPercentage = realPercentage;
             this.OffSet = offset;
+            this.CodeZone = codeZone;
 
         }
 
@@ -64,7 +67,7 @@ namespace AR_Zhuk_DataModel
             List<Requirment> reqs = new List<Requirment>();
             foreach (var r in reqTemp)
             {
-                reqs.Add(new Requirment(r.SubZone, r.MinArea, r.MaxArea, r.Percentage, r.MinCountFlat, r.MaxCountFlat, r.RealCountFlats, r.RealPercentage, r.OffSet));
+                reqs.Add(new Requirment(r.SubZone, r.MinArea, r.MaxArea, r.Percentage, r.MinCountFlat, r.MaxCountFlat, r.RealCountFlats, r.RealPercentage, r.OffSet,r.CodeZone));
             }
             return reqs;
         }

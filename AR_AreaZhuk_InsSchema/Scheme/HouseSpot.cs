@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AR_AreaZhuk.Scheme.SpatialIndex;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.Scheme.SpatialIndex;
 
 namespace AR_Zhuk_InsSchema.Scheme
 {
@@ -75,11 +75,11 @@ namespace AR_Zhuk_InsSchema.Scheme
             Section section = null; 
             int startStepInSeg;
             var segment = GetSegmentAtStep(startStepInHouse, out startStepInSeg);
-            int endStepInSeg = startStepInSeg + sectionCountStep;
+            int endStepInSeg = startStepInSeg + sectionCountStep-1;
             
             // Еслм начальный шаг или конечный секции попали в мертвую зону (угол), то такой дом нельзя скомпановать
-            if (segment.StepInDeadZone(startStepInSeg) ||
-                segment.StepInDeadZone(endStepInSeg))
+            if (segment.StartStepInDeadZone(startStepInSeg) ||
+                segment.EndStepInDeadZone(endStepInSeg))
             {
                 return null;
             }
@@ -98,6 +98,13 @@ namespace AR_Zhuk_InsSchema.Scheme
                 }
                 // Угловая                
                 section.IsCorner = true;
+
+                // Проверка минимальности шага угловой секции
+                if (section.CountStep < HouseSpot.CornerSectionMinStep)
+                {
+                    return null;
+                }
+
                 if (segment.EndType == SegmentEnd.CornerLeft)
                     section.SectionType = SectionType.CornerLeft;
                 else
@@ -145,9 +152,9 @@ namespace AR_Zhuk_InsSchema.Scheme
                 section.Direction = segment.IsVertical ? segment.Direction.Row : segment.Direction.Col;
 
                 // Инсоляция левая
-                var insLeft = segment.GetModules(segment.ModulesLeft, startStepInSeg, segment.CountSteps);
+                var insLeft = segment.GetModules(segment.ModulesLeft, startStepInSeg, section.CountStep);
                 // правая
-                var insRight = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);
+                var insRight = segment.GetModules(segment.ModulesRight, startStepInSeg, section.CountStep);
                 // определение инсоляции по верху и по низу секции для правого/верхнего расположения ЛЛУ
                 if (section.Direction > 0)
                 {                    
@@ -162,10 +169,16 @@ namespace AR_Zhuk_InsSchema.Scheme
                     section.InsBot.Reverse();
                 }
             }
-            return section;
-        }
 
-        
+            // Боковая инсоляция в торце
+            if (segment.StartType == SegmentEnd.End && startStepInHouse==1 ||
+                segment.EndType == SegmentEnd.End && section.CountStep == endStepInSeg)
+            {                
+                section.InsSide = segment.ModulesSide;
+            }            
+
+            return section;
+        }        
 
         protected void AddSegment (Segment segment)
         {

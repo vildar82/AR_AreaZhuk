@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AR_AreaZhuk.DB;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.DB;
 using AR_Zhuk_InsSchema.Insolation;
 
 namespace AR_Zhuk_InsSchema.Scheme.Cutting
@@ -13,29 +13,122 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
     {
         public static readonly List<int> SectionSteps = new List<int> { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
+        private List<string> failedSections;
+
         private HouseSpot houseSpot;
         private IDBService dbService;
         private IInsolation insService;
+        private SpotInfo sp;
 
-        public CuttingOrdinary (HouseSpot houseSpot, IDBService dbService, IInsolation insService)
+        public CuttingOrdinary (HouseSpot houseSpot, IDBService dbService, IInsolation insService, SpotInfo sp)
         {
             this.houseSpot = houseSpot;
             this.dbService = dbService;
             this.insService = insService;
+            this.sp = sp;
         }
 
-        public List<Section> Cut ()
+        public List<HouseInfo> Cut ()
         {
-            List<Section> resHouses = new List<Section>();
+            failedSections = new List<string>();
+
+            List<HouseInfo> resHouses = new List<HouseInfo>();
             // Все варианты домов по шагам секций
             var housesSteps = GetAllSteps();
             // Подстановка секций под каждый вариант
-            foreach (var houseSteps in housesSteps)
+            for (int h = 0; h < housesSteps.Count; h++)
             {
+                var houseSteps = housesSteps[h];
                 var houseVar = GetHouseVariant(houseSteps);
-                resHouses.Add(houseVar);
+                if (houseVar != null)
+                {
+                    HouseInfo hi = new HouseInfo();
+                    hi.SpotInf = sp;
+                    hi.SectionsBySize = houseVar;
+                    resHouses.Add(hi);
+                }                
             }
             return resHouses;
+        }
+
+        private static string GetSectionDataKey (int sectCountStep, int numberFailSect, int startStepFailedSect)
+        {            
+            string key = "n" + numberFailSect + "z" + sectCountStep + "s" + startStepFailedSect;
+            return key;
+        }
+
+        private List<Section> GetHouseVariant (int[] houseSteps)
+        {            
+            List<Section> resSections = new List<Section>();            
+            int curStepInHouse = 1;
+            int sectionsInHouse = houseSteps.Length;
+
+            string key = string.Empty;
+            bool fail = false;
+            bool addToFailed = true;
+
+            // Перебор нарезанных секций в доме
+            for (int numberSect = 1; numberSect <= sectionsInHouse; numberSect++)
+            {
+                fail = false;
+                Section section = null;                
+                // Размер секции - шагов
+                var sectCountStep = SectionSteps[houseSteps[numberSect - 1]];
+
+                key = GetSectionDataKey(sectCountStep, numberSect, curStepInHouse);
+                if (failedSections.Contains(key))
+                {
+                    fail = true;
+                    addToFailed = false;
+                    break;
+                }            
+
+                section = houseSpot.GetSection(curStepInHouse, sectCountStep);
+                if (section == null)
+                {
+                    fail = true;
+                    break;
+                }
+                curStepInHouse += sectCountStep;
+
+                var type = GetSectionType(section.SectionType);
+                // Этажность секции
+                section.Floors = GetSectionFloors(numberSect, section.SectionType, sectionsInHouse);
+                var levels = GetSectionLevels(section.Floors);
+
+                section.NumberInSpot = numberSect;
+                section.SpotOwner = houseSpot.SpotName;
+
+                section.IsStartSectionInHouse = numberSect == 1;
+                section.IsEndSectionInHouse = numberSect == sectionsInHouse;
+
+                // Запрос секций из базы
+                section.Sections = dbService.GetSections(section, type, levels, sp);
+                if (section.Sections.Count == 0)
+                {
+                    fail = true;
+                    break;
+                }
+
+                // Проверка инсоляции секции
+                List<FlatInfo> flatsCheckedIns = insService.GetInsolationSections(section);
+                if (flatsCheckedIns.Count == 0)
+                {
+                    fail = true;
+                    break;
+                }
+                section.Sections = flatsCheckedIns;
+                resSections.Add(section);
+            }
+
+            if (fail)
+            {
+                resSections = null;
+                if (addToFailed)
+                    failedSections.Add(key);
+            }
+
+            return resSections;
         }
 
         private int GetSectionFloors (int numberSect, SectionType sectionType, int sectionsInHouse)
@@ -155,39 +248,6 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             return res;
         }
 
-        private Section GetHouseVariant (int[] houseSteps)
-        {            
-            Section resSection = null;
-            Section section = null;
-            int curStepInHouse = 1;
-            int sectionsInHouse = houseSteps.Length;
-
-            // Перебор нарезанных секций в доме
-            for (int numberSect = 1; numberSect <= sectionsInHouse; numberSect++)
-            {
-                // Размер секции - шагов
-                int sectCountStep = SectionSteps[houseSteps[numberSect-1]];
-                section = houseSpot.GetSection(curStepInHouse, sectCountStep);
-
-                var type = GetSectionType(section.SectionType);
-                // Этажность секции
-                section.Floors = GetSectionFloors(numberSect, section.SectionType, sectionsInHouse);
-                var levels = GetSectionLevels(section.Floors);
-
-                section.NumberInSpot = numberSect;
-                section.SpotOwner = houseSpot.SpotName;
-
-                section.IsStartSectionInHouse = numberSect == 1;
-                section.IsEndSectionInHouse = numberSect == sectionsInHouse;
-
-                // Запрос секций из базы
-                section.Sections = dbService.GetSections(sectCountStep, type, levels);                
-
-                // Проверка инсоляции секции
-                List<FlatInfo> flatsCheckedIns = insService.GetInsolationSections(section);                
-            }
-
-            return resSection;
-        }        
+        
     }
 }

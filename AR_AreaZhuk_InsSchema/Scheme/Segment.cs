@@ -92,7 +92,7 @@ namespace AR_Zhuk_InsSchema.Scheme
                 startStep += HouseSpot.WidthOrdinary - 1;
                 endStep += HouseSpot.WidthOrdinary - 1;
             }
-            resModules = sourceModules.Skip(startStep - 1).Take(endStep - startStep).ToList();
+            resModules = sourceModules.Skip(startStep - 1).Take(endStep - startStep+1).ToList();
             return resModules;
         }
 
@@ -100,20 +100,53 @@ namespace AR_Zhuk_InsSchema.Scheme
         /// Проверка попадает ли шаг в мертвую зону сегмента (угол)
         /// </summary>
         /// <param name="step">Шаг в сегменте</param>        
-        public bool StepInDeadZone (int step)
+        public bool StartStepInDeadZone (int step)
         {
-            // Если стартовый торец секции - угловой и шаг попадает в угол
-            if ((StartType == SegmentEnd.CornerLeft || StartType == SegmentEnd.CornerRight) &&
-                (step < HouseSpot.CornerSectionMinStep-1 && step != HouseSpot.WidthOrdinary +1 ))
-            {
-                return true;
-            }
+            //// Если стартовый торец секции - угловой и шаг попадает в угол
+            //if ((StartType == SegmentEnd.CornerLeft || StartType == SegmentEnd.CornerRight) &&
+            //    (step < HouseSpot.CornerSectionMinStep-1 && step != HouseSpot.WidthOrdinary +1 ))
+            //{
+            //    return true;
+            //}
+            // Если стартовый шаг попадает в угловой конец сегмента
             if (EndType == SegmentEnd.CornerLeft || EndType == SegmentEnd.CornerRight)
             {
                 int counToEnd = CountSteps - step;
-                if (counToEnd>0 && counToEnd < HouseSpot.CornerSectionMinStep-1 && counToEnd != HouseSpot.WidthOrdinary+2)
+                if ((counToEnd < HouseSpot.WidthOrdinary+1 && counToEnd != HouseSpot.WidthOrdinary+1)                    || 
+                    counToEnd == HouseSpot.CornerSectionMinStep-2)
                 {
                     return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Проверка попадает ли шаг в мертвую зону сегмента (угол)
+        /// </summary>
+        /// <param name="step">Шаг в сегменте</param>        
+        public bool EndStepInDeadZone (int step)
+        {            
+            if (EndType == SegmentEnd.CornerLeft || EndType == SegmentEnd.CornerRight)
+            {
+                int counToEnd = CountSteps - step;
+                if (counToEnd > 0)
+                {
+                    // Это не угловая секция, она должна встать до угла
+                    if (counToEnd < HouseSpot.CornerSectionMinStep-1 && counToEnd != HouseSpot.WidthOrdinary + 2)
+                    {
+                        return true;
+                    }                    
+                }
+                else
+                {
+                    // Это угловая секция - она должа встать на допустимый шаг на след сегменте
+                    int minStepInNextSeg = HouseSpot.CornerSectionMinStep - HouseSpot.WidthOrdinary - 1;// =3, -1 шаг зашиба
+                    counToEnd = Math.Abs(counToEnd);
+                    if (counToEnd != 1 && counToEnd < minStepInNextSeg)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

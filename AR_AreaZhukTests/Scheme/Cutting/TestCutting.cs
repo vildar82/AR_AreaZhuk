@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AR_AreaZhuk.Insolation;
-using AR_AreaZhuk.Scheme;
-using AR_AreaZhuk.Scheme.Cutting;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.Scheme;
+using AR_Zhuk_InsSchema.Scheme.Cutting;
 using NUnit.Framework;
 
 namespace AR_AreaZhukTests.Scheme.Cutting
@@ -21,19 +20,18 @@ namespace AR_AreaZhukTests.Scheme.Cutting
                  new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false }),
                  new HouseOptions("P2", 15, 25, new List<bool> { true, false, false, false, false })
             };
+            var sp = TestProjectSpot.GetSpotInformation();
 
-            ProjectSpot projectSpot = new ProjectSpot(options);            
+            ProjectSpot projectSpot = new ProjectSpot(options, sp);            
             projectSpot.ReadScheme(insolationFile);            
             List<HouseSpot> houseSpots = projectSpot.HouseSpots;
 
             List<List<HouseInfo>> totalObject = new List<List<HouseInfo>>();
             foreach (var item in houseSpots)
             {
-                ICutting cutting = CuttingFactory.Create(item);
-                List<Section> houses = cutting.Cut();
-
-                HouseInfo hi = new HouseInfo();
-                hi.SectionsBySize = houses;
+                ICutting cutting = CuttingFactory.Create(item, sp);
+                var houses = cutting.Cut();
+                totalObject.Add(houses);
             }           
             Assert.AreEqual(houseSpots.Count, 2);
         }

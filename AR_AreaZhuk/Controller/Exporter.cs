@@ -34,28 +34,28 @@ namespace AR_AreaZhuk.Controller
                floors = "19-25";
            else if (countFloors == 9)
                floors = "9";
-           PIK1TableAdapters.C_SectionsTableAdapter sects = new C_SectionsTableAdapter();
-           PIK1TableAdapters.F_nn_FlatsInSectionTableAdapter flatInSection = new F_nn_FlatsInSectionTableAdapter();
-           PIK1TableAdapters.C_Flats_PIK1TableAdapter flatsISectionDB = new C_Flats_PIK1TableAdapter();
-           foreach (var section in sections)
-           {
-               var idSection = sects.InsertSection(countModules / 4, typeSection, floors);
-               foreach (var flat in section.Flats)
-               {
-                   try
-                   {
-                       var idFlat = flatsISectionDB.GetIdFlat(flat.Type, flat.LinkageDO.Trim(), flat.LinkagePOSLE.Trim());
-                       flatInSection.InsertFlatInSection(Convert.ToInt32(idSection), Convert.ToInt32(idFlat), flat.SelectedIndexBottom,
-                           flat.SelectedIndexTop);
-                   }
-                   catch
-                   {
+           //PIK1TableAdapters.C_SectionsTableAdapter sects = new C_SectionsTableAdapter();
+           //PIK1TableAdapters.F_nn_FlatsInSectionTableAdapter flatInSection = new F_nn_FlatsInSectionTableAdapter();
+           //PIK1TableAdapters.C_Flats_PIK1TableAdapter flatsISectionDB = new C_Flats_PIK1TableAdapter();
+           //foreach (var section in sections)
+           //{
+           //    var idSection = sects.InsertSection(countModules / 4, typeSection, floors);
+           //    foreach (var flat in section.Flats)
+           //    {
+           //        try
+           //        {
+           //            var idFlat = flatsISectionDB.GetIdFlat(flat.Type, flat.LinkageDO.Trim(), flat.LinkagePOSLE.Trim());
+           //            flatInSection.InsertFlatInSection(Convert.ToInt32(idSection), Convert.ToInt32(idFlat), flat.SelectedIndexBottom,
+           //                flat.SelectedIndexTop);
+           //        }
+           //        catch
+           //        {
 
-                   }
+           //        }
 
-               }
-           }
-           Environment.Exit(48);
+           //    }
+           //}
+           //Environment.Exit(48);
 
        }
 

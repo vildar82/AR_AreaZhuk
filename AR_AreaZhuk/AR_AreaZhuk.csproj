@@ -11,16 +11,16 @@
     <AssemblyName>AR_AreaZhuk</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>1.0.208.3382</AssemblyVersion>
+    <AssemblyVersion>1.0.215.3703</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -43,13 +43,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\Revit_server\10. Dll's\Dll\PIK\Dlls\AdvancedDataGridView.dll</HintPath>
     </Reference>
-    <Reference Include="AR_Zhuk_DataModel, Version=1.0.204.30, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AR_Zhuk_DataModel, Version=1.0.201.21, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AR_Zhuk_DataModel\AR_Zhuk_DataModel\bin\Debug\AR_Zhuk_DataModel.dll</HintPath>
+      <HintPath>..\AR_Zhuk_DataModel\bin\Debug\AR_Zhuk_DataModel.dll</HintPath>
     </Reference>
-    <Reference Include="BeetlyVisualisation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\beetlyvisualization\BeetlyVisualisation\BeetlyVisualisation\bin\Debug\BeetlyVisualisation.dll</HintPath>
+    <Reference Include="BeetlyVisualisation">
+      <HintPath>Z:\Revit_server\10. Dll's\Dll\PIK\Dlls\BeetlyVisualisation.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus">
       <HintPath>Z:\Revit_server\10. Dll's\Dll\EPPlus.dll</HintPath>
@@ -72,8 +71,6 @@
     <Compile Include="Controller\Exporter.cs" />
     <Compile Include="Controller\FormManager.cs" />
     <Compile Include="Controller\FrameWork.cs" />
-    <Compile Include="DB\DBService.cs" />
-    <Compile Include="DB\IDBService.cs" />
     <Compile Include="FormPreviewImage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,13 +83,17 @@
     <Compile Include="FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Insolation\InsolationFrameWork.cs" />
     <Compile Include="Model\CodeSection.cs" />
+    <Compile Include="Model\HouseInfo.cs" />
+    <Compile Include="Insolation\Insolation.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Section.cs" />
     <Compile Include="PIK1.cs">
       <DependentUpon>PIK1.xsd</DependentUpon>
     </Compile>
@@ -103,7 +104,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\RoomInfo.cs" />
+    <Compile Include="Model\FlatInfo.cs" />
+    <Compile Include="Model\SpotInfo.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="SpotHouseInfo.cs" />
     <EmbeddedResource Include="FormPreviewImage.resx">
       <DependentUpon>FormPreviewImage.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,7 +161,6 @@
   <ItemGroup>
     <None Include="Resources\up.png" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

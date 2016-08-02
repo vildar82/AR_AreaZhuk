@@ -1,12 +1,13 @@
 ﻿using System;
-using AR_AreaZhuk.DB;
+using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.DB;
 using AR_Zhuk_InsSchema.Insolation;
 
 namespace AR_Zhuk_InsSchema.Scheme.Cutting
 {
     public static class CuttingFactory
     {
-        public static ICutting Create (HouseSpot houseSpot)
+        public static ICutting Create (HouseSpot houseSpot, SpotInfo sp)
         {
             ICutting cutting;
             IInsolation insService = new InsolationSection();
@@ -18,7 +19,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             }
             else
             {
-                cutting = new CuttingOrdinary(houseSpot, dbService, insService);
+                cutting = new CuttingOrdinary(houseSpot, dbService, insService, sp);
             }
             return cutting;
         }
