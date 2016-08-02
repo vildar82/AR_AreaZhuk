@@ -87,21 +87,16 @@
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="Insolation\IInsolation.cs" />
+    <Compile Include="Insolation\InsolationSection.cs" />
     <Compile Include="Scheme\Cell.cs" />
-    <Compile Include="Insolation\CellInsBase.cs" />
-    <Compile Include="Insolation\CellInsCorner.cs" />
-    <Compile Include="Insolation\CellInsOrdinary.cs" />
     <Compile Include="Insolation\Side.cs" />
     <Compile Include="Insolation\IInsCheck.cs" />
     <Compile Include="Insolation\InsCheckBase.cs" />
     <Compile Include="Insolation\InsCheckCorner.cs" />
     <Compile Include="Insolation\InsCheckFactory.cs" />
     <Compile Include="Insolation\InsCheckOrdinary.cs" />
-    <Compile Include="Insolation\InsolationFrameWork.cs" />
-    <Compile Include="Insolation\InsolationSpot.cs" />
     <Compile Include="Insolation\LightingStringParser.cs" />
     <Compile Include="Insolation\SideFlatFake.cs" />
-    <Compile Include="Insolation\StartCellHelper.cs" />
     <Compile Include="Model\CodeSection.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

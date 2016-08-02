@@ -101,132 +101,132 @@ namespace AR_AreaZhuk
             return index;
         }
 
-        public List<InsolationSpot> GetInsulations(string path)
-        {
-            List<InsolationSpot> insulations = new List<InsolationSpot>();
-            insulations.Add(GetInsulationSpot("P1|", path));
-            insulations.Add(GetInsulationSpot("P2|", path));
-            return insulations;
-        }
+        //public List<InsolationSpot> GetInsulations(string path)
+        //{
+        //    List<InsolationSpot> insulations = new List<InsolationSpot>();
+        //    insulations.Add(GetInsulationSpot("P1|", path));
+        //    insulations.Add(GetInsulationSpot("P2|", path));
+        //    return insulations;
+        //}
 
-        private static InsolationSpot GetInsulationSpot (string nameSpot, string path)
-        {
-            InsolationSpot insulation = new InsolationSpot();
-            insulation.Name = nameSpot;
-            insulation.Matrix = new string[100, 100];
-            insulation.MaxLeftXY = new List<int>();
-            insulation.MinLeftXY = new List<int>();
+        //private static InsolationSpot GetInsulationSpot (string nameSpot, string path)
+        //{
+        //    InsolationSpot insulation = new InsolationSpot();
+        //    insulation.Name = nameSpot;
+        //    insulation.Matrix = new string[100, 100];
+        //    insulation.MaxLeftXY = new List<int>();
+        //    insulation.MinLeftXY = new List<int>();
 
-            insulation.MaxRightXY = new List<int>();
-            insulation.MinRightXY = new List<int>();
-            List<RoomInfo> roomsInfo = new List<RoomInfo>();
-            // path = @"E:\Задание по инсоляции ПИК1.xlsx";
-            using (var xlPackage = new ExcelPackage(new FileInfo(path.ToString())))
-            {
-                int firstRow = 1;
-                int firstColumn = 1;
-                bool isAllBreak = false;
-                // string nameSpot = "P2|";
-                int minColumn = 5000;
-                int maxColumn = -5000;
-                for (int column = 1; column < 100; column++)
-                {
-                    for (int row = 1; row < 100; row++)
-                    {
-                        if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
-                            .Contains(nameSpot))
-                        {
-                            if (minColumn > column - 1)
-                                minColumn = column - 1;
-                            if (maxColumn < column - 1)
-                                maxColumn = column - 1;
-                            insulation.Matrix[column - 1, row - 1] =
-                                Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
-                        }
-                        else insulation.Matrix[column - 1, row - 1] = string.Empty;
-                    }
-                }
+        //    insulation.MaxRightXY = new List<int>();
+        //    insulation.MinRightXY = new List<int>();
+        //    List<RoomInfo> roomsInfo = new List<RoomInfo>();
+        //    // path = @"E:\Задание по инсоляции ПИК1.xlsx";
+        //    using (var xlPackage = new ExcelPackage(new FileInfo(path.ToString())))
+        //    {
+        //        int firstRow = 1;
+        //        int firstColumn = 1;
+        //        bool isAllBreak = false;
+        //        // string nameSpot = "P2|";
+        //        int minColumn = 5000;
+        //        int maxColumn = -5000;
+        //        for (int column = 1; column < 100; column++)
+        //        {
+        //            for (int row = 1; row < 100; row++)
+        //            {
+        //                if (Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value)
+        //                    .Contains(nameSpot))
+        //                {
+        //                    if (minColumn > column - 1)
+        //                        minColumn = column - 1;
+        //                    if (maxColumn < column - 1)
+        //                        maxColumn = column - 1;
+        //                    insulation.Matrix[column - 1, row - 1] =
+        //                        Convert.ToString(xlPackage.Workbook.Worksheets[1].Cells[row, column].Value);
+        //                }
+        //                else insulation.Matrix[column - 1, row - 1] = string.Empty;
+        //            }
+        //        }
 
 
-                int minRow = 5000;
-                int maxRow = -5000;
-                for (int i = 0; i < 100; i++)
-                {
-                    if (string.IsNullOrEmpty(insulation.Matrix[minColumn, i]))
-                        continue;
-                    if (!insulation.Matrix[0, i].Contains(nameSpot))
-                        continue;
-                    if (minRow > i)
-                        minRow = i;
-                    if (maxRow < i)
-                        maxRow = i;
-                }
-                insulation.MinLeftXY.Add(minColumn);
-                insulation.MinLeftXY.Add(minRow);
-                insulation.MaxLeftXY.Add(minColumn);
-                insulation.MaxLeftXY.Add(maxRow);
+        //        int minRow = 5000;
+        //        int maxRow = -5000;
+        //        for (int i = 0; i < 100; i++)
+        //        {
+        //            if (string.IsNullOrEmpty(insulation.Matrix[minColumn, i]))
+        //                continue;
+        //            if (!insulation.Matrix[0, i].Contains(nameSpot))
+        //                continue;
+        //            if (minRow > i)
+        //                minRow = i;
+        //            if (maxRow < i)
+        //                maxRow = i;
+        //        }
+        //        insulation.MinLeftXY.Add(minColumn);
+        //        insulation.MinLeftXY.Add(minRow);
+        //        insulation.MaxLeftXY.Add(minColumn);
+        //        insulation.MaxLeftXY.Add(maxRow);
 
-                minRow = 5000;
-                maxRow = -500;
-                for (int i = 0; i < 100; i++)
-                {
-                    if (string.IsNullOrEmpty(insulation.Matrix[maxColumn - 1, i]))
-                        continue;
-                    if (!insulation.Matrix[maxColumn - 1, i].Contains(nameSpot))
-                        continue;
-                    if (minRow > i)
-                        minRow = i;
-                    if (maxRow < i)
-                        maxRow = i;
-                }
-                insulation.MinRightXY.Add(maxColumn);
-                insulation.MinRightXY.Add(minRow);
-                insulation.MaxRightXY.Add(maxColumn);
-                insulation.MaxRightXY.Add(maxRow);
-                string info = "";
-                if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] == insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-                {
-                    info += "П образная.";
-                    string s = Convert.ToString(insulation.Matrix[insulation.MinLeftXY[0], insulation.MinLeftXY[1] + 8]);
-                    if (string.IsNullOrEmpty(s))
-                        info += " Низ.";
-                    else info += " Верх.";
-                }
-                else
-                {
-                    if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] > insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-                    {
-                        info += "Угловая. Левый угол. ";
-                    }
-                    else if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] <
-                             insulation.MaxRightXY[1] - insulation.MinRightXY[1])
-                    {
-                        info += "Угловая. Правый угол. ";
-                    }
-                    if (insulation.MinLeftXY[1].Equals(insulation.MinRightXY[1]))
-                        info += "Верх.";
-                    else info += "Низ.";
-                    switch (info)
-                    {
-                        case "Угловая. Левый угол. Верх.":
-                            insulation.IsLeftTopSection = true;
-                            break;
-                        case "Угловая. Правый угол. Низ.":
-                            insulation.IsRightNizSection = true;
-                            break;
-                        case "Угловая. Правый угол. Верх.":
-                            insulation.IsRightTopSection = true;
-                            break;
-                        case "Угловая. Левый угол. Низ.":
-                            insulation.IsLeftNizSection = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            return insulation;
-        }
+        //        minRow = 5000;
+        //        maxRow = -500;
+        //        for (int i = 0; i < 100; i++)
+        //        {
+        //            if (string.IsNullOrEmpty(insulation.Matrix[maxColumn - 1, i]))
+        //                continue;
+        //            if (!insulation.Matrix[maxColumn - 1, i].Contains(nameSpot))
+        //                continue;
+        //            if (minRow > i)
+        //                minRow = i;
+        //            if (maxRow < i)
+        //                maxRow = i;
+        //        }
+        //        insulation.MinRightXY.Add(maxColumn);
+        //        insulation.MinRightXY.Add(minRow);
+        //        insulation.MaxRightXY.Add(maxColumn);
+        //        insulation.MaxRightXY.Add(maxRow);
+        //        string info = "";
+        //        if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] == insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+        //        {
+        //            info += "П образная.";
+        //            string s = Convert.ToString(insulation.Matrix[insulation.MinLeftXY[0], insulation.MinLeftXY[1] + 8]);
+        //            if (string.IsNullOrEmpty(s))
+        //                info += " Низ.";
+        //            else info += " Верх.";
+        //        }
+        //        else
+        //        {
+        //            if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] > insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+        //            {
+        //                info += "Угловая. Левый угол. ";
+        //            }
+        //            else if (insulation.MaxLeftXY[1] - insulation.MinLeftXY[1] <
+        //                     insulation.MaxRightXY[1] - insulation.MinRightXY[1])
+        //            {
+        //                info += "Угловая. Правый угол. ";
+        //            }
+        //            if (insulation.MinLeftXY[1].Equals(insulation.MinRightXY[1]))
+        //                info += "Верх.";
+        //            else info += "Низ.";
+        //            switch (info)
+        //            {
+        //                case "Угловая. Левый угол. Верх.":
+        //                    insulation.IsLeftTopSection = true;
+        //                    break;
+        //                case "Угловая. Правый угол. Низ.":
+        //                    insulation.IsRightNizSection = true;
+        //                    break;
+        //                case "Угловая. Правый угол. Верх.":
+        //                    insulation.IsRightTopSection = true;
+        //                    break;
+        //                case "Угловая. Левый угол. Низ.":
+        //                    insulation.IsLeftNizSection = true;
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    return insulation;
+        //}
 
         public
              List<RoomInfo> GetRoomData(string path)

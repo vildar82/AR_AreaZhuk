@@ -295,7 +295,7 @@ namespace AR_AreaZhuk
             return isContinue;
         }
 
-        public void GetHousePercentage(ref HouseInfo houseInfo, SpotInfo sp1, InsolationSpot insulation)
+        public void GetHousePercentage(ref HouseInfo houseInfo, SpotInfo sp1)
         {
             sp1 = sp1.CopySpotInfo(spotInfo);
             for (int k = 0; k < houseInfo.Sections.Count; k++) //Квартиры
