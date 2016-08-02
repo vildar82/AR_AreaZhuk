@@ -1,4 +1,6 @@
 ﻿using System;
+using AR_AreaZhuk.DB;
+using AR_AreaZhuk.Insolation;
 
 namespace AR_AreaZhuk.Scheme.Cutting
 {
@@ -7,6 +9,8 @@ namespace AR_AreaZhuk.Scheme.Cutting
         public static ICutting Create (HouseSpot houseSpot)
         {
             ICutting cutting;
+            IInsolation insService = null;
+            IDBService dbService = null;
 
             if (houseSpot.IsTower)
             {
@@ -14,7 +18,7 @@ namespace AR_AreaZhuk.Scheme.Cutting
             }
             else
             {
-                cutting = new CuttingOrdinary(houseSpot);
+                cutting = new CuttingOrdinary(houseSpot, dbService, insService);
             }
             return cutting;
         }

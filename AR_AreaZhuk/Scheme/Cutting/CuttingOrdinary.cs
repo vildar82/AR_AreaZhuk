@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AR_AreaZhuk.DB;
+using AR_AreaZhuk.Insolation;
 using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.Scheme.Cutting
@@ -12,10 +14,14 @@ namespace AR_AreaZhuk.Scheme.Cutting
         public static readonly List<int> SectionSteps = new List<int> { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
         private HouseSpot houseSpot;
+        private IDBService dbService;
+        private IInsolation insService;
 
-        public CuttingOrdinary (HouseSpot houseSpot)
+        public CuttingOrdinary (HouseSpot houseSpot, IDBService dbService, IInsolation insService)
         {
             this.houseSpot = houseSpot;
+            this.dbService = dbService;
+            this.insService = insService;
         }
 
         public void Cut()
@@ -29,7 +35,33 @@ namespace AR_AreaZhuk.Scheme.Cutting
             }
         }
 
-        public static string GetSectionFloors(int countFloors)
+        private int GetSectionFloors (int numberSect, SectionType sectionType, int sectionsInHouse)
+        {
+            int floors = houseSpot.HouseOptions.CountFloorsMain;            
+            if (sectionType != SectionType.CornerLeft && sectionType != SectionType.CornerRight)
+            {
+                bool isDominant = false;
+                if (numberSect < 4)
+                {
+                    isDominant = houseSpot.HouseOptions.DominantPositions[numberSect - 1];
+                }
+                else if (numberSect == sectionsInHouse-1)
+                {
+                    isDominant = houseSpot.HouseOptions.DominantPositions.Last();
+                }
+                else if (numberSect == sectionsInHouse -2)
+                {
+                    isDominant = houseSpot.HouseOptions.DominantPositions[3];
+                }
+                if (isDominant)
+                {
+                    floors = houseSpot.HouseOptions.CountFloorsDominant;
+                }
+            }
+            return floors;
+        }
+
+        public static string GetSectionLevels(int countFloors)
         {
             string floors = "10-18";
             if (countFloors > 18 & countFloors <= 25)
@@ -124,14 +156,26 @@ namespace AR_AreaZhuk.Scheme.Cutting
         {            
             Section section = null;
             int curStepInHouse = 1;
+            int sectionsInHouse = houseSteps.Length;
             // Перебор нарезанных секций в доме
-            for (int numberSect = 0; numberSect < houseSteps.Length; numberSect++)
+            for (int numberSect = 0; numberSect < sectionsInHouse; numberSect++)
             {
+                // Размер секции - шагов
                 int sectCountStep = SectionSteps[houseSteps[numberSect]];
                 section = houseSpot.GetSection(curStepInHouse, sectCountStep);
 
+                var type = GetSectionType(section.SectionType);
+                // Этажность секции
+                var floors = GetSectionFloors(numberSect, section.SectionType, sectionsInHouse);
+                var levels = GetSectionLevels(floors);
+
+                // Запрос секций из базы
+                section.Sections = dbService.GetSections(sectCountStep, type, levels);
+
+                // Проверка инсоляции секции
+                section = insService.GetInsolationSections(section);
             }
             return section;
-        }
+        }        
     }
 }

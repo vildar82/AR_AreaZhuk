@@ -72,6 +72,7 @@ namespace AR_AreaZhuk.Scheme
                 
         public Section GetSection (int startStepInHouse, int sectionCountStep)
         {
+            Section section = null; 
             int startStepInSeg;
             var segment = GetSegmentAtStep(startStepInHouse, out startStepInSeg);
             int endStepInSeg = startStepInSeg + sectionCountStep;
@@ -82,7 +83,89 @@ namespace AR_AreaZhuk.Scheme
             {
                 return null;
             }
+
+            section = new Section();
+            section.CountModules = sectionCountStep * WidthOrdinary;
+            section.CountStep = sectionCountStep;
+
+            // Определение типа секции - угловая или рядовая
+            if (endStepInSeg > segment.CountSteps)
+            {
+                if (segment.EndType != SegmentEnd.CornerLeft || segment.EndType != SegmentEnd.CornerRight)
+                {
+                    // какая-то ошибка.
+                    throw new InvalidOperationException("Ожидался угловой сегмент. Непредвиденная ошибка.");
+                }
+                // Угловая                
+                section.IsCorner = true;
+                if (segment.EndType == SegmentEnd.CornerLeft)
+                    section.SectionType = SectionType.CornerLeft;
+                else
+                    section.SectionType = SectionType.CornerRight;
+
+                var nextSegment = Segments[segment.Number - 1];
+
+                int countStepInThisSeg = segment.CountSteps - startStepInSeg;
+                if (countStepInThisSeg > WidthOrdinary + 1)
+                {
+                    // Хвост угловой секции на этом сегменте
+                    section.IsVertical = segment.IsVertical;
+                    section.Direction = segment.IsVertical ? segment.Direction.Row : segment.Direction.Col;
+
+                    // Верхняя инслоляция
+                    section.InsTop = segment.GetModules(segment.ModulesLeft, startStepInSeg, segment.CountSteps);// segment.ModulesLeft.Skip(startStepInSeg-1).ToList();
+                    section.InsTop.Add(nextSegment.ModulesLeft.First());
+                    // Нижняя инсоляция
+                    section.InsBot = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);// segment.ModulesRight.Skip(startStepInSeg - 1).ToList();                    
+                    int modulesInNextSeg = 1 + (WidthOrdinary - 1); // 1 шаг загиба + 3 боковые ячейки
+                    section.InsBot.AddRange(nextSegment.ModulesRight.Take(modulesInNextSeg));
+                    section.InsBot.Reverse();
+                }
+                else
+                {
+                    // Хвост угловой секции на след сегменте
+                    section.IsVertical = nextSegment.IsVertical;
+                    section.Direction = nextSegment.IsVertical ? nextSegment.Direction.Row : nextSegment.Direction.Col;
+
+                    // Верхняя инсоляция
+                    section.InsTop = new List<Module> { segment.ModulesLeft.Last() };
+                    section.InsTop.AddRange(nextSegment.ModulesLeft.Take(CountSteps - 1));
+                    section.InsTop.Reverse();
+                    // Нижняя инсоляция
+                    int skipModules = segment.ModulesLeft.Count - (WidthOrdinary + 1); // кол модулей до последних 5
+                    section.InsBot = segment.ModulesRight.Skip(skipModules).ToList();
+                    section.InsBot.AddRange(nextSegment.ModulesRight.Take(CountSteps - 2)); // -1 шаг загиба, -1 - первый шаг на текущем сегменте (последний в сегменте)
+                }
+            }
+            else
+            {
+                // Рядовая                
+                section.SectionType = SectionType.Ordinary;
+                section.IsVertical = segment.IsVertical;
+                section.Direction = segment.IsVertical ? segment.Direction.Row : segment.Direction.Col;
+
+                // Инсоляция левая
+                var insLeft = segment.GetModules(segment.ModulesLeft, startStepInSeg, segment.CountSteps);
+                // правая
+                var insRight = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);
+                // определение инсоляции по верху и по низу секции для правого/верхнего расположения ЛЛУ
+                if (section.Direction > 0)
+                {                    
+                    section.InsTop = insLeft;
+                    section.InsTop.Reverse();
+                    section.InsBot = insRight;
+                }
+                else
+                {                    
+                    section.InsTop = insRight;
+                    section.InsBot = insLeft;
+                    section.InsBot.Reverse();
+                }
+            }
+            return section;
         }
+
+        
 
         protected void AddSegment (Segment segment)
         {
@@ -108,9 +191,7 @@ namespace AR_AreaZhuk.Scheme
                 res = true;
             }
             return res;
-        }
-
-        
+        }        
 
         /// <summary>
         /// определение стартового сегмента
@@ -178,9 +259,7 @@ namespace AR_AreaZhuk.Scheme
 
             // Сюда не должен никогда попасть
             throw new InvalidOperationException("Не определено начало дома");
-        }
-
-        
+        }        
 
         /// <summary>
         /// Определение остальных сегментов дома

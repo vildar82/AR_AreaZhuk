@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AR_Zhuk_DataModel;
 using OfficeOpenXml;
 
 namespace AR_AreaZhuk.Scheme

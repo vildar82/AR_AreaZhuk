@@ -86,6 +86,7 @@
     <Compile Include="FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Insolation\IInsolation.cs" />
     <Compile Include="Scheme\Cell.cs" />
     <Compile Include="Insolation\CellInsBase.cs" />
     <Compile Include="Insolation\CellInsCorner.cs" />
@@ -124,10 +125,8 @@
     <Compile Include="Scheme\HouseOptions.cs" />
     <Compile Include="Scheme\HouseSpot.cs" />
     <Compile Include="Scheme\ISchemeParser.cs" />
-    <Compile Include="Scheme\Module.cs" />
     <Compile Include="Scheme\ParserExcel.cs" />
     <Compile Include="Scheme\ProjectSpot.cs" />
-    <Compile Include="Scheme\SectionType.cs" />
     <Compile Include="Scheme\Segment.cs" />
     <Compile Include="Scheme\SegmentEnd.cs" />
     <Compile Include="Scheme\SpatialIndex\Node.cs" />

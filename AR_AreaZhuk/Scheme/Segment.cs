@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AR_Zhuk_DataModel;
 
 namespace AR_AreaZhuk.Scheme
 {
@@ -24,6 +25,7 @@ namespace AR_AreaZhuk.Scheme
         public readonly Cell Direction;
         public readonly List<Module> ModulesLeft;
         public readonly List<Module> ModulesRight;
+        public readonly List<Module> ModulesSide;
         public readonly SegmentEnd StartType;
         public readonly SegmentEnd EndType;
         public readonly bool IsVertical;
@@ -34,6 +36,10 @@ namespace AR_AreaZhuk.Scheme
         /// Номер сегмента в доме
         /// </summary>
         public int Number { get; private set; }
+        /// <summary>
+        /// Кол шагов в сегменте.
+        /// Для углового сегмента в начале секции вычтены 3 лишних шага - боковых
+        /// </summary>
         public int CountSteps { get; private set; }
 
         public Segment(Cell cellStartLeft, Cell cellStartRight, Cell direction, ISchemeParser parser, HouseSpot houseSpot)
@@ -50,7 +56,7 @@ namespace AR_AreaZhuk.Scheme
             ModulesRight = parser.GetSteps(cellStartRight, direction, out CellEndRight);
 
             // Кол шагов в секции
-            CountSteps = ModulesLeft.Count > ModulesRight.Count ? ModulesLeft.Count : ModulesRight.Count;
+            CountSteps = ModulesLeft.Count > ModulesRight.Count ? ModulesLeft.Count : ModulesRight.Count;                        
 
             IsVertical = defineVertical();
 
@@ -60,6 +66,27 @@ namespace AR_AreaZhuk.Scheme
             // Определение вида торцов сегмента
             StartType = defineEndType(CellStartLeft, CellStartRight, direction.Negative, true);
             EndType = defineEndType(CellEndLeft, CellEndRight, direction, false);
+
+            // Если старт секции угловой - отнимаем три лишних шага            
+            if (StartType == SegmentEnd.CornerLeft || StartType == SegmentEnd.CornerRight)
+            {
+                int countStepMinus = HouseSpot.WidthOrdinary - 1;
+                CountSteps -= countStepMinus;                
+            }
+        }
+
+        public List<Module> GetModules (List<Module> sourceModules, int startStep, int endStep)
+        {
+            List<Module> resModules;
+            if ((StartType == SegmentEnd.CornerLeft || StartType == SegmentEnd.CornerRight) &&
+                sourceModules.Count > CountSteps)
+            {
+                // три лишних модуля в начале
+                startStep += HouseSpot.WidthOrdinary - 1;
+                endStep += HouseSpot.WidthOrdinary - 1;
+            }
+            resModules = sourceModules.Skip(startStep - 1).Take(endStep - startStep).ToList();
+            return resModules;
         }
 
         /// <summary>
@@ -77,7 +104,7 @@ namespace AR_AreaZhuk.Scheme
             if (EndType == SegmentEnd.CornerLeft || EndType == SegmentEnd.CornerRight)
             {
                 int counToEnd = CountSteps - step;
-                if (counToEnd< HouseSpot.CornerSectionMinStep && counToEnd != HouseSpot.WidthOrdinary+2)
+                if (counToEnd>0 && counToEnd < HouseSpot.CornerSectionMinStep && counToEnd != HouseSpot.WidthOrdinary+2)
                 {
                     return true;
                 }
@@ -105,14 +132,7 @@ namespace AR_AreaZhuk.Scheme
             // Если ячейки на одном уровне, то это не угловой торец
             if (isOnSomeStep(cellEndLeft, cellEndRight))
             {
-                if (parser.IsInsCell(cellEndLeft.Offset(directionOut)))
-                {
-                    endType = SegmentEnd.Normal;
-                }
-                else
-                {
-                    endType = SegmentEnd.End;
-                }
+                endType = parser.IsInsCell(cellEndLeft.Offset(directionOut)) ? SegmentEnd.Normal : SegmentEnd.End;                
             }
             else
             {
