@@ -237,23 +237,23 @@ namespace AR_Zhuk_InsSchema.Scheme
         /// <summary>
         /// Определение типа углового торца
         /// </summary>
-        /// <param name="cellEndLeft">Крайняя левая точка сегмента (по направлению)</param>
-        /// <param name="cellEndRight">Крайняя правая точка сегмента</param>
+        /// <param name="cellLeft">Крайняя левая точка сегмента (по направлению)</param>
+        /// <param name="cellRight">Крайняя правая точка сегмента</param>
         /// <param name="isStartEnd">Это стартовый торец</param>
         /// <returns></returns>
-        private SegmentEnd GetCornerEnd (Cell cellEndLeft, Cell cellEndRight, bool isStartEnd)
+        private SegmentEnd GetCornerEnd (Cell cellLeft, Cell cellRight, bool isStartEnd)
         {
             SegmentEnd resEndCornerType;
-            int dir = IsVertical ? Direction.Row : Direction.Col;
-            int levelLeft = GetCellLevel(CellEndLeft) * dir;
-            int levelRight = GetCellLevel(cellEndRight) * dir;
+            //int dir = IsVertical ? Direction.Row : Direction.Col;
+            int levelLeft = GetCellLevel(cellLeft);
+            //int levelRight = GetCellLevel(cellEndRight) * dir;
             if (isStartEnd)
             {
-                resEndCornerType = levelLeft > levelRight ? SegmentEnd.CornerLeft : SegmentEnd.CornerRight;                
+                resEndCornerType = levelLeft == StartLevel ? SegmentEnd.CornerRight : SegmentEnd.CornerLeft;                
             }
             else
             {
-                resEndCornerType = levelLeft > levelRight ? SegmentEnd.CornerRight : SegmentEnd.CornerLeft;
+                resEndCornerType = levelLeft == EndLevel ? SegmentEnd.CornerRight : SegmentEnd.CornerLeft;
             }
             return resEndCornerType;
         }
@@ -273,7 +273,7 @@ namespace AR_Zhuk_InsSchema.Scheme
                 res = parser.GetSteps(CellEndLeft, dir, out lastCell);
             }
             
-            if (res != null)
+            if (res != null && res.Count == 4)
             {
                 res.RemoveAt(0);
                 res.RemoveAt(res.Count - 1);
@@ -292,9 +292,11 @@ namespace AR_Zhuk_InsSchema.Scheme
         {
             int level = 0;
             int dir = IsVertical ? directionInner.Row : directionInner.Col;
-            int l1 = GetCellLevel(cell1) * dir;
-            int l2 = GetCellLevel(cell2) * dir;            
-            level = Math.Abs(l1 < l2 ? l1 : l2);            
+            int l1 = GetCellLevel(cell1);
+            int l1d = l1 * dir;
+            int l2 = GetCellLevel(cell2);
+            int l2d = l2 * dir;
+            level = l1d < l2d ? l1 : l2;            
             return level;
         }
 

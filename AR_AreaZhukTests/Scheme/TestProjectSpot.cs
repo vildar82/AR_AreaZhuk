@@ -13,27 +13,7 @@ namespace AR_AreaZhukTests.Scheme
     [TestFixture]
     class TestProjectSpot
     {
-        [Test]
-        public void TestGetProjectSpot()
-        {
-            string insolationFile = @"c:\Задание по инсоляции ПИК1.xlsx";
-            List<HouseOptions> options = new List<HouseOptions>() {
-                 new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false }),
-                 new HouseOptions("P2", 15, 25, new List<bool> { true, false, false, false, false })
-            };
-
-            SpotInfo sp = GetSpotInformation();
-            ProjectScheme projectSpot = new ProjectScheme(options, sp);
-
-            // Чтение файла схемы объекта
-            projectSpot.ReadScheme(insolationFile);
-            // Получение домов (пятен)
-            List<HouseSpot> houseSpots = projectSpot.HouseSpots;
-
-            Assert.AreEqual(houseSpots.Count, 2);
-        }
-
-        [Test]
+        //[Test]
         public void TestTotalObjects ()
         {
             // Исходнве данные

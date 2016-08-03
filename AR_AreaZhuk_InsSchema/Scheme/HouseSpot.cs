@@ -91,13 +91,14 @@ namespace AR_Zhuk_InsSchema.Scheme
             // Определение типа секции - угловая или рядовая
             if (endStepInSeg > segment.CountSteps)
             {
+                // Угловая                
+                section.IsCorner = true;
+
                 if (segment.EndType != SegmentEnd.CornerLeft && segment.EndType != SegmentEnd.CornerRight)
                 {
                     // какая-то ошибка.
                     throw new InvalidOperationException("Ожидался угловой сегмент. Непредвиденная ошибка.");
-                }
-                // Угловая                
-                section.IsCorner = true;
+                }                
 
                 // Проверка минимальности шага угловой секции
                 if (section.CountStep < HouseSpot.CornerSectionMinStep)
@@ -105,10 +106,12 @@ namespace AR_Zhuk_InsSchema.Scheme
                     return null;
                 }
 
-                if (segment.EndType == SegmentEnd.CornerLeft)
-                    section.SectionType = SectionType.CornerLeft;
-                else
-                    section.SectionType = SectionType.CornerRight;
+                //if (segment.EndType == SegmentEnd.CornerLeft)
+                //    section.SectionType = SectionType.CornerLeft;
+                //else
+                //    section.SectionType = SectionType.CornerRight;
+                // тип угловой секции
+                section.SectionType = segment.EndType == SegmentEnd.CornerRight ? SectionType.CornerRight : SectionType.CornerLeft;
 
                 var nextSegment = Segments[segment.Number];
 
@@ -126,7 +129,7 @@ namespace AR_Zhuk_InsSchema.Scheme
                     section.InsBot = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);// segment.ModulesRight.Skip(startStepInSeg - 1).ToList();                    
                     int modulesInNextSeg = 1 + (WidthOrdinary - 1); // 1 шаг загиба + 3 боковые ячейки
                     section.InsBot.AddRange(nextSegment.ModulesRight.Take(modulesInNextSeg));
-                    section.InsBot.Reverse();
+                    section.InsBot.Reverse();                    
                 }
                 else
                 {
@@ -212,9 +215,9 @@ namespace AR_Zhuk_InsSchema.Scheme
         private void DefineStartSegment ()
         {
             // Наименьшая длина дома от стартовой точки - определяет начало стартового сегмента.
-            // Влево от стартовой точки 
+            // Вправо от стартовой точки 
             Cell lastCellLeft;            
-            var modulesLeft = parser.GetSteps(cellStart, Cell.Left, out lastCellLeft);
+            var modulesLeft = parser.GetSteps(cellStart, Cell.Right, out lastCellLeft);
             if (modulesLeft.Count == WidthOrdinary)
             {
                 // Сегмент вертикальный сверху-вниз
@@ -234,9 +237,9 @@ namespace AR_Zhuk_InsSchema.Scheme
                 return;
             }
 
-            // от нижней точки влево
+            // от нижней точки вправо
             Cell lastCell;
-            var modules = parser.GetSteps(lastCellDown, Cell.Left, out lastCell);
+            var modules = parser.GetSteps(lastCellDown, Cell.Right, out lastCell);
             if (modules.Count == WidthOrdinary)
             {
                 // Сегмент вертикальный снизу-вверх
@@ -272,7 +275,7 @@ namespace AR_Zhuk_InsSchema.Scheme
 
             // Сюда не должен никогда попасть
             throw new InvalidOperationException("Не определено начало дома");
-        }        
+        }
 
         /// <summary>
         /// Определение остальных сегментов дома
@@ -285,17 +288,26 @@ namespace AR_Zhuk_InsSchema.Scheme
             Segment newSegment = null;
             if (lastSegment.EndType == SegmentEnd.Normal)
             {
-                newSegment =new Segment(lastSegment.CellEndLeft.Offset(lastSegment.Direction),
+                newSegment = new Segment(lastSegment.CellEndLeft.Offset(lastSegment.Direction),
                     lastSegment.CellEndRight.Offset(lastSegment.Direction), lastSegment.Direction, parser, this);
-                               
-            }            
-            else if (lastSegment.EndType != SegmentEnd.End)
+
+            }
+            else if (lastSegment.EndType == SegmentEnd.CornerLeft)
             {
-                Cell newSegmentDir = lastSegment.EndType == SegmentEnd.CornerLeft ? 
-                    lastSegment.Direction.ToLeft() : lastSegment.Direction.ToRight();                
+                Cell newSegmentDir = lastSegment.Direction.ToLeft();
+
                 newSegment = new Segment(lastSegment.CellEndLeft.Offset(lastSegment.Direction).Offset(newSegmentDir),
-                    lastSegment.CellEndRight.Offset(newSegmentDir), newSegmentDir, parser, this);
-            }            
+                    lastSegment.CellEndRight.Offset(newSegmentDir), 
+                    newSegmentDir, parser, this);
+            }
+            else if (lastSegment.EndType == SegmentEnd.CornerRight)
+            {
+                Cell newSegmentDir = lastSegment.Direction.ToRight();
+
+                newSegment = new Segment(lastSegment.CellEndLeft.Offset(newSegmentDir),
+                    lastSegment.CellEndRight.Offset(lastSegment.Direction).Offset(newSegmentDir),
+                    newSegmentDir, parser, this);                
+            }
             else
             {
                 // Конец дома

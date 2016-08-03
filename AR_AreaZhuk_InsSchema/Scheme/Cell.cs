@@ -22,11 +22,11 @@ namespace AR_Zhuk_InsSchema.Scheme
         /// <summary>
         /// Направление влево
         /// </summary>
-        public static readonly Cell Left = new Cell(0, 1);
+        public static readonly Cell Left = new Cell(0, -1);
         /// <summary>
         /// Направление вправо
         /// </summary>
-        public static readonly Cell Right = new Cell(0, -1);        
+        public static readonly Cell Right = new Cell(0, 1);        
 
         /// <summary>
         /// Строка

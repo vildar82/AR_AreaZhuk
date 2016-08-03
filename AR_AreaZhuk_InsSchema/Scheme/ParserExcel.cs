@@ -18,7 +18,7 @@ namespace AR_Zhuk_InsSchema.Scheme
         /// </summary>
         const int SCANAREA = 100;        
 
-        public List<HouseSpot> HouseSpots { get; private set; } = new List<HouseSpot>();
+        public List<HouseSpot> HouseSpots { get; private set; }
 
         ExcelWorksheet worksheet;        
 
@@ -31,6 +31,7 @@ namespace AR_Zhuk_InsSchema.Scheme
 
         public void Parse (string schemeFile)
         {
+            HouseSpots = new List<HouseSpot>();
             // временный файл для копии схемы
             string tempFileScheme = Path.GetTempFileName();
             try
@@ -46,6 +47,8 @@ namespace AR_Zhuk_InsSchema.Scheme
                     UnmergeCell();
                     // Определение домов
                     ScanHouses();
+
+                    HouseSpots.Sort((h1, h2) => h1.SpotName.CompareTo(h2.SpotName));
                 }
             }
             finally
@@ -58,29 +61,20 @@ namespace AR_Zhuk_InsSchema.Scheme
         private void ScanHouses ()
         {
             // от 1 ячейки - сканирование до заданного значения сканирования
-            for (int s = 1; s <= SCANAREA; s++)
+            for (int c = 1; c <= SCANAREA; c++)
             {
                 // проверка колонки
-                for (int c = 1; c <= s; c++)
+                for (int r = 1; r <= SCANAREA; r++)
                 {
-                    checkCell(new Cell(s, c));
-                }
-                // проверка строки
-                for (int r = 1; r < s; r++)
-                {
-                    checkCell(new Cell(r, s));
-                }
+                    checkCell(new Cell(r, c));
+                }                
             }
         }
         
         private void checkCell (Cell cell)
-        {
-            // Если в этой ячейке уже есть дом, то пропускаем
-            if (HouseSpots.Any(h => h.HasCell(cell)))            
-                return;            
-            
+        {            
             // Если это ячейка пятна дома
-            if (IsInsCell(cell))
+            if (IsInsCell(cell) && !HouseSpots.Any(h => h.HasCell(cell)))
             {
                 // Создание пятна дома
                 var houseSpot = new HouseSpot(spotName, cell, this);
