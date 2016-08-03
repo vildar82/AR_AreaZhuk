@@ -54,9 +54,9 @@ namespace AR_Zhuk_InsSchema
 
         /// <summary>
         /// Получение всех вариантов домов для всех пятен домов
-        /// <param name="maxSectionBySize">Максимальное кол-во вариантов секций одного размера</param>
+        /// <param name="maxSectionBySize">Максимальное кол-во вариантов секций одного размера. 0 - все.</param>
         /// </summary>        
-        public List<List<HouseInfo>> GetTotalHouses (int maxSectionBySize)
+        public List<List<HouseInfo>> GetTotalHouses (int maxSectionBySize = 0)
         {
             List<List<HouseInfo>> totalHouses = new List<List<HouseInfo>>();
             foreach (var item in HouseSpots)

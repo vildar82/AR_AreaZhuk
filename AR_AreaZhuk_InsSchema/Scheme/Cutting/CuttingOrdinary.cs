@@ -56,7 +56,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                     hi.SectionsBySize = houseVar;
                     resHouses.Add(hi);
 #if TEST
-                    //Test.CreateHouseImage.TestCreateImage(hi);
+                    Test.CreateHouseImage.TestCreateImage(hi);
 #endif
                 }                
             }

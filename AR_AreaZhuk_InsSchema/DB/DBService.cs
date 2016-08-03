@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 using AR_Zhuk_InsSchema.DB.SAPRTableAdapters;
+using static AR_Zhuk_InsSchema.DB.SAPR;
 
 namespace AR_Zhuk_InsSchema.DB
 {
@@ -20,7 +21,15 @@ namespace AR_Zhuk_InsSchema.DB
             if (!dictSections.TryGetValue(key, out sectionsBySyze))
             {
                 FlatsInSectionsTableAdapter flatsIsSection = new FlatsInSectionsTableAdapter();
-                var flatsDb = flatsIsSection.GetFlatsInTypeSection(section.CountStep, type, levels).ToList();
+                List<FlatsInSectionsRow> flatsDb;
+                if (maxSectionBySize == 0)
+                {
+                    flatsDb = flatsIsSection.GetFlatsInTypeSection(section.CountStep, type, levels).ToList();
+                }
+                else
+                {
+                    flatsDb = flatsIsSection.GetFlatsInTypeSectionMax(maxSectionBySize, section.CountStep, type, levels).ToList();
+                }
 
                 sectionsBySyze = new List<FlatInfo>();                
                 flatsDb = flatsDb.OrderBy(x => x.ID_FlatInSection).ToList();                

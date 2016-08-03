@@ -4957,7 +4957,7 @@ VALUES        (@Type,@ShortType,@AreaLive,@AreaTotalStandart,@AreaTotalStrong,@A
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[4];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT        C_Sections.ID_Section, C_Sections.CountModules, C_Sections.Type AS TypeSection, C_Sections.Levels, C_Flats_PIK1.Type AS TypeFlat, C_Flats_PIK1.ID_Flat, 
@@ -4994,6 +4994,22 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CountModules", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "CountModules", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "TypeSection", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Levels", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Levels", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = @"SELECT        TOP (@max) C_Sections.ID_Section, C_Sections.CountModules, C_Sections.Type AS TypeSection, C_Sections.Levels, C_Flats_PIK1.Type AS TypeFlat, 
+                         C_Flats_PIK1.ID_Flat, F_nn_FlatsInSection.SelectedIndexBottom, F_nn_FlatsInSection.SelectedIndexTop, C_Flats_PIK1.ShortType, C_Flats_PIK1.AreaLive, 
+                         C_Flats_PIK1.AreaTotalStandart, C_Flats_PIK1.AreaTotalStrong, C_Flats_PIK1.AreaInModule, C_Flats_PIK1.SelectedIndexBottom AS Expr1, 
+                         C_Flats_PIK1.SelectedIndexTop AS Expr2, C_Flats_PIK1.LinkageBefore, C_Flats_PIK1.LinkageAfter, C_Flats_PIK1.FactorSmoke, C_Flats_PIK1.LightBottom, 
+                         C_Flats_PIK1.LightTop, C_Flats_PIK1.IndexTop, C_Flats_PIK1.IndexBottom, C_Flats_PIK1.SubZone, F_nn_FlatsInSection.ID_FlatInSection
+FROM            C_Flats_PIK1 INNER JOIN
+                         F_nn_FlatsInSection ON C_Flats_PIK1.ID_Flat = F_nn_FlatsInSection.ID_Flat INNER JOIN
+                         C_Sections ON F_nn_FlatsInSection.ID_Section = C_Sections.ID_Section
+WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @Type) AND (C_Sections.Levels = @Levels)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@max", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@CountModules", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "CountModules", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Type", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "TypeSection", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Levels", global::System.Data.SqlDbType.NVarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Levels", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5037,6 +5053,31 @@ WHERE        (C_Sections.CountModules = @CountModules) AND (C_Sections.Type = @T
             }
             else {
                 this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Levels));
+            }
+            SAPR.FlatsInSectionsDataTable dataTable = new SAPR.FlatsInSectionsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual SAPR.FlatsInSectionsDataTable GetFlatsInTypeSectionMax(int max, int CountModules, string Type, string Levels) {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(max));
+            this.Adapter.SelectCommand.Parameters[1].Value = ((int)(CountModules));
+            if ((Type == null)) {
+                throw new global::System.ArgumentNullException("Type");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Type));
+            }
+            if ((Levels == null)) {
+                this.Adapter.SelectCommand.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[3].Value = ((string)(Levels));
             }
             SAPR.FlatsInSectionsDataTable dataTable = new SAPR.FlatsInSectionsDataTable();
             this.Adapter.Fill(dataTable);

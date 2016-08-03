@@ -17,7 +17,7 @@ namespace AR_AreaZhukTests.Scheme
         public void TestTotalObjects ()
         {
             // Исходнве данные
-            string insolationFile = @"c:\Задание по инсоляции ПИК1.xlsx";
+            string insolationFile = @"c:\work\test\АР\ЖУКИ\Задание по инсоляции ПИК1.xlsx";
             List<HouseOptions> options = new List<HouseOptions>() {
                  new HouseOptions("P1", 15, 25, new List<bool> { false, false, false, false, true }),
                  new HouseOptions("P2", 15, 25, new List<bool> { false, false, false, false, true })
@@ -26,7 +26,6 @@ namespace AR_AreaZhukTests.Scheme
 
             // схема проекта
             ProjectScheme projectSpot = new ProjectScheme(options, sp);
-
             // Чтение файла схемы объекта
             projectSpot.ReadScheme(insolationFile);
             // Получение всех домов

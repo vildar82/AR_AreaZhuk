@@ -84,7 +84,8 @@ namespace AR_Zhuk_InsSchema.Insolation
 
         private bool IsIdenticalSection (FlatInfo curSection, List<FlatInfo> resulsSections)
         {
-            var res = resulsSections.Any(s => IsEqualSections(s.Flats, curSection.Flats));
+            var res = resulsSections.Any(s => (s.IsInvert == curSection.IsInvert) &&
+                                IsEqualSections(s.Flats, curSection.Flats));
             return res;
         }
 

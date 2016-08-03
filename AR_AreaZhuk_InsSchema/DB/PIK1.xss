@@ -8,8 +8,8 @@
   <Shapes>
     <Shape ID="DesignTable:F_nn_FlatsInSection" ZOrder="7" X="437" Y="111" Height="229" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="121" />
     <Shape ID="DesignTable:C_Flats_PIK1" ZOrder="2" X="53" Y="70" Height="381" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="254" />
-    <Shape ID="DesignTable:C_Sections" ZOrder="6" X="440" Y="483" Height="210" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="102" />
-    <Shape ID="DesignTable:FlatsInSections" ZOrder="1" X="888" Y="69" Height="343" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="254" />
+    <Shape ID="DesignTable:C_Sections" ZOrder="6" X="440" Y="483" Height="210" Width="292" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="102" />
+    <Shape ID="DesignTable:FlatsInSections" ZOrder="1" X="888" Y="69" Height="402" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="294" />
   </Shapes>
   <Connectors>
     <Connector ID="DesignRelation:F_nn_FlatsInSection_Flats" ZOrder="5" LineWidth="11">
