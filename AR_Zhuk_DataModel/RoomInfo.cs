@@ -9,6 +9,10 @@ namespace AR_Zhuk_DataModel
 {
     public class RoomInfo : IEquatable<RoomInfo>
     {
+        /// <summary>
+        /// Только для тестов!! Прошлали инсоляция
+        /// </summary>
+        public bool IsInsPassed { get; set; }
 
         public string ShortType { get; set; }
         public string SubZone { get; set; }
@@ -38,8 +42,7 @@ namespace AR_Zhuk_DataModel
 
         public int CurrentOffsetX { get; set; }
         public string ImageNameSuffix { get; set; }
-        public int HorisontalModules { get; set; }
-        public bool IsInsPassed { get; set; }
+        public int HorisontalModules { get; set; }       
 
         public RoomInfo()
         { }

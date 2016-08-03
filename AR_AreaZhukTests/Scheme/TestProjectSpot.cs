@@ -18,7 +18,8 @@ namespace AR_AreaZhukTests.Scheme
         {
             string insolationFile = @"c:\Задание по инсоляции ПИК1.xlsx";
             List<HouseOptions> options = new List<HouseOptions>() {
-                 new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false })
+                 new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false }),
+                 new HouseOptions("P2", 15, 25, new List<bool> { true, false, false, false, false })
             };
 
             SpotInfo sp = GetSpotInformation();
@@ -38,8 +39,8 @@ namespace AR_AreaZhukTests.Scheme
             // Исходнве данные
             string insolationFile = @"c:\Задание по инсоляции ПИК1.xlsx";
             List<HouseOptions> options = new List<HouseOptions>() {
-                 new HouseOptions("P1", 15, 25, new List<bool> { true, false, false, false, false }),
-                 new HouseOptions("P2", 15, 25, new List<bool> { true, false, false, false, false })
+                 new HouseOptions("P1", 15, 25, new List<bool> { false, false, false, false, true }),
+                 new HouseOptions("P2", 15, 25, new List<bool> { false, false, false, false, true })
             };
             SpotInfo sp = GetSpotInformation();
 

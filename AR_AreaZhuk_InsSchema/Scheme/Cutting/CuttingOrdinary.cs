@@ -137,9 +137,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             DefineSectionsEnds(resSections);
 
             return resSections;
-        }
-
-        
+        }       
 
         private int GetSectionFloors (int numberSect, int sectionsInHouse, bool isCorner)
         {
@@ -195,7 +193,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
 
         private List<int[]> GetAllSteps ()
         {            
-            int houseSteps = 47;
+            int houseSteps = houseSpot.CountSteps;
             int sectMinStep = SectionSteps[0];
             int maxSectionsInHouse = houseSteps / sectMinStep;            
             int[] selectedSectionsStep = new int[maxSectionsInHouse];
@@ -264,6 +262,8 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
         /// <param name="sections"></param>
         private void DefineSectionsEnds (List<Section> sections)
         {
+            if (sections == null) return;
+
             for (int i = 0; i < sections.Count; i++)
             {
                 var section = sections[i];

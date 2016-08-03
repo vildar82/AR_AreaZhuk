@@ -91,7 +91,7 @@ namespace AR_Zhuk_InsSchema.Scheme
             // Определение типа секции - угловая или рядовая
             if (endStepInSeg > segment.CountSteps)
             {
-                if (segment.EndType != SegmentEnd.CornerLeft || segment.EndType != SegmentEnd.CornerRight)
+                if (segment.EndType != SegmentEnd.CornerLeft && segment.EndType != SegmentEnd.CornerRight)
                 {
                     // какая-то ошибка.
                     throw new InvalidOperationException("Ожидался угловой сегмент. Непредвиденная ошибка.");
@@ -110,7 +110,7 @@ namespace AR_Zhuk_InsSchema.Scheme
                 else
                     section.SectionType = SectionType.CornerRight;
 
-                var nextSegment = Segments[segment.Number - 1];
+                var nextSegment = Segments[segment.Number];
 
                 int countStepInThisSeg = segment.CountSteps - startStepInSeg;
                 if (countStepInThisSeg > WidthOrdinary + 1)

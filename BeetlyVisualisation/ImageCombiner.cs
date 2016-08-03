@@ -377,10 +377,6 @@ namespace BeetlyVisualisation
             return imgHouse;
         }
 
-
-
-
-
         private Bitmap generateOneSection (ImgSection section)
         {
             int width = section.Lenght * ModuleWidth + ModuleWidth / 9;
@@ -476,11 +472,7 @@ namespace BeetlyVisualisation
                     using (Font arialFont = new Font("Arial", 20))
                     {
                         canvas.DrawString(section.SectionInfo.IdSection.ToString(), arialFont, Brushes.Black, width * 0.5f, height * 0.5f, format);
-                    }
-                    using (Font arialFont = new Font("Arial", 20))
-                    {
-                        canvas.DrawString(section.SectionInfo.StartSextionCell, arialFont, Brushes.Blue, width * 0.5f, height * 0.4f, format);
-                    }
+                    }                    
                     if (!imgFlat.IsInsPassed)
                     {
                         using (Font arialFont = new Font("Arial", 16))
@@ -489,7 +481,6 @@ namespace BeetlyVisualisation
                         }
                     }
                 }
-
 
                 // canvas.RotateTransform(7);
                 canvas.Save();
