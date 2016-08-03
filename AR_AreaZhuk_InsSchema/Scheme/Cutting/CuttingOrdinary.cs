@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
 {
     class CuttingOrdinary : ICutting
     {
-        public static readonly List<int> SectionSteps = new List<int> { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+        public static readonly List<int> SectionSteps = new List<int> { 7, 8, 9, 10, 11, 12, 13, 14 };
 
         private List<string> failedSections;
 
@@ -41,15 +42,22 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             for (int h = 0; h < housesSteps.Count; h++)
             {
                 var houseSteps = housesSteps[h];
+
+#if TEST
+                var sisexTest = string.Join(".", houseSteps);
+#endif
+
                 var houseVar = GetHouseVariant(houseSteps);
+
                 if (houseVar != null)
                 {
                     HouseInfo hi = new HouseInfo();
                     hi.SpotInf = sp;
                     hi.SectionsBySize = houseVar;
                     resHouses.Add(hi);
-
+#if TEST
                     Test.CreateHouseImage.TestCreateImage(hi);
+#endif
                 }                
             }
             return resHouses;
@@ -62,7 +70,9 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
         }
 
         private List<Section> GetHouseVariant (int[] houseSteps)
-        {            
+        {
+            Debug.WriteLine("Размерность дома: " + string.Join(",", houseSteps));
+
             List<Section> resSections = new List<Section>();            
             int curStepInHouse = 1;
             int sectionsInHouse = houseSteps.Length;
@@ -80,24 +90,30 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                 // Размер секции - шагов
                 var sectCountStep = SectionSteps[houseSteps[numberSect - 1]];
 
+                // ключ размерности секции
                 key = GetSectionDataKey(sectCountStep, numberSect, curStepInHouse);
                 if (failedSections.Contains(key))
                 {
+                    Debug.WriteLine("failedSection - " + key);
+
                     fail = true;
                     addToFailed = false;
                     break;
                 }            
 
+                // Отрезка секции из дома
                 section = houseSpot.GetSection(curStepInHouse, sectCountStep);
                 if (section == null)
                 {
+                    Debug.WriteLine("fail нарезки - curStepInHouse=" + curStepInHouse + "; sectCountStep=" + sectCountStep);
+
                     fail = true;
                     break;
                 }
                 curStepInHouse += sectCountStep;
 
-                var type = GetSectionType(section.SectionType);
-                // Этажность секции
+                // Этажность секции, тип
+                var type = GetSectionType(section.SectionType);                
                 section.Floors = GetSectionFloors(numberSect, sectionsInHouse, section.IsCorner);
                 var levels = GetSectionLevels(section.Floors);
 
@@ -111,6 +127,8 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                 section.Sections = dbService.GetSections(section, type, levels, sp, maxSectionBySize);
                 if (section.Sections.Count == 0)
                 {
+                    Debug.WriteLine("fail no in db - шаг=" + section.CountStep + "; type=" + type + "; levels=" + levels);
+
                     fail = true;
                     break;
                 }
@@ -119,6 +137,8 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                 List<FlatInfo> flatsCheckedIns = insService.GetInsolationSections(section);
                 if (flatsCheckedIns.Count == 0)
                 {
+                    Debug.WriteLine("fail ins");
+
                     fail = true;
                     break;
                 }
@@ -149,11 +169,11 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                 {
                     isDominant = houseSpot.HouseOptions.DominantPositions[numberSect - 1];
                 }
-                else if (numberSect == sectionsInHouse-1)
+                else if (numberSect == sectionsInHouse)
                 {
                     isDominant = houseSpot.HouseOptions.DominantPositions.Last();
                 }
-                else if (numberSect == sectionsInHouse -2)
+                else if (numberSect == sectionsInHouse -1)
                 {
                     isDominant = houseSpot.HouseOptions.DominantPositions[3];
                 }
@@ -267,8 +287,12 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             for (int i = 0; i < sections.Count; i++)
             {
                 var section = sections[i];
-                var sectionPrev = sections.ElementAt(i-1);
-                var sectionNext = sections.ElementAt(i + 1);
+                Section sectionPrev = null;
+                if (i!=0)
+                    sectionPrev = sections.ElementAt(i-1);
+                Section sectionNext = null;
+                if (i!= sections.Count-1)
+                    sectionNext = sections.ElementAt(i + 1);
                                 
                 section.JointStart = GetJoint(section, sectionPrev);
                 section.JointEnd = GetJoint(section, sectionNext);
@@ -292,6 +316,6 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             {
                 return Joint.Seam;
             }
-        }
+        }        
     }
 }

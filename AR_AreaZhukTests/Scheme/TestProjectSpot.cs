@@ -13,7 +13,7 @@ namespace AR_AreaZhukTests.Scheme
     [TestFixture]
     class TestProjectSpot
     {
-        //[Test]
+        [Test]
         public void TestTotalObjects ()
         {
             // Исходнве данные

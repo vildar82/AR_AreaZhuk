@@ -78,8 +78,7 @@ namespace AR_Zhuk_InsSchema.Scheme
             int endStepInSeg = startStepInSeg + sectionCountStep-1;
             
             // Еслм начальный шаг или конечный секции попали в мертвую зону (угол), то такой дом нельзя скомпановать
-            if (segment.StartStepInDeadZone(startStepInSeg) ||
-                segment.EndStepInDeadZone(endStepInSeg))
+            if (segment.StepInDeadZone(startStepInSeg, endStepInSeg))
             {
                 return null;
             }
@@ -109,9 +108,7 @@ namespace AR_Zhuk_InsSchema.Scheme
                 //if (segment.EndType == SegmentEnd.CornerLeft)
                 //    section.SectionType = SectionType.CornerLeft;
                 //else
-                //    section.SectionType = SectionType.CornerRight;
-                // тип угловой секции
-                section.SectionType = segment.EndType == SegmentEnd.CornerRight ? SectionType.CornerRight : SectionType.CornerLeft;
+                //    section.SectionType = SectionType.CornerRight;                
 
                 var nextSegment = Segments[segment.Number];
 
@@ -119,14 +116,18 @@ namespace AR_Zhuk_InsSchema.Scheme
                 if (countStepInThisSeg > WidthOrdinary + 1)
                 {
                     // Хвост угловой секции на этом сегменте
+
+                    // тип угловой секции
+                    section.SectionType = segment.EndType == SegmentEnd.CornerRight ? SectionType.CornerLeft : SectionType.CornerRight;
+
                     section.IsVertical = segment.IsVertical;
                     section.Direction = segment.IsVertical ? segment.Direction.Row : segment.Direction.Col;
 
                     // Верхняя инслоляция
-                    section.InsTop = segment.GetModules(segment.ModulesLeft, startStepInSeg, segment.CountSteps);// segment.ModulesLeft.Skip(startStepInSeg-1).ToList();
+                    section.InsTop = segment.GetModules(segment.ModulesLeft, startStepInSeg, segment.CountSteps);
                     section.InsTop.Add(nextSegment.ModulesLeft.First());
                     // Нижняя инсоляция
-                    section.InsBot = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);// segment.ModulesRight.Skip(startStepInSeg - 1).ToList();                    
+                    section.InsBot = segment.GetModules(segment.ModulesRight, startStepInSeg, segment.CountSteps);
                     int modulesInNextSeg = 1 + (WidthOrdinary - 1); // 1 шаг загиба + 3 боковые ячейки
                     section.InsBot.AddRange(nextSegment.ModulesRight.Take(modulesInNextSeg));
                     section.InsBot.Reverse();                    
@@ -134,6 +135,10 @@ namespace AR_Zhuk_InsSchema.Scheme
                 else
                 {
                     // Хвост угловой секции на след сегменте
+
+                    // тип угловой секции
+                    section.SectionType = segment.EndType == SegmentEnd.CornerRight ? SectionType.CornerRight : SectionType.CornerLeft;
+
                     section.IsVertical = nextSegment.IsVertical;
                     section.Direction = nextSegment.IsVertical ? nextSegment.Direction.Row : nextSegment.Direction.Col;
 

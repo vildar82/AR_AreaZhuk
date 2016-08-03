@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
@@ -16,10 +17,11 @@ namespace AR_Zhuk_InsSchema.Test
         static string testsResultFolder;
         static string steps;
         static int countSteps;
+        static string curDir;
 
         static CreateHouseImage()
         {
-            var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             testsResultFolder = Path.Combine(curDir, "Результаты");
 
             if (!Directory.Exists(testsResultFolder))
@@ -45,8 +47,13 @@ namespace AR_Zhuk_InsSchema.Test
             //go.SpotInf.RealArea = area;
             go.GUID = Guid.NewGuid().ToString();
             // ob.Add(go);
+            house.Sections = new List<FlatInfo>();
+            foreach (var item in house.SectionsBySize)
+            {
+                house.Sections.Add(item.Sections[0]);
+            }            
 
-            string spotName = house.Sections.First().SpotOwner.Split('|')[0];
+            string spotName = house.SectionsBySize[0].SpotOwner;
             string curSteps = string.Join(".", house.Sections.Select(s=>s.CountStep.ToString()));
 
             if (steps != curSteps)
@@ -62,17 +69,17 @@ namespace AR_Zhuk_InsSchema.Test
             string ids = string.Join("_", house.Sections.Select(s => s.IdSection.ToString()));
             string name = $"{contFileString}_{spotName}_{steps}_{ids}.png";            
 
-            string imagePath = Path.Combine( testsResultFolder, name);
+            string imagePath = Path.Combine(testsResultFolder, name);
 
             string sourceImgFlats = @"z:\Revit_server\13. Settings\02_RoomManager\00_PNG_ПИК1\";
-            string ExcelDataPath = "БД_Параметрические данные квартир ПИК1 -Не трогать.xlsx";
+            string ExcelDataPath = Path.Combine(curDir, "БД_Параметрические данные квартир ПИК1 -Не трогать.xlsx");
 
             BeetlyVisualisation.ImageCombiner imgComb = new BeetlyVisualisation.ImageCombiner(go, ExcelDataPath, sourceImgFlats, 72);
             var img = imgComb.generateGeneralObject();
             img.Save(imagePath, ImageFormat.Png);
 
             // Лог дома
-            LogHouse(house, contFileString);
+            //LogHouse(house, contFileString);
         }
 
         private static void LogHouse (HouseInfo house, string countFileString)

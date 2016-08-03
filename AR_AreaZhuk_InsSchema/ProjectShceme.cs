@@ -63,7 +63,10 @@ namespace AR_Zhuk_InsSchema
             {
                 ICutting cutting = CuttingFactory.Create(item, sp);
                 var houses = cutting.Cut(maxSectionBySize);
-                totalHouses.Add(houses);
+                if (houses.Count != 0)
+                {
+                    totalHouses.Add(houses);
+                }
             }
             return totalHouses;
         }

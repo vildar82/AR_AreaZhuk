@@ -10,7 +10,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
         public static ICutting Create (HouseSpot houseSpot, SpotInfo sp)
         {
             ICutting cutting;
-            IInsolation insService = new InsolationSection();
+            IInsolation insService = new InsolationSection(sp);
             IDBService dbService = new DBService();
 
             if (houseSpot.IsTower)

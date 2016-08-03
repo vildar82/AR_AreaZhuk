@@ -17,6 +17,13 @@ namespace AR_Zhuk_InsSchema.Insolation
                 new RoomInsolation ("Четырехкомнатная", 4, new List<string>() { "2C", "C+2B" })
             };
 
+        private readonly SpotInfo spOrig;
+
+        public InsolationSection(SpotInfo sp)
+        {
+            this.spOrig = sp;
+        }
+
         /// <summary>
         /// Проверка инсоляции секции
         /// </summary>
@@ -30,20 +37,25 @@ namespace AR_Zhuk_InsSchema.Insolation
 
             foreach (var sectFlats in section.Sections)
             {
-                // Пропуск секций с малым количеством квартир (меньше 5 (вместе с ЛЛУ))
-                //if (sect.Flats.Count < 5)
-                //    continue;
+                // Проверка однотипной секции
+                if (IsIdenticalSection(sectFlats, resFlats))
+                {
+                    continue;
+                }
+                string code = GetFlatCode(sectFlats);
 
 #if TEST
                 //// !!!! Только для тестирования!!!! - добавление всех секций с пометками квартир прошедших/непрошедших инсоляцию
                 FlatInfo flats = NewFlats(section, sectFlats, isInvert: false);
                 insCheck.CheckSection(flats, isRightOrTopLLu: true);
+                flats.Code = code;
                 resFlats.Add(flats);
 
                 if (!section.IsCorner)
                 {
                     flats = NewFlats(section, sectFlats, isInvert: true);
                     insCheck.CheckSection(flats, isRightOrTopLLu: false);
+                    flats.Code = code;
                     resFlats.Add(flats);
                 }
 #else
@@ -51,21 +63,67 @@ namespace AR_Zhuk_InsSchema.Insolation
                 if (insCheck.CheckSection(sectFlats, isRightOrTopLLu: true))
                 {
                     FlatInfo flats = NewFlats(section, sectFlats, isInvert:false);
+                    flats.Code = code;
                     resFlats.Add(flats);
                 }
 
                 if (!section.IsCorner)
                 {
                     // Проверка инсоляции инвертированной секции
+                    FlatInfo flats = NewFlats(section, sectFlats, isInvert: true);                    
                     if (insCheck.CheckSection(sectFlats, isRightOrTopLLu: false))
-                    {
-                        FlatInfo flats = NewFlats(section, sectFlats, isInvert: true);
+                    {                        
+                        flats.Code = code;
                         resFlats.Add(flats);
                     }
                 }               
 #endif
             }
             return resFlats;
+        }
+
+        private bool IsIdenticalSection (FlatInfo curSection, List<FlatInfo> resulsSections)
+        {
+            var res = resulsSections.Any(s => IsEqualSections(s.Flats, curSection.Flats));
+            return res;
+        }
+
+        public bool IsEqualSections (List<RoomInfo> section1, List<RoomInfo> section2)
+        {
+            if (section1.Count != section2.Count) return false;
+            foreach (var flat1 in section1)
+            {
+                int countInSection1 = section1.Where(x => x.ShortType.Equals(flat1.ShortType)).ToList().Count();
+                int countInSection2 = section2.Where(x => x.ShortType.Equals(flat1.ShortType)).ToList().Count();
+                if (countInSection1 != countInSection2)
+                    return false;
+            }
+            return true;
+        }
+
+        private string GetFlatCode(FlatInfo flats)
+        {
+            var sp = spOrig.CopySpotInfo(spOrig);
+            for (int l = 0; l < flats.Flats.Count; l++) //Квартиры
+            {
+                if (flats.Flats[l].SubZone.Equals("0")) continue;
+                var reqs =
+                    sp.requirments.Where(
+                        x => x.CodeZone.Equals(flats.Flats[l].SubZone))
+                        .Where(
+                            x =>
+                                x.MaxArea + 5 >= flats.Flats[l].AreaTotal &
+                                x.MinArea - 5 <= flats.Flats[l].AreaTotal)
+                        .ToList();
+                if (reqs.Count == 0) continue;
+                reqs[0].RealCountFlats++;
+            }
+            string code = "";
+            foreach (var r in sp.requirments)
+            {
+                code += r.RealCountFlats.ToString();
+            }
+            return code;            
         }
 
         public RoomInsolation FindRule (RoomInfo flat)

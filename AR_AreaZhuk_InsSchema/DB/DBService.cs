@@ -30,15 +30,18 @@ namespace AR_Zhuk_InsSchema.DB
                 foreach (var gg in groupFlats)
                 {
                     fl = new FlatInfo();
+
+                    fl.Floors = section.Floors;
                     fl.CountStep = section.CountStep;
                     fl.Flats = new List<RoomInfo>();
                     fl.IsCorner = section.IsCorner;
                     isValidSection = true;
+                    bool isContains = false;
                     for (int i = 0; i < gg.Count; i++)
                     {
                         var f = gg[i];
                         fl.IdSection = f.ID_Section;
-                        bool isContains = false;
+                        isContains = false;
                         if (!f.SubZone.Equals("0"))
                         {
                             isValidSection = false;
@@ -66,17 +69,19 @@ namespace AR_Zhuk_InsSchema.DB
                         fflat.SelectedIndexTop = f.SelectedIndexTop;
                         fflat.SelectedIndexBottom = f.SelectedIndexBottom;
                         fl.Flats.Add(fflat);
-
-                        // Проверка максимального кол-ва секций одного размера
-                        if (maxSectionBySize != 0 && sectionsBySyze.Count == maxSectionBySize)
-                        {
-                            break;
-                        }
-
+                        
                         if (!isValidSection)
                             continue;
+
                     }
+                    if (!isContains)
+                        continue;
                     sectionsBySyze.Add(fl);                    
+
+                    if (maxSectionBySize != 0 && sectionsBySyze.Count == maxSectionBySize)
+                    {
+                        break;
+                    }
                 }
                 dictSections.Add(key, sectionsBySyze);
             }
