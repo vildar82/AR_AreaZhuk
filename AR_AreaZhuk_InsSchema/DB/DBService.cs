@@ -12,7 +12,7 @@ namespace AR_Zhuk_InsSchema.DB
     {
         private static Dictionary<string, List<FlatInfo>> dictSections = new Dictionary<string, List<FlatInfo>>();
 
-        public List<FlatInfo> GetSections (Section section, string type, string levels, SpotInfo sp)
+        public List<FlatInfo> GetSections (Section section, string type, string levels, SpotInfo sp, int maxSectionBySize)
         {
             List<FlatInfo> sectionsBySyze;
             string key = section.CountStep + type + levels;
@@ -67,8 +67,11 @@ namespace AR_Zhuk_InsSchema.DB
                         fflat.SelectedIndexBottom = f.SelectedIndexBottom;
                         fl.Flats.Add(fflat);
 
-                        //if (sectionsBySyze.Count < 250) continue;
-                        //break;
+                        // Проверка максимального кол-ва секций одного размера
+                        if (maxSectionBySize != 0 && sectionsBySyze.Count == maxSectionBySize)
+                        {
+                            break;
+                        }
 
                         if (!isValidSection)
                             continue;

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 
-namespace AR_AreaZhuk.Test
+namespace AR_Zhuk_InsSchema.Test
 {
     static class CreateHouseImage
     {

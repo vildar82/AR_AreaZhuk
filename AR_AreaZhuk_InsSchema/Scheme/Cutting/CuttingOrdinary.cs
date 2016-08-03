@@ -19,6 +19,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
         private IDBService dbService;
         private IInsolation insService;
         private SpotInfo sp;
+        private int maxSectionBySize;
 
         public CuttingOrdinary (HouseSpot houseSpot, IDBService dbService, IInsolation insService, SpotInfo sp)
         {
@@ -28,8 +29,9 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             this.sp = sp;
         }
 
-        public List<HouseInfo> Cut ()
+        public List<HouseInfo> Cut (int maxSectionBySize)
         {
+            this.maxSectionBySize = maxSectionBySize;
             failedSections = new List<string>();
 
             List<HouseInfo> resHouses = new List<HouseInfo>();
@@ -46,6 +48,8 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                     hi.SpotInf = sp;
                     hi.SectionsBySize = houseVar;
                     resHouses.Add(hi);
+
+                    Test.CreateHouseImage.TestCreateImage(hi);
                 }                
             }
             return resHouses;
@@ -71,7 +75,8 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             for (int numberSect = 1; numberSect <= sectionsInHouse; numberSect++)
             {
                 fail = false;
-                Section section = null;                
+                Section section = null;   
+                             
                 // Размер секции - шагов
                 var sectCountStep = SectionSteps[houseSteps[numberSect - 1]];
 
@@ -93,7 +98,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
 
                 var type = GetSectionType(section.SectionType);
                 // Этажность секции
-                section.Floors = GetSectionFloors(numberSect, section.SectionType, sectionsInHouse);
+                section.Floors = GetSectionFloors(numberSect, sectionsInHouse, section.IsCorner);
                 var levels = GetSectionLevels(section.Floors);
 
                 section.NumberInSpot = numberSect;
@@ -103,7 +108,7 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                 section.IsEndSectionInHouse = numberSect == sectionsInHouse;
 
                 // Запрос секций из базы
-                section.Sections = dbService.GetSections(section, type, levels, sp);
+                section.Sections = dbService.GetSections(section, type, levels, sp, maxSectionBySize);
                 if (section.Sections.Count == 0)
                 {
                     fail = true;
@@ -128,13 +133,18 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
                     failedSections.Add(key);
             }
 
+            // Определение торцов секций
+            DefineSectionsEnds(resSections);
+
             return resSections;
         }
 
-        private int GetSectionFloors (int numberSect, SectionType sectionType, int sectionsInHouse)
+        
+
+        private int GetSectionFloors (int numberSect, int sectionsInHouse, bool isCorner)
         {
             int floors = houseSpot.HouseOptions.CountFloorsMain;            
-            if (sectionType != SectionType.CornerLeft && sectionType != SectionType.CornerRight)
+            if (!isCorner)
             {
                 bool isDominant = false;
                 if (numberSect < 4)
@@ -248,6 +258,40 @@ namespace AR_Zhuk_InsSchema.Scheme.Cutting
             return res;
         }
 
-        
+        /// <summary>
+        /// Определение торцов в секциях
+        /// </summary>
+        /// <param name="sections"></param>
+        private void DefineSectionsEnds (List<Section> sections)
+        {
+            for (int i = 0; i < sections.Count; i++)
+            {
+                var section = sections[i];
+                var sectionPrev = sections.ElementAt(i-1);
+                var sectionNext = sections.ElementAt(i + 1);
+                                
+                section.JointStart = GetJoint(section, sectionPrev);
+                section.JointEnd = GetJoint(section, sectionNext);
+            }
+        }
+
+        private Joint GetJoint(Section section, Section sectionJoint)
+        {
+            if (sectionJoint == null)
+                return Joint.End;
+            
+            if (section.Floors> sectionJoint.Floors)
+            {
+                return Joint.End;
+            }
+            else if (section.Floors == sectionJoint.Floors)
+            {
+                return Joint.None;
+            }
+            else
+            {
+                return Joint.Seam;
+            }
+        }
     }
 }

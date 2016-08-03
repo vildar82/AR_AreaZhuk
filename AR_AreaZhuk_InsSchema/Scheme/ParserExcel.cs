@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema.Insolation;
 using OfficeOpenXml;
 
 namespace AR_Zhuk_InsSchema.Scheme
@@ -18,7 +19,8 @@ namespace AR_Zhuk_InsSchema.Scheme
         const int SCANAREA = 100;        
 
         public List<HouseSpot> HouseSpots { get; private set; } = new List<HouseSpot>();
-        ExcelWorksheet worksheet;
+
+        ExcelWorksheet worksheet;        
 
         Module module;
         string spotName;

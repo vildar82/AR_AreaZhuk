@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Insolation\LightingStringParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scheme\Cutting\TestCutting.cs" />
     <Compile Include="Scheme\TestProjectSpot.cs" />
   </ItemGroup>
   <ItemGroup>

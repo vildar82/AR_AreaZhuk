@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -77,23 +78,26 @@
     <Compile Include="Scheme\HouseSpot.cs" />
     <Compile Include="Scheme\ISchemeParser.cs" />
     <Compile Include="Scheme\ParserExcel.cs" />
-    <Compile Include="Scheme\ProjectSpot.cs" />
+    <Compile Include="ProjectShceme.cs" />
     <Compile Include="Scheme\Segment.cs" />
     <Compile Include="Scheme\SegmentEnd.cs" />
     <Compile Include="Scheme\SpatialIndex\Node.cs" />
     <Compile Include="Scheme\SpatialIndex\Point.cs" />
     <Compile Include="Scheme\SpatialIndex\Rectangle.cs" />
     <Compile Include="Scheme\SpatialIndex\RTree.cs" />
+    <Compile Include="Test\CreateHouseImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AR_Zhuk_DataModel\AR_Zhuk_DataModel.csproj">
       <Project>{a9e4c50e-13ce-4c52-8046-8a1a6c503403}</Project>
       <Name>AR_Zhuk_DataModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BeetlyVisualisation\BeetlyVisualisation.csproj">
+      <Project>{61cf9608-66bd-4fd3-81f6-58445c10446b}</Project>
+      <Name>BeetlyVisualisation</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Test\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="DB\PIK1.xsc">

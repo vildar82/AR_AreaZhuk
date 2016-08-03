@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
+using AR_Zhuk_InsSchema;
 using AR_Zhuk_InsSchema.Scheme;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace AR_AreaZhukTests.Scheme
             };
 
             SpotInfo sp = GetSpotInformation();
-            ProjectSpot projectSpot = new ProjectSpot(options, sp);
+            ProjectScheme projectSpot = new ProjectScheme(options, sp);
 
             // Чтение файла схемы объекта
             projectSpot.ReadScheme(insolationFile);
@@ -42,13 +43,13 @@ namespace AR_AreaZhukTests.Scheme
             };
             SpotInfo sp = GetSpotInformation();
 
-            // 
-            ProjectSpot projectSpot = new ProjectSpot(options, sp);
+            // схема проекта
+            ProjectScheme projectSpot = new ProjectScheme(options, sp);
 
             // Чтение файла схемы объекта
             projectSpot.ReadScheme(insolationFile);
             // Получение всех домов
-            var totalHouses = projectSpot.GetTotalHouses();
+            var totalHouses = projectSpot.GetTotalHouses(10);
 
             Assert.AreEqual(totalHouses.Count, 2);
         }
