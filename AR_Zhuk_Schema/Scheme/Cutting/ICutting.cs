@@ -5,6 +5,6 @@ namespace AR_Zhuk_Schema.Scheme.Cutting
 {
     public interface ICutting
     {
-        List<HouseInfo> Cut (int maxSectionBySize);
+        List<HouseInfo> Cut ();
     }
 }

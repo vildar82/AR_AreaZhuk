@@ -54,15 +54,15 @@ namespace AR_Zhuk_Schema
 
         /// <summary>
         /// Получение всех вариантов домов для всех пятен домов
-        /// <param name="maxSectionBySize">Максимальное кол-во вариантов секций одного размера. 0 - все.</param>
+        /// <param name="maxSectionBySize">Максимальное кол-во вариантов секций одного размера загружаемых из базы. 0 - все.</param>
         /// </summary>        
         public List<List<HouseInfo>> GetTotalHouses (int maxSectionBySize = 0)
         {
             List<List<HouseInfo>> totalHouses = new List<List<HouseInfo>>();
             foreach (var item in HouseSpots)
             {
-                ICutting cutting = CuttingFactory.Create(item, sp);
-                var houses = cutting.Cut(maxSectionBySize);
+                ICutting cutting = CuttingFactory.Create(item, sp, maxSectionBySize);
+                var houses = cutting.Cut();
                 if (houses.Count != 0)
                 {
                     totalHouses.Add(houses);

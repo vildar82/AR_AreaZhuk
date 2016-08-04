@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 using AR_Zhuk_DataModel;
 using AR_Zhuk_Schema;
 using AR_Zhuk_Schema.Scheme;
-using NUnit.Framework;
 
-namespace AR_Zhuk_Scheme_Tests.Scheme
+namespace AR_Zhuk_Scheme_ConsoleTest.Scheme
 {
-    [TestFixture]
     class TestProjectScheme
-    {
-        [Test]
+    {        
         public void TestTotalHouses ()
         {
+            CreateHouseImage testCreateHouse = new CreateHouseImage();
+
             // Исходнве данные
             string insolationFile = @"c:\work\test\АР\ЖУКИ\Задание по инсоляции ПИК1.xlsx";
             List<HouseOptions> options = new List<HouseOptions>() {
@@ -29,17 +28,18 @@ namespace AR_Zhuk_Scheme_Tests.Scheme
             // Чтение файла схемы объекта
             projectSpot.ReadScheme(insolationFile);
             // Получение всех домов
-            var totalHouses = projectSpot.GetTotalHouses();
+            var totalHouses = projectSpot.GetTotalHouses(150);
+
+            Console.WriteLine($"Пятен = {totalHouses.Count}; Домов = {totalHouses.Sum(s=>s.Count)}");            
 
             foreach (var hs in totalHouses)
             {
+                Console.WriteLine($"Пятно дома = {hs[0].SectionsBySize[0].SpotOwner}; Кол домов = {hs.Count}");
                 foreach (var house in hs)
                 {
-                    CreateHouseImage.TestCreateImage(house);
+                    testCreateHouse.TestCreateImage(house);
                 }
-            }
-
-            Assert.AreEqual(totalHouses.Count, 2);
+            }            
         }
 
         public static SpotInfo GetSpotInformation ()

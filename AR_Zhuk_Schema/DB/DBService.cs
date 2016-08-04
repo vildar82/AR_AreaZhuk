@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,24 +12,32 @@ namespace AR_Zhuk_Schema.DB
 {
     public class DBService : IDBService
     {
-        private static Dictionary<string, List<FlatInfo>> dictSections = new Dictionary<string, List<FlatInfo>>();
+        private Dictionary<string, List<FlatInfo>> dictSections = new Dictionary<string, List<FlatInfo>>();
+        private ConcurrentDictionary<SelectSectionParam, List<FlatsInSectionsRow>> dictDbFlats = 
+                    new ConcurrentDictionary<SelectSectionParam, List<FlatsInSectionsRow>>();
+        
 
-        public List<FlatInfo> GetSections (Section section, string type, string levels, SpotInfo sp, int maxSectionBySize)
+        SpotInfo sp;
+        int maxSectionBySize;        
+
+        public DBService(SpotInfo sp, int maxSectionBySize)
+        {
+            this.sp = sp;
+            this.maxSectionBySize = maxSectionBySize;
+        }
+
+        public List<FlatInfo> GetSections (Section section, SelectSectionParam selecSectParam)
         {
             List<FlatInfo> sectionsBySyze;
-            string key = section.CountStep + type + levels;
+            string key = section.CountStep + selecSectParam.Type + selecSectParam.Levels;
 
             if (!dictSections.TryGetValue(key, out sectionsBySyze))
             {
-                FlatsInSectionsTableAdapter flatsIsSection = new FlatsInSectionsTableAdapter();
-                List<FlatsInSectionsRow> flatsDb;
-                if (maxSectionBySize == 0)
+                List<FlatsInSectionsRow> flatsDb;                
+                if (!dictDbFlats.TryGetValue(selecSectParam, out flatsDb))
                 {
-                    flatsDb = flatsIsSection.GetFlatsInTypeSection(section.CountStep, type, levels).ToList();
-                }
-                else
-                {
-                    flatsDb = flatsIsSection.GetFlatsInTypeSectionMax(maxSectionBySize, section.CountStep, type, levels).ToList();
+                    flatsDb = LoadFromDbSection(selecSectParam);
+                    dictDbFlats.TryAdd(selecSectParam, flatsDb);
                 }
 
                 sectionsBySyze = new List<FlatInfo>();                
@@ -95,6 +104,58 @@ namespace AR_Zhuk_Schema.DB
                 dictSections.Add(key, sectionsBySyze);
             }
             return sectionsBySyze;
-        }        
+        }
+
+        public void PrepareLoadSections (List<SelectSectionParam> selectSects)
+        {
+            // отбор типов секций которые не загружались
+            var notInDictSS = selectSects.Where(s => !dictDbFlats.ContainsKey(s)).ToList();
+            if (notInDictSS.Count > 0)
+            {
+                // Паралельная загрузка секций                
+                Parallel.ForEach(notInDictSS, (s) => dictDbFlats.TryAdd(s, LoadFromDbSection(s)));                                
+            }
+        }
+
+        private List<FlatsInSectionsRow> LoadFromDbSection (SelectSectionParam selectSectParam)
+        {
+            List<FlatsInSectionsRow> flatsDb;
+            FlatsInSectionsTableAdapter flatsIsSection = new FlatsInSectionsTableAdapter();
+            if (maxSectionBySize == 0)
+            {
+                flatsDb = flatsIsSection.GetFlatsInTypeSection(selectSectParam.Step, 
+                            selectSectParam.Type, selectSectParam.Levels).ToList();
+            }
+            else
+            {
+                flatsDb = flatsIsSection.GetFlatsInTypeSectionMax(maxSectionBySize, 
+                            selectSectParam.Step, selectSectParam.Type, selectSectParam.Levels).ToList();
+            }
+            return flatsDb;            
+        }
+    }
+
+    public class SelectSectionParam : IEquatable<SelectSectionParam>
+    {
+        public readonly int Step;
+        public readonly string Type;
+        public readonly string Levels;
+
+        public SelectSectionParam(int step, string type, string levels)
+        {
+            Step = step;
+            Type = type;
+            Levels = levels;
+        }
+
+        public bool Equals (SelectSectionParam other)
+        {
+            return Step == other.Step && Type == other.Type && Levels == other.Levels;
+        }
+
+        public override int GetHashCode ()
+        {
+            return Step.GetHashCode() ^ Type.GetHashCode() ^ Levels.GetHashCode();
+        }
     }
 }

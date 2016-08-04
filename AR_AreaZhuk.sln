@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_Zhuk_DataModel", "AR_Zhu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeetlyVisualisation", "BeetlyVisualisation\BeetlyVisualisation.csproj", "{61CF9608-66BD-4FD3-81F6-58445C10446B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_Zhuk_Scheme_ConsoleTest", "AR_Zhuk_Scheme_ConsoleTest\AR_Zhuk_Scheme_ConsoleTest.csproj", "{7AD1EAF0-12B3-4A90-BBD3-8BC575125CE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{61CF9608-66BD-4FD3-81F6-58445C10446B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CF9608-66BD-4FD3-81F6-58445C10446B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CF9608-66BD-4FD3-81F6-58445C10446B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AD1EAF0-12B3-4A90-BBD3-8BC575125CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD1EAF0-12B3-4A90-BBD3-8BC575125CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AD1EAF0-12B3-4A90-BBD3-8BC575125CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AD1EAF0-12B3-4A90-BBD3-8BC575125CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

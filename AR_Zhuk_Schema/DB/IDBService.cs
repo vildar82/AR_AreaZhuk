@@ -5,6 +5,7 @@ namespace AR_Zhuk_Schema.DB
 {
     public interface IDBService
     {
-        List<FlatInfo> GetSections (Section section, string type, string levels, SpotInfo sp, int maxSectionBySize);
+        List<FlatInfo> GetSections (Section section, SelectSectionParam selSectParam);
+        void PrepareLoadSections (List<SelectSectionParam> selectSects);
     }
 }
