@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_AreaZhuk", "AR_AreaZhuk\AR_AreaZhuk.csproj", "{0815305E-D0A6-43DF-A5CA-763541117A3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_AreaZhukTests", "AR_AreaZhukTests\AR_AreaZhukTests.csproj", "{0C007E91-CA9C-4BF2-9F30-5AE1E34C754F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_Zhuk_Scheme_Tests", "AR_Zhuk_Scheme_Tests\AR_Zhuk_Scheme_Tests.csproj", "{0C007E91-CA9C-4BF2-9F30-5AE1E34C754F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_AreaZhuk_InsSchema", "AR_AreaZhuk_InsSchema\AR_AreaZhuk_InsSchema.csproj", "{24D396BC-5E21-4F82-AD9A-53A75B20BC43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_Zhuk_Schema", "AR_Zhuk_Schema\AR_Zhuk_Schema.csproj", "{24D396BC-5E21-4F82-AD9A-53A75B20BC43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AR_Zhuk_DataModel", "AR_Zhuk_DataModel\AR_Zhuk_DataModel.csproj", "{A9E4C50E-13CE-4C52-8046-8A1A6C503403}"
 EndProject
